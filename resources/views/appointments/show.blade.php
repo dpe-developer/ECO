@@ -1,0 +1,117 @@
+<div id="showAppointmentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="show-appointment-title" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Appointment</h5>
+				<button class="close" data-dismiss="modal-ajax" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+                <div class="form-group mb-0">
+					<label>Appointment Date:</label>
+					{{ date('M d, Y h:ia', strtotime($appointment->appointment_date)) }}
+				</div>
+				<div class="form-group mb-0">
+					<label>Status:</label>
+					@if ($appointment->status != 3 && $appointment->appointment_date < today())
+						<span class="badge badge-danger">Due</span>
+					@endif
+					{!! $appointment->statusBadge() !!}
+				</div>
+				<div class="form-group mb-0">
+					<label>Patient ID:</label>
+					{{ $appointment->patient->username }}
+				</div>
+				<div class="form-group mb-0">
+					<label>Patient:</label>
+					{{ $appointment->patient->fullname('f-m-l') }}
+				</div>
+				<div class="form-group mb-0">
+					<label>Doctor:</label>
+					{{ $appointment->doctor->fullname('f-m-l') }}
+				</div>
+                <div class="form-group mb-0">
+					<label>Service:</label>
+					{{ $appointment->service->name }}
+				</div>
+				<div class="form-group mb-0">
+					<label>Description:</label>
+					{{ $appointment->description }}
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="col">
+                    @can('appointments.destroy')
+                    <a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('appointments.destroy', $appointment->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+                    @endcan
+					@can('appointments.edit')
+						<a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editAppointmentModal" data-href="{{ route('appointments.edit', $appointment->id) }}"><i class="fad fa-edit"></i> Edit</a>
+					@endcan
+				</div>
+				<div class="col text-right">
+					@if($appointment->status != 'declined')
+						@switch($appointment->status)
+							@case('pending')
+								@can('appointments.update')
+									<a class="btn btn-default text-primary" href="{{ route('appointments.confirm', $appointment->id) }}">Confirm</a>
+								@endcan
+								@break
+							@case('confirmed')
+								@can('appointments.update')
+									@if(Auth::user()->isDoctor())
+										@if(Auth::user()->employee_id == $appointment->doctor_id)
+											<a class="btn btn-default text-success" href="{{ route('appointments.accept_patient', $appointment->id) }}">Accept Patient</a>
+										@endif
+									@endif
+								@endcan
+								@break
+							@default
+						@endswitch
+						@can('appointments.decline')
+						<a class="btn btn-default text-danger" href="javascript:void(0)" data-toggle="modal" data-target="#declineAppointmentModal">Decline</a>
+						@endcan
+						@if($appointment->status != 'done')
+							@can('appointments.cancel')
+							<a class="btn btn-default text-danger"  href="{{ route('appointments.cancel', $appointment->id) }}">Cancel</a>
+							@endcan
+						@endif
+					@endif
+					<button class="btn btn-default" type="button" data-dismiss="modal-ajax">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<form action="{{ route('appointments.decline', $appointment->id) }}" method="POST">
+    @csrf
+    <div id="declineAppointmentModal" class="modal fade" role="dialog" aria-labelledby="decline-appointment-title" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Decline Appointment</h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="reasonOfDecline">Reason</label>
+                        <select class="form-control" name="reason_of_decline" id="reasonOfDecline" required>
+                            <option></option>
+                            <option value="holiday">holiday</option>
+                            <option value="bad weather">bad weather</option>
+                            <option value="booking appointment is full">booking appointment is full</option>
+                            <option value="doctor unavailable at the hour">doctor unavailable at the hour</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fad fa-times"></i> Cancel</button>
+                    <button type="submit" class="btn btn-default text-success"><i class="fad fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,78 @@
+.loader {
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    z-index: 9999999;
+    background-color: #ffffff5c;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.loader svg {
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    -o-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+}
+
+.loader > p > svg > g > rect {
+    fill: #007bff !important;
+}
+
+#loader {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999999;
+    background-color: #ffffff5c;
+    /*background-color: #0000005c;*/
+    /* -webkit-animation-duration: 80s;
+    -moz-animation-duration: 80s;
+    -o-animation-duration: 80s;
+    animation-duration: 80s;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: pulsate;
+    -moz-animation-name: pulsate;
+    -o-animation-name: pulsate;
+    animation-name: pulsate;
+    -webkit-animation-direction: normal;
+    -moz-animation-direction: normal;
+    -o-animation-direction: normal;
+    animation-direction: normal; */
+}
+
+table.table-form td {
+    padding: 1px;
+}
+
+tr[data-toggle="tr-link"],
+tr[data-toggle="modal-ajax"] {
+    cursor: pointer !important;
+}
+
+.dark-mode .select2-container--bootstrap4.select2-container--focus .select2-selection,
+.select2-container--bootstrap4.select2-container--focus .select2-selection {
+    border-color: #80bdff;
+    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
+    outline: 0;
+    /* box-shadow: none; */
+    -webkit-box-shadow: none;
+}
+
+.dark-mode .select2-container--bootstrap4 .select2-selection,
+.dark-mode .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+    border-color: #6c757d;
+    background-color: #343a40;
+    color: #fff;
+}
+
+.dark-mode .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow b {
+    border-color: #fff transparent transparent transparent;
+}
+
+
