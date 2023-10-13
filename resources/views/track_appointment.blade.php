@@ -24,14 +24,43 @@
         <div class="col-md-6">
             <h1 class="heading">&nbsp;My Appointment</h1>
             <p class="lead">Check the status of your Appointment now!</p>
-            <form action="appointment-status" method="POST">
-                @csrf
+            <form action="track-appointment" method="GET">
                 <div class="form-outline mb-4">
-                    <input type="text" id="inputRefferenceCode" class="form-control form-control-lg" required />
-                    <label class="form-label" for="inputRefferenceCode">Refference Code</label>
+                    <input type="text" id="inputReferenceCode" class="form-control form-control-lg" name="reference_code" value="{{ request()->get('reference_code') }}" required />
+                    <label class="form-label" for="inputReferenceCode">Reference Code</label>
                 </div>
                 <button type="submit" class="btn btn-primary me-auto mb-4 text-right" style="">Track Appointment</button>
             </form>
+            @isset($appointment->id)
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-outline mb-4">
+                            <input type="text" id="patient" class="form-control form-control-lg" value="{{ $appointment->patient->fullname('') }}" readonly />
+                            <label class="form-label" for="patient">Patient</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input type="text" id="service" class="form-control form-control-lg" value="{{ $appointment->service->name }}" readonly />
+                            <label class="form-label" for="service">Service</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-outline mb-4">
+                            <input type="text" id="appointmentDateTime" class="form-control form-control-lg" value="{{ Carbon::parse($appointment->created_at)->format('M d,Y h:ia') }}" readonly />
+                            <label class="form-label" for="appointmentDateTime">Date & time</label>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input type="text" id="appointmentStatus" class="form-control form-control-lg" value="{{ $appointment->status }}" readonly />
+                            <label class="form-label" for="appointmentStatus">Status</label>
+                        </div>
+                        {{-- <div class="form-group">
+                            <b for="appointmentStatus">Status</b>
+                            <br>
+                            {!! $appointment->statusBadge() !!}
+                        </div> --}}
+                    </div>
+                </div>
+            @endisset
         </div>
         <div class="col-md-6">
             <h1 class="heading">&nbsp;Contact Us</h1>

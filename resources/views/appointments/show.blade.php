@@ -8,9 +8,13 @@
 				</button>
 			</div>
 			<div class="modal-body">
+				<div class="form-group mb-0">
+					<label>Refference Code:</label>
+					{{ Carbon::parse($appointment->created_at)->timestamp  }}
+				</div>
                 <div class="form-group mb-0">
 					<label>Appointment Date:</label>
-					{{ date('M d, Y h:ia', strtotime($appointment->appointment_date)) }}
+					{{ Carbon::parse($appointment->appointment_date)->format('M d,Y h:ia') }}
 				</div>
 				<div class="form-group mb-0">
 					<label>Status:</label>

@@ -198,9 +198,9 @@
                         description    : 'description for All Day Event',
                         start          : '{{ $appointment->appointment_date }}',
                         // end            : '{{ date("Y-m-d", strtotime($appointment->booking_date_to)) }} 24:00:00',
-                        dataTarget     : '#showAppointment',
-                        dataHref       : '{{ route('patient_appointments.show', $appointment->id) }}',
-                        formAction     : '{{ route('patient_appointments.update', $appointment->id) }}',
+                        dataTarget     : '#showAppointmentModal',
+                        dataHref       : '{{ route("appointments.show", $appointment->id) }}',
+                        formAction     : '{{ route("appointments.update", $appointment->id) }}',
                         allDay         : true,
                         @if($appointment->status == 'pending')
                         backgroundColor: '#ffc107', //color: warning

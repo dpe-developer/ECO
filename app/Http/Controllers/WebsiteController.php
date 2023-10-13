@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Appointment;
 use App\Mail\SampleMail;
 use App\Mail\RegistrationCompleteMail;
 use Illuminate\Http\Request;
@@ -44,9 +45,16 @@ class WebsiteController extends Controller
         return view('our_organization');
     }
 
-    public function trackAppointment()
+    public function trackAppointment(Request $request)
     {
-        return view('track_appointment');
+        $data = [];
+        if($request->get('reference_code') != null){
+            $appointment = Appointment::where('created_at', Carbon::createFromTimestamp($request->get('reference_code'))->toDateTimeString())->first();
+            $data = [
+                'appointment' => $appointment
+            ];
+        }
+        return view('track_appointment', $data);
     }
 
     public function contactUs()
