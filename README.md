@@ -1,6 +1,6 @@
-## Laravel AdminLTE v2.1.0
+## Dizon Vision Clinic
 
-This is a starter kit for developing web application using Laravel. User management is already setup. In addition, the roles and permission has already setup.
+Patient Medical Records, Appointments, and Content Management System.
 
 ---
 
@@ -10,8 +10,3 @@ This is a starter kit for developing web application using Laravel. User managem
  - AdminLTE 3.2.0
  - Spatie Laravel Permission 5.8.0
 ---
-
-### Whats new?
-
-- Settings for company profile
-- Settings for customizing AdminLTE User Interface
