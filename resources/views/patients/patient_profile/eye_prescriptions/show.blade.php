@@ -1,0 +1,177 @@
+@section('modal_open_script')
+	<script type="application/javascript">
+		$(document).ready(function() {
+			$('#showEyePrescription').modal('show');
+		});
+	</script>
+@endsection
+{{-- modal-Show Eye Prescription --}}
+<div class="modal fade" id="showEyePrescription" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-scrollable modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+	          <h4 class="modal-title">Eye Prescription - {{ date('M d, Y h:ia', strtotime($eyePrescription_show->updated_at)) }}</h4>
+	          {{-- <a class="close" href="{{ route('patients.show', $patient->id) }}">&times;</a> --}}
+	          <button class="close" data-dismiss="modal-ajax"  type="button">&times;</button>
+	    	</div>
+			<div class="modal-body text-left scrollbar-primary">
+				<div class="callout callout-info">
+                	<label>Doctor:</label> {{ $eyePrescription_show->doctor->fullname()}}<br>
+                	{{-- <label>Patient:</label> {{ $eyePrescription_show->patient->patient_name($eyePrescription_show->patient_id) }} --}}
+                </div>
+				{{-- <div class="row patient-profile-form grid"> --}}
+					@foreach ($eyePrescription_show->result as $result)
+						@if ($result->reference->type == 'parent')
+							{{-- <div class="col-md-4 grid-item"> --}}
+								<div class="callout callout-light">
+									<legend>{{ $result->reference->name }}:</legend>
+									<fieldset class="form-group">
+										<ul class="children-references">
+										@foreach ($result->children as $children)
+											@if($children->child->count() == 0 && $children->child_id == null)
+												@if($children->reference->type == 'text')
+													<li>
+														<div class="form-group">
+															<label>{{ $children->reference->name }}:</label>
+															<p>{{ $children->value }}</p>
+														</div>
+													</li>
+												@elseif($children->reference->type == 'checkbox')
+													<li>
+														@if($children->value != null)
+															@fa('far fa-check-square fa-lg text-success')
+														@else
+															@fa('far fa-square fa-lg text-secondary')
+														@endif
+														{{ $children->reference->name }}
+													</li>
+												@elseif($children->reference->type == 'check_textbox')
+													<li>
+														<p>
+															@if($children->value != null)
+																@fa('far fa-check-square fa-lg text-success')
+															@else
+																@fa('far fa-square fa-lg text-secondary')
+															@endif
+															{{ $children->reference->name }}<br>
+															{{ $children->reference->description }}: {{ $children->sub_value }}
+														</p>
+													</li>
+												@elseif($children->reference->type == 'textarea')
+													<li>
+														<div class="form-group">
+															<label>{{ $children->reference->name }}:</label>
+															<p>{{ $children->value }}</p>
+														</div>
+													</li>
+												@endif
+											@elseif($children->child->count())
+												<li>
+													<label style="font-weight: bold">{{ $children->reference->name }}:</label>
+													<ul class="child-references" style="list-style-type: circle;">
+														@foreach ($children->child as $child)
+															@if($child->reference->type == 'text')
+																<li>
+																	<div class="form-group">
+																		<label>{{ $child->reference->name }}:</label>
+																		<p>{{ $child->value }}</p>
+																	</div>
+																</li>
+															@elseif($child->reference->type == 'checkbox')
+																<li>
+																	<p>
+																		@if($child->value != null)
+																			@fa('far fa-check-square fa-lg text-success')
+																		@else
+																			@fa('far fa-square fa-lg text-secondary')
+																		@endif
+																		{{ $child->reference->name }}
+																	</p>
+																</li>
+															@elseif($child->reference->type == 'check_textbox')
+																<li>
+																	<p>
+																		@if($child->value != null)
+																			@fa('far fa-check-square fa-lg text-success')
+																		@else
+																			@fa('far fa-square fa-lg text-secondary')
+																		@endif
+																		{{ $child->reference->name }} <br>
+																		{{ $child->reference->description }}: {{ $child->sub_value }}
+																	</p>
+																</li>
+															@elseif($child->reference->type == 'textarea')
+																<li>
+																	<div class="form-group">
+																		<label>{{ $child->reference->name }}:</label>
+																		<p>{{ $child->value }}</p>
+																	</div>
+																</li>
+															@endif
+														@endforeach
+													</ul>
+												</li>
+											@endif
+										@endforeach
+										</ul>
+									</fieldset>
+								</div>
+							{{-- </div> --}}
+							{{-- ./col-md-4 End of Reference with Children|Child --}}
+						@elseif($result->parent_id == null)
+							{{-- <div class="col-md-4 grid-item"> --}}
+								<div class="callout callout-light">
+									@if($result->reference->type == 'text')
+										<div class="form-group">
+											<label>{{ $result->reference->name }}:</label>
+											<p>{{ $result->value }}</p>
+										</div>
+									@elseif($result->reference->type == 'checkbox')
+										<p>
+											@if($result->value != null)
+												@fa('far fa-check-square fa-lg text-success')
+											@else
+												@fa('far fa-square fa-lg text-secondary')
+											@endif
+											{{ $result->reference->name }}
+										</p>
+									@elseif($result->reference->type == 'check_textbox')
+										<p>
+											@if($result->value != null)
+												@fa('far fa-check-square fa-lg text-success')
+											@else
+												@fa('far fa-square fa-lg text-secondary')
+											@endif
+											{{ $result->reference->name }} <br>
+											{{ $result->reference->description }}: {{ $result->sub_value }}
+										</p>
+									@elseif($result->reference->type == 'textarea')
+										<div class="form-group">
+											<label>{{ $result->reference->name }}:</label>
+											<p>{{ $result->value }}</p>
+										</div>
+									@endif
+								</div>
+							{{-- </div> --}}
+							{{-- ./col-md-4 --}}
+						@endif
+					@endforeach
+				{{-- </div> --}}
+			</div>
+			<div class="modal-footer">
+				<div class="col">
+					@can('eye_prescriptions.destroy')
+					<a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescriptions.destroy', $eyePrescription_show->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+					@endcan
+					@can('eye_prescriptions.edit')
+					   <a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('eye_prescriptions.edit', $eyePrescription_show->id) }}" data-target="#editEyePrescription"><i class="fad fa-edit"></i> Edit</a>
+					@endcan
+				</div>
+				<div class="col text-right">
+					<button class="btn btn-default" type="button" data-dismiss="modal-ajax"> Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{-- /modal Show-Eye Prescription --}}

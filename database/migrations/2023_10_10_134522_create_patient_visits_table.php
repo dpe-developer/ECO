@@ -18,8 +18,17 @@ class CreatePatientVisitsTable extends Migration
             $table->unsignedBigInteger('appointment_id')->nullable();
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('service_id')->nullable();
             $table->string('status')->nullable();
+            $table->longText('findings')->nullable();
+            $table->longText('complaints')->nullable();
+            $table->longText('recommendations')->nullable();
+            $table->longText('medical_history')->nullable();
+            $table->longText('final_diagnosis')->nullable();
+            $table->longText('remarks')->nullable();
             $table->timestamp('visit_date')->nullable();
+            $table->timestamp('session_start')->nullable();
+            $table->timestamp('session_end')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
@@ -29,6 +38,10 @@ class CreatePatientVisitsTable extends Migration
 				->onUpdate('cascade');
             $table->foreign('doctor_id')
 				->references('id')->on('users')
+				->onDelete('cascade')
+				->onUpdate('cascade');
+            $table->foreign('service_id')
+				->references('id')->on('services')
 				->onDelete('cascade')
 				->onUpdate('cascade');
         });

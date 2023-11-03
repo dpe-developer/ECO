@@ -113,7 +113,7 @@ class PatientController extends Controller
     public function show(User $user)
     {
         $data = [
-            'patients' => $user
+            'patient' => $user
         ];
         return view('patients.show', $data);
     }

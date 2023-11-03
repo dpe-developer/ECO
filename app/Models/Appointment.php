@@ -96,6 +96,37 @@ class Appointment extends Model
 		return $badge;
 	}
 
+	public function statusAlert($additionalClass = null)
+	{
+		$alert = "";
+		switch ($this->status) {
+			case 'pending':
+				$alert = '<div class="alert '.$additionalClass.' text-center alert-warning" role="alert">Pending</div>';
+				break;
+
+			case 'confirmed':
+				$alert = '<div class="alert '.$additionalClass.' text-center alert-primary" role="alert">Confirmed</div>';
+				break;
+
+			case 'done':
+				$alert = '<div class="alert '.$additionalClass.' text-center alert-success" role="alert">Done</div>';
+				break;
+
+			case 'canceled':
+				$alert = '<div class="alert '.$additionalClass.' text-center alert-danger" role="alert">Canceled</div>';
+				break;
+
+			case 'declined':
+				$alert = '<div class="alert '.$additionalClass.' text-center alert-danger" role="alert">Declined</div>';
+				break;
+
+			default:
+				$alert = "";
+				break;
+		}
+		return $alert;
+	}
+
     public function appointmentTime()
     {
         $time [

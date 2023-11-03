@@ -168,12 +168,12 @@
                                         @endcan
                                     @endunlessrole
                                 >
-									@if(Auth::user()->hasrole('System Administrator'))
 									<td>
-										{{ $appointment->id }}
-									</td>
-									@endif
-									<td>{{ date('M d, Y', strtotime($appointment->appointment_date)) }}</td>
+                                        {{ date('M d, Y', strtotime($appointment->appointment_date)) }}
+                                        @if(UserNotification::isNotSeen('appointment', $appointment->id))
+                                        <span class="right badge badge-danger">new</span>
+                                        @endif
+                                    </td>
 									<td>{{ date('h:ia', strtotime($appointment->appointment_date)) }}</td>
 									<td>
                                         @if ($appointment->status != 3 && $appointment->appointment_date < today())
@@ -418,7 +418,7 @@
                     backgroundColor: '#28a745', //color: success
                     borderColor    : '#28a745', //color: success
                     textColor      : '#fff',
-                    @elseif($appointment->status == 'canceled' || $appointment->status == 'decline')
+                    @elseif($appointment->status == 'canceled' || $appointment->status == 'declined')
                     backgroundColor: '#dc3545', //color: danger
                     borderColor    : '#dc3545', //color: danger
                     textColor      : '#fff',

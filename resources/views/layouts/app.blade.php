@@ -25,8 +25,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
 
-    {{-- Styles --}}
-    <link href="{{ asset('plugins/MDB5-STANDARD-UI-KIT-Free-6.4.2/css/mdb.min.css') }}" rel="stylesheet">
+    {{-- Main Stylesheet --}}
+    <link class="reloadable" href="{{ asset('plugins/MDB5-STANDARD-UI-KIT-Free-6.4.2/css/mdb.min.css') }}" rel="stylesheet">
     {{-- <link href="{{ asset('bootstrap-5.2.3/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('css/website-style.css') }}" rel="stylesheet">
     @yield('style')
@@ -55,7 +55,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="announcements">
+                        <a class="nav-link" aria-current="page" href="clinic-announcements">
                             <i class="fa-thin fa-megaphone "></i>
                             Announcements
                         </a>
@@ -323,7 +323,7 @@
     {{-- scripts --}}
     <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
     {{-- <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script> --}}
-    <script type="text/javascript" src="{{ asset('plugins/MDB5-STANDARD-UI-KIT-Free-6.4.2/js/mdb.min.js') }}"></script>
+    <script class="reloadable" type="text/javascript" src="{{ asset('plugins/MDB5-STANDARD-UI-KIT-Free-6.4.2/js/mdb.min.js') }}"></script>
     {{-- <script src="{{ asset('bootstrap-5.2.3/js/bootstrap.bundle.min.js') }}"></script> --}}
     @include('layouts.scripts')
     @yield('scripts')

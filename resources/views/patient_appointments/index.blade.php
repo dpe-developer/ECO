@@ -116,9 +116,12 @@
                         success: function(data){
                             $('.modal-backdrop').remove();
                             $('#modalAjax').html(data.modal_content);
+                            $('.select2').select2();
+                            // reloadStylesheets();
+                            // reloadScripts();
+                            $('#modalAjax').find('.close').html('').addClass('btn-close');
                             $('#createAppointment').modal('show');
                             // $('#loader').hide();
-                            $('.select2').select2();
                         },
                         error: function(xhr, ajaxOptions, thrownError){
                             ajax_error(xhr, ajaxOptions, thrownError)

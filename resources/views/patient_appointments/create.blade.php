@@ -5,7 +5,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Create Appointment</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal-ajax" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal-ajax" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -60,7 +60,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="description"></label>
+                                <label for="description">Description</label>
                                 <textarea name="description" id="description" rows="3" class="form-control"></textarea>
                             </div>
                             {{-- <div class="form-group">

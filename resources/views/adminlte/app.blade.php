@@ -1,3 +1,9 @@
+@php
+    if(Auth::user()->hasrole('Patient')){
+        header('location: ' . config('app.url'));
+        exit;
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,7 +81,7 @@
         <!-- /.control-sidebar -->
         <!-- Main Footer -->
         <footer class="main-footer">
-            <strong>Copyright &copy; {{ date('Y') }} <a href="#">{{ Setting::company('company_name') }}</a>.</strong>
+            <strong>Copyright &copy; {{ date('Y') }} <a href="#">{{ config('app.client_name') }}</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Version</b> {{ config('app.version') }}

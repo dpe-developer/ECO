@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Mail\AppointmentDeclinedMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class AppointmentController extends Controller
             $doctors = User::where('role_id', 3)->get();
             $patients = User::where('role_id', 4)->get();
             $data = [
-                'appointments' => $appointments->get(),
+                'appointments' => $appointments->orderBy('created_at', 'DESC')->get(),
                 'patients' => $patients,
                 'doctors' => $doctors,
             ];
@@ -66,6 +67,12 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
+        UserNotification::create([
+            'user_id' => Auth::user()->id,
+            'entity_id' => $appointment->id,
+            'notification_type' => 'appointment',
+            'is_seen' => true,
+        ]);
         $data = ([
 			'appointment' => $appointment,
 		]);
@@ -116,13 +123,17 @@ class AppointmentController extends Controller
     
     public function declineAppointment(Request $request, Appointment $appointment)
     {
+        $reason = $request->get('reason_of_decline');
+        if($request->get('reason_of_decline') == 'other'){
+            $reason = $request->get('other_reason');
+        }
         $appointment->update([
             'status' => 'declined',
-            'reason_of_decline' => $request->get('reason_of_decline')
+            'reason_of_decline' => $reason
         ]);
         // Send Mail
         if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
-            Mail::to($appointment->patient->email)->send(new AppointmentDeclinedMail($appointment));
+            // Mail::to($appointment->patient->email)->send(new AppointmentDeclinedMail($appointment));
         }
         return back()->with('alert-warning', 'Appointment declined');
     }

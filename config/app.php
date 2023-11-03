@@ -255,6 +255,11 @@ return [
         'Setting' => App\Models\Setting::class,
         'Carbon' => Carbon\Carbon::class,
 
+        /**
+         * Custom Models
+         */
+        'UserNotification' => App\Models\UserNotification::class,
+
     ],
 
 ];

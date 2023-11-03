@@ -25,7 +25,7 @@ Auth::routes();
 // Route::get('home', 'WebsiteController@home');
 Route::get('home', 'WebsiteController@home')->name('home');
 Route::get('services', 'WebsiteController@services');
-Route::get('announcements', 'WebsiteController@announcements');
+Route::get('clinic-announcements', 'WebsiteController@announcements');
 Route::get('gallery', 'WebsiteController@gallery');
 Route::get('our-story', 'WebsiteController@ourStory');
 Route::get('our-organization', 'WebsiteController@ourOrganization');
@@ -48,6 +48,11 @@ Route::group(['middleware' => ['role:System Administrator']], function () {
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::group(array('middleware'=>['auth']), function() {
+
+	/**
+	 * Announcements
+	 */
+	Route::resource('announcements', 'AnnouncementController');
 
 	/**
 	 * Appointments
@@ -79,22 +84,44 @@ Route::group(array('middleware'=>['auth']), function() {
 	 * Patient Visit
 	 */
 	Route::resource('patient_visits', 'PatientVisitController');
+	Route::get('patient_visits/end-visit/{patient_visit}', [
+		'as' => 'patient_visits.end_visit',
+		'uses' => 'PatientVisitController@endVisit'
+	]);
 	// restore
 	Route::post('patient_visits_restore/{patient_visit}', [
 		'as' => 'patient_visits.restore',
 		'uses' => 'PatientVisitController@restore'
 	]);
+	
 
 	/**
 	 * Patient
 	 */
-	Route::resource('patients', 'PatientController');
+	Route::resource('patients', 'PatientController')->parameters([
+		'patients' => 'user'
+	]);
+
 	/**
 	 * Patient Appointments
 	 */
 	Route::resource('patient_appointments', 'PatientAppointmentController')->parameters([
 		'patient_appointments' => 'appointment'
 	]);
+
+	/**
+	 * Patient Eye Prescriptions
+	 */
+	Route::resource('eye_prescriptions', 'PatientProfile\EyePrescription\EyePrescriptionController');
+	Route::resource('eye_prescription_references', 'PatientProfile\EyePrescription\EyePrescriptionReferenceController');
+
+	/**
+	 * Patient Medical Histories
+	 */
+	Route::resource('medical_histories', 'PatientProfile\MedicalHistory\MedicalHistoryController')->parameters([
+		'medical_histories' => 'medical_history'
+	]);
+	Route::resource('medical_history_references', 'PatientProfile\MedicalHistory\MedicalHistoryReferenceController');
 
     /**
      * Users

@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{{ asset('css/') }}">
 <form action="{{ route('patients.store') }}" method="POST">
     @csrf
     <input type="hidden" name ="from_modal_ajax_href" value="{{ route('patients.create') }}">
@@ -12,27 +13,20 @@
                     </a>
                 </div>
                 <div class="modal-body">
-                    <div class="form-outline mb-4">
-                        <input type="text" name="patient_id" value="{{ old('patient_id') }}" id="inputPatientId" class="form-control @error('patient_id') is-invalid @enderror" required/>
-                        <label class="form-label" for="inputPatientId">Patient ID <strong class="text-danger">*</strong></label>
-                        @error('patient_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-outline mb-4">
-                                <input type="text" name="first_name" value="{{ old('first_name') }}" id="inputFirstName" class="form-control @error('first_name') is-invalid @enderror" required/>
+                            <div class="form-group">
                                 <label class="form-label" for="inputFirstName">First Name <strong class="text-danger">*</strong></label>
+                                <input type="text" name="first_name" value="{{ old('first_name') }}" id="inputFirstName" class="form-control @error('first_name') is-invalid @enderror" required/>
                                 @error('first_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-outline mb-4">
-                                <input type="text" name="last_name" value="{{ old('last_name') }}" id="inputLastName" class="form-control @error('last_name') is-invalid @enderror" required/>
+                            <div class="form-group">
                                 <label class="form-label" for="inputLastName">Last Name <strong class="text-danger">*</strong></label>
+                                <input type="text" name="last_name" value="{{ old('last_name') }}" id="inputLastName" class="form-control @error('last_name') is-invalid @enderror" required/>
                                 @error('first_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -41,22 +35,26 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input @error('sex') is-invalid @enderror" type="radio" name="sex" id="radioSexMale" value="male" @if(old('sex') == 'male') checked @endif required/>
-                                <label class="form-check-label" for="radioSexMale">Male</label>
-                                @error('sex')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input @error('sex') is-invalid @enderror" type="radio" name="sex" id="radioSexFemale" value="remale" @if(old('sex') == 'remale') checked @endif required/>
-                                <label class="form-check-label" for="radioSexFemale">Female</label>
+                            <div class="form-group">
+                                <label>Sex <strong class="text-danger">*</strong></label>
+                                <br>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input @error('sex') is-invalid @enderror" type="radio" name="sex" id="radioSexMale" value="male" @if(old('sex') == 'male') checked @endif required/>
+                                    <label class="form-check-label" for="radioSexMale">Male</label>
+                                    @error('sex')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input @error('sex') is-invalid @enderror" type="radio" name="sex" id="radioSexFemale" value="remale" @if(old('sex') == 'remale') checked @endif required/>
+                                    <label class="form-check-label" for="radioSexFemale">Female</label>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-outline mb-4">
-                                <input type="date" name="birthdate" value="{{ old('birthdate') }}" id="inputBirthdate" class="form-control @error('birthdate') is-invalid @enderror" max="{{ date('Y-m-d') }}" required/>
+                            <div class="form-group">
                                 <label class="form-label" for="inputBirthdate">Birthdate <strong class="text-danger">*</strong></label>
+                                <input type="date" name="birthdate" value="{{ old('birthdate') }}" id="inputBirthdate" class="form-control @error('birthdate') is-invalid @enderror" max="{{ date('Y-m-d') }}" required/>
                                 @error('birthdate')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -65,34 +63,34 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-outline mb-4">
-                                <input type="text" name="contact_number" value="{{ old('contact_number') }}" id="inputContactNumber" class="form-control @error('contact_number') is-invalid @enderror" required/>
+                            <div class="form-group">
                                 <label class="form-label" for="inputContactNumber">Contact #</label>
+                                <input type="text" name="contact_number" value="{{ old('contact_number') }}" id="inputContactNumber" class="form-control @error('contact_number') is-invalid @enderror" required/>
                                 @error('contact_number')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-sm-6 mb-4">
-                            <div class="form-outline">
-                                <input type="text" name="occupation" value="{{ old('occupation') }}" id="inputOccupation" class="form-control @error('occupation') is-invalid @enderror" required/>
+                        <div class="col-sm-6">
+                            <div class="form-group">
                                 <label class="form-label" for="inputOccupation">Occupation <strong class="text-danger">*</strong></label>
+                                <input type="text" name="occupation" value="{{ old('occupation') }}" id="inputOccupation" class="form-control @error('occupation') is-invalid @enderror" required/>
                                 @error('occupation')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
                     </div>
-                    <div class="form-outline mb-4">
-                        <textarea class="form-control @error('address') is-invalid @enderror" name="address" id="textareaAddress" rows="4" required>{{ old('address') }}</textarea>
+                    <div class="form-group">
                         <label class="form-label" for="textareaAddress">Address</label>
+                        <textarea class="form-control @error('address') is-invalid @enderror" name="address" id="textareaAddress" rows="4" required>{{ old('address') }}</textarea>
                         @error('address')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-outline mb-4">
-                        <input type="email" name="email" value="{{ old('email') }}" id="inputEmail" class="form-control @error('email') is-invalid @enderror"/>
+                    <div class="form-group">
                         <label class="form-label" for="inputEmail">Email</label>
+                        <input type="email" name="email" value="{{ old('email') }}" id="inputEmail" class="form-control @error('email') is-invalid @enderror"/>
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -106,3 +104,6 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+
+</script>

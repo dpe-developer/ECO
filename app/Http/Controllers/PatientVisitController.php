@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\PatientVisit;
+use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon;
 
 class PatientVisitController extends Controller
 {
@@ -22,9 +25,16 @@ class PatientVisitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data = [
+            'doctors' => User::where('role_id', 3)->get(),
+            'services' => Service::get(),
+            'patient' => User::find($request->get('patient_id'))
+        ];
+        return response()->json([
+            'modal_content' => view('patients.patient_profile.patient_visits.create', $data)->render()
+        ]);
     }
 
     /**
@@ -35,7 +45,16 @@ class PatientVisitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        PatientVisit::create([
+            'appointment_id' => $request->get('appointment_id'),
+            'patient_id' => $request->get('patient'),
+            'doctor_id' => $request->get('doctor'),
+            'service_id' => $request->get('service'),
+            'status' => 'active',
+            'visit_date' => Carbon::now(),
+            'session_start' => Carbon::now(),
+        ]);
+        return redirect()->route('patients.show', $request->get('patient'))->with('alert-success', 'Patient Visit added successfully');
     }
 
     /**

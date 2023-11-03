@@ -157,6 +157,7 @@
                             $('#modalAjax').find('select[name="'+name+'"]').val(value).trigger('change').addClass($(this).data('error'));
                         }
                     })
+                    
                     $(target).modal('show')
                     $('#loader').hide();
                 },
@@ -260,5 +261,35 @@
                 break;
         }
 
+    }
+
+    function reloadStylesheets()
+    {
+        // Reload stylesheets
+        $(".reloadable[rel='stylesheet']").each(function() {
+            // Get the current href attribute
+            let currentHref = $(this).attr('href');
+            
+            // Create a new href with a timestamp or random query parameter to force a reload
+            let newHref = currentHref + "?v=" + new Date().getTime();
+            console.log(newHref)
+            // Set the new href attribute to trigger a reload
+            $(this).attr('href', newHref);
+        });
+    }
+
+    function reloadScripts()
+    {
+        // Reload stylesheets
+        $("script.reloadable").each(function() {
+            // Get the current href attribute
+            let currentSrc = $(this).attr('src');
+            
+            // Create a new Src with a timestamp or random query parameter to force a reload
+            let newSrc = currentSrc + "?v=" + new Date().getTime();
+            console.log(newSrc)
+            // Set the new Src attribute to trigger a reload
+            $(this).attr('src', newSrc);
+        });
     }
 </script>

@@ -33,6 +33,7 @@
             </form>
             @isset($appointment->id)
                 <hr>
+                {!! $appointment->statusAlert() !!}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-outline mb-4">
@@ -50,8 +51,8 @@
                             <label class="form-label" for="appointmentDateTime">Date & time</label>
                         </div>
                         <div class="form-outline mb-4">
-                            <input type="text" id="appointmentStatus" class="form-control form-control-lg" value="{{ $appointment->status }}" readonly />
-                            <label class="form-label" for="appointmentStatus">Status</label>
+                            <input type="text" id="appointmentStatus" class="form-control form-control-lg" value="{{ $appointment->doctor->fullname('f-m-l') }}" readonly />
+                            <label class="form-label" for="appointmentStatus">Doctor</label>
                         </div>
                         {{-- <div class="form-group">
                             <b for="appointmentStatus">Status</b>

@@ -55,6 +55,9 @@
                         <i class="nav-icon far fa-calendar-check"></i>
                         <p>
                             Appointments
+                            @if(Auth::user()->newAppointments()->count() > 0)
+                            <span class="right badge badge-danger">{{ Auth::user()->newAppointments()->count() }}</span>
+                            @endif
                         </p>
                     </a>
                 </li>
@@ -62,9 +65,19 @@
                 @can('patients.index')
                 <li class="nav-item">
                     <a href="{{ route('patients.index') }}" class="nav-link">
-                        <i class="nav-icon far fa-calendar-check"></i>
+                        <i class="nav-icon fa fa-procedures"></i>
                         <p>
                             Patients
+                        </p>
+                    </a>
+                </li>
+                @endcan
+                @can('announcements.index')
+                <li class="nav-item">
+                    <a href="{{ route('announcements.index') }}" class="nav-link">
+                        <i class="nav-icon fa fa-bullhorn"></i>
+                        <p>
+                            Announcements
                         </p>
                     </a>
                 </li>
