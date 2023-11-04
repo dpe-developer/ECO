@@ -86,7 +86,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="jumbotron text-center">
-                        <h1>{{ Setting::company('company_name') }}</h1>
+                        <h1>{{ config('app.client_name') }}</h1>
                     </div>
                 </div>
             </div>
