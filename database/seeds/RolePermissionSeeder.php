@@ -35,6 +35,11 @@ class RolePermissionSeeder extends Seeder
                             $array[1] == 'edit' ||
                             $array[1] == 'destroy' ||
                             $array[1] == 'export' ||
+                            $action_object['as'] == 'appointments.confirm' ||
+                            $action_object['as'] == 'appointments.decline' ||
+                            $action_object['as'] == 'appointments.cancel' ||
+                            $action_object['as'] == 'appointments.accept_patient' ||
+                            $action_object['as'] == 'patient_visits.end_visit' ||
                             $array[1] == 'edit_company' ||
                             $array[1] == 'reset_company' ||
                             $array[1] == 'edit_user_interface' ||
@@ -70,6 +75,18 @@ class RolePermissionSeeder extends Seeder
                 ['group', '!=', 'permissions'],
                 ['name', '!=', 'settings.edit_system'],
                 ['name', '!=', 'settings.restore_system'],
+            ])->get()
+        );
+
+        $doctor->givePermissionTo(
+            Permission::where([
+                ['group', '!=', 'roles'],
+                ['group', '!=', 'permissions'],
+                ['group', '!=', 'settings'],
+                ['group', '!=', 'users'],
+                ['group', '!=', 'login infos'],
+                ['group', 'NOT LIKE', '%reference%'],
+                ['name', 'NOT LIKE', '%destroy%'],
             ])->get()
         );
     }

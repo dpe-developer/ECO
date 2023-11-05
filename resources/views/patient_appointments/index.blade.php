@@ -17,6 +17,12 @@
         .fc-content:hover {
             cursor: pointer;
         }
+        .fc-toolbar.fc-header-toolbar {
+            margin-bottom: 0px;
+            padding-top: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
         .fc-button {
             padding: .25rem .5rem;
             font-size: .875rem;
@@ -26,25 +32,13 @@
         .fc-day.fc-widget-content.fc-today {
             background-color: #007bff4a
         }
-        .fc-header-toolbar {
-            /*
-            the calendar will be butting up against the edges,
-            but let's scoot in the header's buttons
-            */
-            padding-top: 1em;
-            padding-left: 1em;
-            padding-right: 1em;
-        }
-        /*.fc-toolbar.fc-header-toolbar {
-            margin-bottom: 0;
-        }*/
-        /* .calendar-container {
+        .calendar-container {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-          } */
+        }
 
     </style>
 @endsection
@@ -53,7 +47,7 @@
 <div class="container mt-3">
     <h1 class="heading">&nbsp;Appointment</h1>
     <div class="row justify-content-center mb-5">
-        <div class="col-md-12">
+        <div class="col">
             <div id="calendar"></div>
         </div>
     </div>
@@ -94,15 +88,20 @@
                 header    : {
                     left  : 'title',
                     // center: 'dayGridMonth,timeGridWeek,timeGridDay',
-                    right : 'prev,next today'
+                    // right : 'prev,next today'
+                    right : 'prev,next today, dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 eventLimit: true, // allow "more" link when too many events
                 views: {
+                    dayGrid : {
+                        eventLimit: 18
+                    },
                     timeGrid: {
-                        eventLimit: 6 // adjust to 6 only for timeGridWeek/timeGridDay
+                        eventLimit: 18 // adjust to 6 only for timeGridWeek/timeGridDay
                     },
                 },
-                selectable: true,
+                minTime: '09:00:00',
+                maxTime: '17:30:00',
                 dateClick: function(info) {
                     var d = new Date();
                     dateNow = d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate();
@@ -166,45 +165,23 @@
                             // $('#loader').hide();
                         }
                     })
-                    
-                    // alert('Clicked ' + eventObj.extendedProps.toggle);
                 },
-                /*eventRender: function(info) {
-                    var tooltip = new Tooltip(info.el, {
-                      title: info.event.extendedProps.description,
-                      placement: 'top',
-                      trigger: 'hover',
-                      container: 'body'
-                    });
-                },*/
-                /*eventRender: function (event, element) {
-                    var tooltip = event.Description;
-                    $(element).attr("data-original-title", tooltip);
-                    $(element).tooltip({
-                         container: "body"
-                     })
-                },*/
-                /* eventTimeFormat: {
+                eventTimeFormat: {
                     hour           : 'numeric',
                     minute         : '2-digit',
                     meridiem       : 'short',
-                }, */
-                displayEventTime: false,
+                },
                 events: [
                 @foreach ($appointments as $appointment)
                     {
-                        @if($appointment->user_id == Auth::user()->id)
-                        title          : '{{ $appointment->patient->last_name }}, {{ $appointment->patient->first_name }}',
-                        @else
-                        title          : '{{ Carbon::parse($appointment->appointment_date)->format("h-i-a") }}',
-                        @endif
+                        title          : '{{ $appointment->description }}',
                         description    : 'description for All Day Event',
                         start          : '{{ $appointment->appointment_date }}',
-                        // end            : '{{ date("Y-m-d", strtotime($appointment->booking_date_to)) }} 24:00:00',
+                        end            : '{{ Carbon::parse($appointment->appointment_date)->addMinutes(30) }}',
                         dataTarget     : '#showAppointmentModal',
                         dataHref       : '{{ route("appointments.show", $appointment->id) }}',
                         formAction     : '{{ route("appointments.update", $appointment->id) }}',
-                        allDay         : true,
+                        allDay         : false,
                         @if($appointment->status == 'pending')
                         backgroundColor: '#ffc107', //color: warning
                         borderColor    : '#ffc107', //color: warning

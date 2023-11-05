@@ -50,6 +50,9 @@ class PatientVisitController extends Controller
             'patient_id' => $request->get('patient'),
             'doctor_id' => $request->get('doctor'),
             'service_id' => $request->get('service'),
+            'complaints' => $request->get('complaints'),
+            'findings' => $request->get('findings'),
+            'recommendation' => $request->get('recommendation'),
             'status' => 'active',
             'visit_date' => Carbon::now(),
             'session_start' => Carbon::now(),
@@ -65,7 +68,11 @@ class PatientVisitController extends Controller
      */
     public function show(PatientVisit $patientVisit)
     {
-        //
+        $data = [
+            'patientVisit' => $patientVisit,
+            'patient' => $patientVisit->patient
+        ];
+        return view('patients.patient_profile.patient_visits.show', $data);
     }
 
     /**
@@ -88,7 +95,14 @@ class PatientVisitController extends Controller
      */
     public function update(Request $request, PatientVisit $patientVisit)
     {
-        //
+        $patientVisit->update([
+            'service_id' => $request->get('service'),
+            'complaints' => $request->get('complaints'),
+            'findings' => $request->get('findings'),
+            'recommendation' => $request->get('recommendation'),
+            'session_start' => Carbon::now(),
+        ]);
+        return redirect()->route('patients.show', $patientVisit->patient_id)->with('alert-success', 'Saved');
     }
 
     /**
@@ -100,5 +114,14 @@ class PatientVisitController extends Controller
     public function destroy(PatientVisit $patientVisit)
     {
         //
+    }
+
+    public function endVisit(Request $request, PatientVisit $patientVisit)
+    {
+        $patientVisit->update([
+            'status' => 'done',
+            'session_end' => Carbon::now(),
+        ]);
+        return redirect()->route('patients.show', $patientVisit->patient_id)->with('alert-success', 'SESSION END');
     }
 }

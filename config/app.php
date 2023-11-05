@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'version' => "2.1.5",
+    'version' => "3.3.0",
     'client_name' => env('APP_CLIENT_NAME', 'Laravel AdminLTE'),
     // Twilio
     'twilio_sid' => env('TWILIO_SID'),

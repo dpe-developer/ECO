@@ -32,10 +32,16 @@ class PatientAppointmentController extends Controller
      */
     public function create(Request $request)
     {
+        $appointmentDate = Carbon::parse($request->get('appointment_date'))->format('Y-m-d');
+        $timeTaken = [];
+        foreach(Appointment::whereDate('appointment_date', $appointmentDate)->whereIn('status', ['pending', 'confirmed'])->get() as $appointment){
+            $timeTaken[] = Carbon::parse($appointment->appointment_date)->format('H:i');
+        }
         $data = [
             'doctors' => User::where('role_id', 3)->get(),
             'services' => Service::get(),
-            'appointmentDate' => Carbon::parse($request->get('appointment_date'))->format('Y-m-d'),
+            'appointmentDate' => $appointmentDate,
+            'timeTaken' => $timeTaken,
         ];
         return response()->json([
             'modal_content' => view('patient_appointments.create', $data)->render()

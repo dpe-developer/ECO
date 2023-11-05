@@ -15,6 +15,8 @@
     
     {{-- <link rel="icon" type="image/x-icon" href="{{ asset(config('hospital.logo')) }}"> --}}
     <title>{{ config('app.name') }} | {{ config('app.client_name') }}</title>
+
+    <link rel="shortcut icon" href="{{ asset('images/dizonvisionclinic-icon.png') }}" type="image/x-icon">
     
     <!-- jQuery -->
     <script type="text/javascript" src="{{ asset('AdminLTE-3.2.0/plugins/jquery/jquery.min.js') }}"></script>

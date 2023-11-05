@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\User;
+use App\Models\PatientVisit;
 use App\Models\UserNotification;
 use App\Mail\AppointmentDeclinedMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Auth;
+use Carbon;
 
 class AppointmentController extends Controller
 {
@@ -17,10 +19,66 @@ class AppointmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if(Auth::user()->role_id != 3){
+        if(Auth::user()->role_id != 4){
             $appointments = Appointment::select('*');
+            if($request->get('filter_patient')){
+                $appointments->whereIn('patient_id', $request->get('filter_patient'));
+            }
+            if($request->get('filter_doctor')){
+                $appointments->whereIn('doctor_id', $request->get('filter_doctor'));
+            }
+            if($request->get('filter_date_option')){
+                switch ($request->get('filter_date_option')) {
+                    case 'today':
+                        $date = Carbon::today();
+                        $appointments->whereDate('appointment_date', $date);
+                        break;
+                    case 'yesterday':
+                        $date = Carbon::yesterday();
+                        $appointments->whereDate('appointment_date', $date);
+                        break;
+                    case 'this week':
+                        $dayOfWeek = Carbon::today()->dayOfWeek;
+                        $dateFrom = Carbon::parse(today()->subDays($dayOfWeek-1));
+                        $dateTo = Carbon::parse(today()->addDays(7-$dayOfWeek));
+                        $appointments->whereBetween('appointment_date', [$dateFrom, $dateTo]);
+                        break;
+                    case 'last week':
+                        $dayOfWeek = Carbon::today()->dayOfWeek;
+                        $dateFrom = Carbon::parse(today()->subDays($dayOfWeek+6));
+                        $dateTo = Carbon::parse(today()->subDays($dayOfWeek));
+                        $appointments->whereBetween('appointment_date', [$dateFrom, $dateTo]);
+                        break;
+                    case 'this month':
+                        $daysInMonth = Carbon::today()->daysInMonth;
+                        $dateFrom = date('Y-m-').'1';
+                        $dateTo = date('Y-m-').$daysInMonth;
+                        $appointments->whereBetween('appointment_date', [$dateFrom, $dateTo]);
+                        break;
+                    case 'last month':
+                        $dayNow = date('d')+0;
+                        $dateTo = Carbon::parse(today()->subDays($dayNow));
+                        $dateFrom = Carbon::parse(today()->subDays($dayNow+(date('d', strtotime($dateTo)-1))));
+                        $appointments->whereBetween('appointment_date', [$dateFrom, $dateTo]);
+                        break;
+                    case 'range':
+                        if(Appointment::get()->count() > 0){
+                            $dateFrom = Carbon::parse(is_null($request->get('filter_appointment_date_from')) ? Appointment::orderBy('appointment_date', 'DESC')->first()->value('appointment_date') : $request->get('filter_appointment_date_from'));
+                            $dateTo = Carbon::parse(is_null($request->get('filter_appointment_date_to')) ? Appointment::orderBy('appointment_date', 'DESC')->latest()->value('appointment_date') : $request->get('filter_appointment_date_to'));
+                            $appointments->whereBetween('appointment_date', [$dateFrom, $dateTo]);
+                        }
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            }
+    
+            if($request->get('filter_appointment_status')){
+                $appointments->whereIn('status', $request->get('filter_appointment_status'));
+            }
             $doctors = User::where('role_id', 3)->get();
             $patients = User::where('role_id', 4)->get();
             $data = [
@@ -120,6 +178,36 @@ class AppointmentController extends Controller
     {
         //
     }
+
+    public function confirmAppointment(Request $request, Appointment $appointment)
+    {
+        $appointment->update([
+            'status' => 'confirmed',
+        ]);
+        // Send Mail
+        if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
+            // Mail::to($appointment->patient->email)->send(new AppointmentDeclinedMail($appointment));
+        }
+        return back()->with('alert-success', 'Appointment Confirmed');
+    }
+
+    public function acceptPatient(Request $request, Appointment $appointment)
+    {
+        if(PatientVisit::where('appointment_id', $appointment->id)->doesntExist()){
+            PatientVisit::create([
+                'appointment_id' => $appointment->id,
+                'patient_id' => $appointment->patient_id,
+                'doctor_id' => $appointment->doctor_id,
+                'service_id' => $appointment->service_id,
+                'status' => 'active',
+                'visit_date' => Carbon::now(),
+                'session_start' => Carbon::now(),
+            ]);
+            return redirect()->route('patients.show', $appointment->patient_id)->with('alert-success', 'Patient Session Start');
+        }else{
+            return redirect()->route('patients.show', $appointment->patient_id)->with('alert-success', 'Patient Already Accepted');
+        }
+    }
     
     public function declineAppointment(Request $request, Appointment $appointment)
     {
@@ -136,6 +224,19 @@ class AppointmentController extends Controller
             // Mail::to($appointment->patient->email)->send(new AppointmentDeclinedMail($appointment));
         }
         return back()->with('alert-warning', 'Appointment declined');
+    }
+
+    public function cancelAppointment(Request $request, Appointment $appointment)
+    {
+        $appointment->update([
+            'status' => 'canceled',
+            'reason_of_cancel' => $request->get('reason')
+        ]);
+        // Send Mail
+        if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
+            // Mail::to($appointment->patient->email)->send(new AppointmentDeclinedMail($appointment));
+        }
+        return back()->with('alert-warning', 'Appointment canceled');
     }
 
     public function getAvailableAppointmentTime(Request $request)

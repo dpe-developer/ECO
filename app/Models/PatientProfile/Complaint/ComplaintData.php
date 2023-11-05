@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models\PatientProfile\EyePrescription;
+namespace App\Models\PatientProfile\Complaint;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EyePrescriptionData extends Model
+class ComplaintData extends Model
 {
-    protected $table = 'eye_prescription_data';
+    protected $table = 'complaint_data';
 
 	protected $fillable = [
-		'eye_prescription_id',
+		'complaint_id',
 		'parent_id',
 		'child_id',
 		'type',
@@ -39,21 +39,21 @@ class EyePrescriptionData extends Model
 
 	public function children_not_null()
 	{
-        return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescriptionData', 'parent_id')->whereNotNull('result');
+        return $this->hasMany('App\Models\PatientProfile\Complaint\ComplaintData', 'parent_id')->whereNotNull('result');
 	}
 
 	public function child_not_null()
 	{
-        return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescriptionData', 'child_id')->whereNotNull('result');
+        return $this->hasMany('App\Models\PatientProfile\Complaint\ComplaintData', 'child_id')->whereNotNull('result');
 	}
 
 	public function children()
 	{
-        return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescriptionData', 'parent_id');
+        return $this->hasMany('App\Models\PatientProfile\Complaint\ComplaintData', 'parent_id');
 	}
 
 	public function child()
 	{
-        return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescriptionData', 'child_id');
+        return $this->hasMany('App\Models\PatientProfile\Complaint\ComplaintData', 'child_id');
 	}
 }

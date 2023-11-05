@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col">
-		<h5>Eye Prescriptions
+		<h5>{{ trans('terminologies.eye_prescription') }}
 			@can('eye_prescription_references.index')
 			<a href="{{ route('eye_prescription_references.index') }}" title="Edit References"><i class="fad fa-edit"></i></a>
 			@endcan

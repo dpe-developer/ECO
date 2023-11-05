@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMedicalHistoryDataTable extends Migration
+class CreateComplaintReferencesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,32 +13,24 @@ class CreateMedicalHistoryDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('medical_history_data', function (Blueprint $table) {
+        Schema::create('complaint_references', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->unsignedBigInteger('medical_history_id');
 			$table->unsignedBigInteger('parent_id')->nullable();
 			$table->unsignedBigInteger('child_id')->nullable();
-			$table->string('type')->nullable();
-			$table->string('name')->nullable();
+			$table->string('type');
+			$table->string('name');
 			$table->string('description')->nullable();
-			$table->longText('value')->nullable();
-			$table->longText('sub_value')->nullable();
 			$table->unsignedBigInteger('created_by')->nullable();
 			$table->unsignedBigInteger('updated_by')->nullable();
 			$table->unsignedBigInteger('deleted_by')->nullable();
 			$table->timestamps();
-			$table->softDeletes();
 
-			$table->foreign('medical_history_id')
-				->references('id')->on('medical_history')
-				->onDelete('cascade')
-				->onUpdate('cascade');
 			$table->foreign('parent_id')
-				->references('id')->on('medical_history_data')
+				->references('id')->on('complaint_references')
 				->onDelete('cascade')
 				->onUpdate('cascade');
 			$table->foreign('child_id')
-				->references('id')->on('medical_history_data')
+				->references('id')->on('complaint_references')
 				->onDelete('cascade')
 				->onUpdate('cascade');
         });
@@ -51,6 +43,6 @@ class CreateMedicalHistoryDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('medical_history_data');
+        Schema::dropIfExists('complaint_references');
     }
 }

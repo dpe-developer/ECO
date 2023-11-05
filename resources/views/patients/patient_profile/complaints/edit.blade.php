@@ -1,7 +1,7 @@
 @section('modal_open_script')
 	<script type="application/javascript">
 		$(document).ready(function() {
-			$('#editVitalInformation').modal('show');
+			$('#editComplaint').modal('show');
 		});
 	</script>
 	<script type="application/javascript">
@@ -15,15 +15,15 @@
 	</script>
 @endsection
 {{-- modal-Edit Eye Prescription --}}
-<form action="{{ route('vital_information.update', $vitalInformation_edit->id) }}" method="POST">
+<form action="{{ route('complaints.update', $vitalInformation_edit->id) }}" method="POST">
 @csrf
 @method('PUT')
-	<div class="modal fade" id="editVitalInformation" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="editComplaint" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-scrollable modal-lg" style="max-width: 1200px">
 			<div class="modal-content">
 				<div class="modal-header">
 		        	<h4 class="modal-title">Edit {{ trans('terminologies.eye_prescription') }} - {{ date('F d, Y h:ia', strtotime($vitalInformation_edit->updated_at)) }}</h4>
-		        	<button class="close" type="button" data-toggle="modal" data-target="#closeEditVitalInformation">&times;</button>
+		        	<button class="close" type="button" data-toggle="modal" data-target="#closeEditComplaint">&times;</button>
 		        	{{-- <a class="close" href="{{ route('patients.show', $vitalInformation_edit->patient_id) }}">&times;</a> --}}
 		    	</div>
 				<div class="modal-body text-left scrollbar-primary">
@@ -48,8 +48,8 @@
 														<li>
 															<div class="checkbox">
 															    <div class="custom-control custom-checkbox">
-																	<input @if($children->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $children->id }}" value="{{ $children->reference->name }}" id="editVitalInformation_{{ $children->id }}">
-																	<label class="custom-control-label" for="editVitalInformation_{{ $children->id }}">{{ $children->reference->name }}</label>
+																	<input @if($children->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $children->id }}" value="{{ $children->reference->name }}" id="editComplaint_{{ $children->id }}">
+																	<label class="custom-control-label" for="editComplaint_{{ $children->id }}">{{ $children->reference->name }}</label>
 																</div>
 															</div>
 														</li>
@@ -57,8 +57,8 @@
 														<li>
 															<div class="form-group">
 																<div class="custom-control custom-checkbox">
-																	<input @if($children->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $children->id }}" name="{{ $children->id }}" value="{{ $children->reference->name }}" id="editVitalInformation_{{ $children->id }}">
-																	<label class="custom-control-label" for="editVitalInformation_{{ $children->id }}">{{ $children->reference->name }}</label>
+																	<input @if($children->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $children->id }}" name="{{ $children->id }}" value="{{ $children->reference->name }}" id="editComplaint_{{ $children->id }}">
+																	<label class="custom-control-label" for="editComplaint_{{ $children->id }}">{{ $children->reference->name }}</label>
 																</div>
 																<div class="input-group input-group-sm">
 																	<span class="input-group-prepend">
@@ -66,7 +66,7 @@
 																			{{ $children->reference->description }}
 																		</div>	
 																	</span>
-																	<input value="{{ $children->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $children->id }}" name="input_{{$children->id}}" id="editVitalInformation_input{{ $children->id }}" @if($children->result == null) disabled="" @endif>
+																	<input value="{{ $children->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $children->id }}" name="input_{{$children->id}}" id="editComplaint_input{{ $children->id }}" @if($children->result == null) disabled="" @endif>
 																</div>
 															</div>
 														</li>
@@ -93,8 +93,8 @@
 																<li>
 																	<div class="checkbox">
 																	    <div class="custom-control custom-checkbox">
-																			<input @if($child->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $child->id }}" value="{{ $child->reference->name }}" id="editVitalInformation_{{ $child->id }}">
-																			<label class="custom-control-label" for="editVitalInformation_{{ $child->id }}">{{ $child->reference->name }}</label>
+																			<input @if($child->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $child->id }}" value="{{ $child->reference->name }}" id="editComplaint_{{ $child->id }}">
+																			<label class="custom-control-label" for="editComplaint_{{ $child->id }}">{{ $child->reference->name }}</label>
 																		</div>
 																	</div>
 																</li>
@@ -102,8 +102,8 @@
 																<li>
 																	<div class="form-group">
 																		<div class="custom-control custom-checkbox">
-																			<input @if($child->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $child->id }}" name="{{ $child->id }}" value="{{ $child->reference->name }}" id="editVitalInformation_{{ $child->id }}">
-																			<label class="custom-control-label" for="editVitalInformation_{{ $child->id }}">{{ $child->reference->name }}</label>
+																			<input @if($child->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $child->id }}" name="{{ $child->id }}" value="{{ $child->reference->name }}" id="editComplaint_{{ $child->id }}">
+																			<label class="custom-control-label" for="editComplaint_{{ $child->id }}">{{ $child->reference->name }}</label>
 																		</div>
 																		<div class="input-group input-group-sm">
 																			<span class="input-group-prepend">
@@ -111,7 +111,7 @@
 																					{{ $child->reference->description }}
 																				</div>	
 																			</span>
-																			<input value="{{ $child->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $child->id }}" name="input_{{$child->id}}" id="editVitalInformation_input{{ $child->id }}" @if($child->result == null) disabled="" @endif>
+																			<input value="{{ $child->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $child->id }}" name="input_{{$child->id}}" id="editComplaint_input{{ $child->id }}" @if($child->result == null) disabled="" @endif>
 																		</div>
 																	</div>
 																</li>
@@ -144,16 +144,16 @@
 											<div class="form-group">
 												<div class="checkbox">
 												    <div class="custom-control custom-checkbox">
-														<input @if($result->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $result->id }}" value="{{ $result->reference->name }}" id="editVitalInformation_{{ $result->id }}">
-														<label class="custom-control-label" for="editVitalInformation_{{ $result->id }}">{{ $result->reference->name }}</label>
+														<input @if($result->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $result->id }}" value="{{ $result->reference->name }}" id="editComplaint_{{ $result->id }}">
+														<label class="custom-control-label" for="editComplaint_{{ $result->id }}">{{ $result->reference->name }}</label>
 													</div>
 												</div>
 											</div>
 										@elseif($result->reference->type == 'check_textbox')
 											<div class="form-group">
 												<div class="custom-control custom-checkbox">
-													<input @if($result->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $result->id }}" name="{{ $result->id }}" value="{{ $result->reference->name }}" id="editVitalInformation_{{ $result->id }}">
-													<label class="custom-control-label" for="editVitalInformation_{{ $result->id }}">{{ $result->reference->name }}</label>
+													<input @if($result->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $result->id }}" name="{{ $result->id }}" value="{{ $result->reference->name }}" id="editComplaint_{{ $result->id }}">
+													<label class="custom-control-label" for="editComplaint_{{ $result->id }}">{{ $result->reference->name }}</label>
 												</div>
 												<div class="input-group input-group-sm">
 													<span class="input-group-prepend">
@@ -161,7 +161,7 @@
 															{{ $result->reference->description }}
 														</div>	
 													</span>
-													<input value="{{ $result->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $result->id }}" name="input_{{$result->id}}" id="editVitalInformation_input{{ $result->id }}" @if($result->result == null) disabled="" @endif>
+													<input value="{{ $result->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $result->id }}" name="input_{{$result->id}}" id="editComplaint_input{{ $result->id }}" @if($result->result == null) disabled="" @endif>
 												</div>
 											</div>
 										@elseif($result->reference->type == 'textarea')
@@ -192,24 +192,24 @@
 				<div class="modal-footer">
 					<div class="col">
 						@if ($vitalInformation_edit->trashed())
-	                		@can('vital_information.restore')
-						    <a class="btn btn-default text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('vital_information.restore', $vitalInformation_edit->id) }}"><i class="fad fa-download"></i> Restore</a>
+	                		@can('complaints.restore')
+						    <a class="btn btn-default text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('complaints.restore', $vitalInformation_edit->id) }}"><i class="fad fa-download"></i> Restore</a>
 							@endcan
 						@else
-							@can('vital_information.destroy')
-						    <a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('vital_information.destroy', $vitalInformation_edit->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+							@can('complaints.destroy')
+						    <a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('complaints.destroy', $vitalInformation_edit->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
 							@endcan
 						@endif
 					</div>
 					<div class="col text-right">
-						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#closeEditVitalInformation">Cancel</button>
+						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#closeEditComplaint">Cancel</button>
 						<button class="btn btn-default text-success" type="submit"><i class="fad fa-save"></i> Save</button>
 					</div>
 				</div> {{-- ./modal-footer --}}
 			</div> {{-- ./modal-content --}}
 		</div> {{-- ./modal-dialog --}}
 	</div> {{-- ./modal --}}
-	<div class="modal fade" id="closeEditVitalInformation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="closeEditComplaint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-md modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header text-center">

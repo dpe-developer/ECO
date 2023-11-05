@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMedicalHistoryDataTable extends Migration
+class CreateComplaintDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateMedicalHistoryDataTable extends Migration
      */
     public function up()
     {
-        Schema::create('medical_history_data', function (Blueprint $table) {
+        Schema::create('complaint_data', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->unsignedBigInteger('medical_history_id');
+			$table->unsignedBigInteger('complaint_id');
 			$table->unsignedBigInteger('parent_id')->nullable();
 			$table->unsignedBigInteger('child_id')->nullable();
-			$table->string('type')->nullable();
+            $table->string('type')->nullable();
 			$table->string('name')->nullable();
 			$table->string('description')->nullable();
 			$table->longText('value')->nullable();
@@ -29,16 +29,16 @@ class CreateMedicalHistoryDataTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 
-			$table->foreign('medical_history_id')
-				->references('id')->on('medical_history')
+			$table->foreign('complaint_id')
+				->references('id')->on('complaint')
 				->onDelete('cascade')
 				->onUpdate('cascade');
 			$table->foreign('parent_id')
-				->references('id')->on('medical_history_data')
+				->references('id')->on('complaint_data')
 				->onDelete('cascade')
 				->onUpdate('cascade');
 			$table->foreign('child_id')
-				->references('id')->on('medical_history_data')
+				->references('id')->on('complaint_data')
 				->onDelete('cascade')
 				->onUpdate('cascade');
         });
@@ -51,6 +51,6 @@ class CreateMedicalHistoryDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('medical_history_data');
+        Schema::dropIfExists('complaint_data');
     }
 }

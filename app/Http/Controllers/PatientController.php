@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\PatientVisit;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Auth;
@@ -113,7 +114,8 @@ class PatientController extends Controller
     public function show(User $user)
     {
         $data = [
-            'patient' => $user
+            'patient' => $user,
+            'services' => Service::get()
         ];
         return view('patients.show', $data);
     }

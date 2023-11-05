@@ -10,7 +10,7 @@
     <title>{{ config('app.name') }} | {{ config('app.client_name') }}</title>
 
     {{-- App icon --}}
-	<link rel="shortcut icon" href="{{ asset('images/dizonvisionclinic-logo-300px.png') }}" type="image/x-icon">
+	<link rel="shortcut icon" href="{{ asset('images/dizonvisionclinic-icon.png') }}" type="image/x-icon">
 
     {{-- Fonts --}}
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
@@ -43,19 +43,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 main-navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/">
+                        <a class="nav-link" aria-current="page" href="{{ url('/') }}">
                             <i class="fa-thin fa-house "></i>
                             Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="services">
+                        <a class="nav-link" aria-current="page" href="{{ url('services') }}">
                             <i class="fa-thin fa-stethoscope "></i>
                             Services
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="clinic-announcements">
+                        <a class="nav-link" aria-current="page" href="{{ url('clinic-announcements') }}">
                             <i class="fa-thin fa-megaphone "></i>
                             Announcements
                         </a>
@@ -67,24 +67,24 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown_About">
                             <li>
-                                <a class="dropdown-item" href="gallery">Gallery</a>
+                                <a class="dropdown-item" href="{{ url('gallery') }}">Gallery</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="our-story">Our Story</a>
+                                <a class="dropdown-item" href="{{ url('our-story') }}">Our Story</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="our-organization">Our Organization</a>
+                                <a class="dropdown-item" href="{{ url('our-organization') }}">Our Organization</a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="track-appointment">
+                        <a class="nav-link" aria-current="page" href="{{ url('track-appointment') }}">
                             <i class="fa-thin fa-calendar-check "></i>
                             Track Appointment
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="contact-us">
+                        <a class="nav-link" aria-current="page" href="{{ url('contact-us') }}">
                             <i class="fa-thin fa-comments "></i>
                             Contact Us
                         </a>
@@ -94,7 +94,7 @@
             @auth
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ Auth::user()->getAvatar() }}" class="rounded-circle" height="35" alt="Black and White Portrait of a Man" loading="lazy"/>
+                    <img src="{{ asset(Auth::user()->getAvatar()) }}" class="rounded-circle" height="35" alt="Black and White Portrait of a Man" loading="lazy"/>
                     {{ Auth::user()->first_name }}
                     {{ Auth::user()->last_name }}
                 </a>

@@ -16,9 +16,11 @@ class CreateEyePrescriptionDataTable extends Migration
         Schema::create('eye_prescription_data', function (Blueprint $table) {
             $table->bigIncrements('id');
 			$table->unsignedBigInteger('eye_prescription_id');
-			$table->unsignedBigInteger('reference_id');
 			$table->unsignedBigInteger('parent_id')->nullable();
 			$table->unsignedBigInteger('child_id')->nullable();
+			$table->string('type')->nullable();
+			$table->string('name')->nullable();
+			$table->string('description')->nullable();
 			$table->longText('value')->nullable();
 			$table->longText('sub_value')->nullable();
 			$table->unsignedBigInteger('created_by')->nullable();
@@ -29,10 +31,6 @@ class CreateEyePrescriptionDataTable extends Migration
 
 			$table->foreign('eye_prescription_id')
 				->references('id')->on('eye_prescription')
-				->onDelete('cascade')
-				->onUpdate('cascade');
-			$table->foreign('reference_id')
-				->references('id')->on('eye_prescription_references')
 				->onDelete('cascade')
 				->onUpdate('cascade');
 			$table->foreign('parent_id')

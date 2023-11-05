@@ -24,6 +24,7 @@ class CreatePatientVisitsTable extends Migration
             $table->longText('complaints')->nullable();
             $table->longText('recommendations')->nullable();
             $table->longText('medical_history')->nullable();
+            $table->longText('admiting_diagnosis')->nullable();
             $table->longText('final_diagnosis')->nullable();
             $table->longText('remarks')->nullable();
             $table->timestamp('visit_date')->nullable();

@@ -20,10 +20,55 @@
     </div>
 </div>
 <div class="container mt-3">
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-12">
-            <h1 class="heading">&nbsp;&nbsp;Our Story</h1>
+            <h1 class="heading mb-5">&nbsp;&nbsp;Announcements</h1>
+            <div class="row">
+                @foreach ($announcements as $announcement)
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">{{ $announcement->title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Date Published: {{ Carbon::parse($announcement->created_at)->format('M d,Y') }}</h6>
+                        </div>
+                        <div class="card-body announcement-card-body">
+                            <div class="announcement-container">
+                                {!! $announcement->content !!}
+                            </div>
+                            <a class="show-more d-none" href="clinic-announcements/view/{{ $announcement->id }}">
+                                ... show more
+                            </a>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col">
+                                    {{ $announcement->getAnnouncementDuration() }}
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-primary float-end" class="show-more d-none" href="clinic-announcements/view/{{ $announcement->id }}">
+                                        View
+                                    </a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    $(function(){
+        $('.announcement-container').each(function(){
+            if(this.offsetHeight < this.scrollHeight){
+                $(this).parent().find('.show-more').removeClass('d-none')
+            }
+        })
+    })
+</script>
 @endsection

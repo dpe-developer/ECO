@@ -11,7 +11,7 @@
 					<input type="text" name="patient" hidden value="{{ $patient->id }}">
 					<div class="form-group">
 						<label>Service:</label>
-						<select class="form-control select2" name="visit_type" id="visitType" style="width: 100%">
+						<select class="form-control select2" name="service" style="width: 100%">
 							<option></option>
 							@foreach($services as $service)
 							<option value="{{ $service->id }}">{{ $service->name }}</option>
@@ -29,10 +29,10 @@
 							@endforeach
 						</select>
 					</div>
-					{{-- <div class="form-group">
+					<div class="form-group">
 						<label>Complaints:</label>
-						<textarea name="complaints" id="" cols="30" rows="10" class="form-control"></textarea>
-					</div> --}}
+						<textarea name="complaints" rows="5" class="form-control"></textarea>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal-ajax"><i class="fa fa-times"></i> Cancel</button>

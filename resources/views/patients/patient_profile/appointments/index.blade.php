@@ -23,13 +23,11 @@
 				<tbody>
 					@forelse ($patient->appointments()->orderBy('created_at', 'DESC')->get() as $appointment)
 					<tr 
-                        @unlessrole('System Administrator') 
-                            @can('appointments.show') 
-                                data-toggle="modal-ajax" 
-                                data-href="{{ route('appointments.show', $appointment->id) }}" 
-                                data-target="#showAppointmentModal" 
-                            @endcan
-                        @endunlessrole
+                        @can('appointments.show') 
+                            data-toggle="modal-ajax" 
+                            data-href="{{ route('appointments.show', $appointment->id) }}" 
+                            data-target="#showAppointmentModal" 
+                        @endcan
                         >
 						<td>{{ date('F d, Y h:i A', strtotime($appointment->appointment_date)) }}</td>
 						<td>

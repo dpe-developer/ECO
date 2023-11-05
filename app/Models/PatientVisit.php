@@ -39,9 +39,21 @@ class PatientVisit extends Model
     {
         return $this->belongsTo('App\Models\Service', 'service_id');
     }
+    
+    public function medicalHistories()
+    {
+        return $this->hasMany('App\Models\PatientProfile\MedicalHistory\MedicalHistory', 'visit_id');
+    }
+
+    public function complaints()
+    {
+        return $this->hasMany('App\Models\PatientProfile\Complaint\Complaint', 'visit_id');
+    }
 
     public function eyePrescriptions()
     {
         return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescription', 'visit_id');
     }
+
+    
 }

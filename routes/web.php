@@ -26,6 +26,7 @@ Auth::routes();
 Route::get('home', 'WebsiteController@home')->name('home');
 Route::get('services', 'WebsiteController@services');
 Route::get('clinic-announcements', 'WebsiteController@announcements');
+Route::get('clinic-announcements/view/{announcement}', 'WebsiteController@viewAnnouncement');
 Route::get('gallery', 'WebsiteController@gallery');
 Route::get('our-story', 'WebsiteController@ourStory');
 Route::get('our-organization', 'WebsiteController@ourOrganization');
@@ -62,7 +63,7 @@ Route::group(array('middleware'=>['auth']), function() {
 		'as' => 'appointments.confirm',
 		'uses' => 'AppointmentController@confirmAppointment'
 	]);
-	Route::get('appointment-cancel/{appointment}', [
+	Route::post('appointment-cancel/{appointment}', [
 		'as' => 'appointments.cancel',
 		'uses' => 'AppointmentController@cancelAppointment'
 	]);
@@ -84,7 +85,7 @@ Route::group(array('middleware'=>['auth']), function() {
 	 * Patient Visit
 	 */
 	Route::resource('patient_visits', 'PatientVisitController');
-	Route::get('patient_visits/end-visit/{patient_visit}', [
+	Route::get('patient_visits/end-visit/{patientVisit}', [
 		'as' => 'patient_visits.end_visit',
 		'uses' => 'PatientVisitController@endVisit'
 	]);
@@ -110,18 +111,24 @@ Route::group(array('middleware'=>['auth']), function() {
 	]);
 
 	/**
-	 * Patient Eye Prescriptions
-	 */
-	Route::resource('eye_prescriptions', 'PatientProfile\EyePrescription\EyePrescriptionController');
-	Route::resource('eye_prescription_references', 'PatientProfile\EyePrescription\EyePrescriptionReferenceController');
-
-	/**
 	 * Patient Medical Histories
 	 */
 	Route::resource('medical_histories', 'PatientProfile\MedicalHistory\MedicalHistoryController')->parameters([
 		'medical_histories' => 'medical_history'
 	]);
 	Route::resource('medical_history_references', 'PatientProfile\MedicalHistory\MedicalHistoryReferenceController');
+
+	/**
+	 * Patient Eye Prescriptions
+	 */
+	Route::resource('eye_prescriptions', 'PatientProfile\EyePrescription\EyePrescriptionController');
+	Route::resource('eye_prescription_references', 'PatientProfile\EyePrescription\EyePrescriptionReferenceController');
+
+	/**
+	 * Patient Complaints
+	 */
+	Route::resource('complaints', 'PatientProfile\Complaint\ComplaintController');
+	Route::resource('complaint_references', 'PatientProfile\Complaint\ComplaintReferenceController');
 
     /**
      * Users

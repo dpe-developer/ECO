@@ -54,3 +54,15 @@
     color: #ffffff;
     text-align: center;
 }
+
+.announcement-card-body {
+    max-height: 360px;
+    min-height: 360px;
+}
+
+.announcement-container {
+    max-height: 300px;
+    min-height: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

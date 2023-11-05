@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PatientVisit;
+use App\Models\User;
+use Auth;
 
 class Appointment extends Model
 {
@@ -134,6 +137,14 @@ class Appointment extends Model
         ];
         return $time;
     }
+
+	public function hasVisit()
+	{
+		if(PatientVisit::where('appointment_id', $this->id)->exists()){
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Static functions

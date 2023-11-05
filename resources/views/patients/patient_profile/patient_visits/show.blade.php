@@ -1,89 +1,178 @@
-<div class="modal fade" id="showPatientVisit" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-scrollable">
-		<div class="modal-content">
-			<div class="modal-header">
-	          <h4 class="modal-title">Visit - {{ $patientVisit_show->visit_type }}</h4>
-	          <button type="button" class="close" data-dismiss="modal-ajax">&times;</button>
-	    	</div>
-			<div class="modal-body">
-				<input type="text" name="patient" hidden value="{{ $patient->id }}">
-				<div class="row">
-					<div class="col-md-6">
-						<label>Status:</label>
-						{{ $patientVisit_show->status }}
-						<br>
-						<label>type:</label>
-						{{ $patientVisit_show->visit_type }}
-						<br>
-						<label>Admitting Doctor:</label>
-						{{ $patientVisit_show->doctor->employeeName() }}
-						<br>
-						<label>Reason for visit:</label>
-						{!! clean($patientVisit_show->reason_for_visit) !!}
-					</div>
-					<div class="col-md-6">
-						<label>Admission/Check In Date:</label>
-						{{ date('F d, Y h:iA', strtotime($patientVisit_show->admission_date)) }}
-						<br>
-						@if ($patientVisit_show->discharge_date != null)
-						<label>Discharge/Check Out Date:</label>
-						{{ date('F d, Y h:iA', strtotime($patientVisit_show->discharge_date)) }}
-						@endif
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="col">
-					@if ($patientVisit_show->trashed())
-                		@can('patient_visits.restore')
-					    <a class="btn btn-default text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('patient_visits.restore', $patientVisit_show->id) }}"><i class="fad fa-download"></i> Restore</a>
-						@endcan
-					@else
-						@can('patient_visits.destroy')
-					    <a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('patient_visits.destroy', $patientVisit_show->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
-						@endcan
-					@endif
-					@can('patient_visits.edit')
-					<a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientVisit" data-href="{{ route('patient_visits.edit', $patientVisit_show->id) }}"><i class="fad fa-edit"></i> Edit</a>
-					@endcan
-				</div>
-				<div class="col text-right">
-					@if ($patientVisit_show->status == 'active')
-					<button class="btn btn-success" type="button" data-toggle="modal" data-target="#dischargePatientModal">Discharge</button>					
-					@endif
-					<button class="btn btn-default" data-dismiss="modal-ajax">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
+@extends('adminlte.app')
+
+@section('content')
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <h1 class="m-0 text-dark">Patient Profile</h1>
+                </div>
+                <div class="col-md-6 text-right">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        {{-- Patient Info --}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-outline card-primary collapsed-card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <strong>{{ $patientVisit->patient->username }}</strong> -
+                            {{ $patientVisit->patient->fullname('f-m-l') }}
+                        </h2>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body" id="profile">
+                        <div class="row patient-info">
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <img class="img-thumbnail patient-avatar" src="{{ isset($patientVisit->patient->profile_image->data) ? $patientVisit->patient->profile_image->data : asset('images/avatar.png') }}" width="100%" />
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group mb-0">
+                                    <label>Patient ID:</label>
+                                    {{ $patientVisit->patient->username }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>First Name:</label>
+                                    {{ $patientVisit->patient->first_name }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Last Name:</label>
+                                    {{ $patientVisit->patient->last_name }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Sex:</label>
+                                    {{ $patientVisit->patient->sex }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Age:</label>
+                                    {{ $patientVisit->patient->age() }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Date of Birth:</label> 
+                                    {{ Carbon::parse($patientVisit->patient->birthdate)->format('M d,Y') }}
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group mb-0 form-group mb-0-clean">
+                                    <label>Address:</label>
+                                    {{ $patientVisit->patient->address }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Contact #:</label>
+                                    {{ $patientVisit->patient->contact_number }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Email:</label>
+                                    {{ $patientVisit->patient->email }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Occupation:</label>
+                                    {{ $patientVisit->patient->occupation }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		{{-- Visit Informations --}}
+        @include('patients.patient_profile.patient_visits.info')
+
+        {{-- Medical Records --}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary card-outline card-outline-tabs">
+                    <div class="card-header p-0 border-bottom-0">
+                        <ul class="nav nav-tabs {{-- patient-profile-tab --}}" id="patient-profile-tab" role="tablist">
+                            @can('patient_visits.index')
+                            <li class="nav-item">
+                                <a class="nav-link active" id="visits-tab" data-toggle="tab" href="#nav-visits" role="tab" aria-controls="nav-visits" aria-selected="true">Visits</a>
+                            </li>
+                            @endcan
+                            @can('appointments.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="appointments-tab" data-toggle="tab" href="#nav-appointments" role="tab" aria-controls="nav-appointments" aria-selected="false">Appointments</a>
+                            </li>
+                            @endcan
+                            @can('medical_histories.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="medical-histories-tab" data-toggle="tab" href="#nav-medical-histories" role="tab" aria-controls="nav-medical-histories" aria-selected="false">Medical Histories</a>
+                            </li>
+                            @endcan
+                            @can('complaints.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="complaints-tab" data-toggle="tab" href="#nav-complaints" role="tab" aria-controls="nav-complaints" aria-selected="false">{{ trans('terminologies.complaints') }}</a>
+                            </li>
+                            @endcan
+                            @can('eye_prescriptions.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="eye-prescriptions-tab" data-toggle="tab" href="#nav-eye-prescriptions" role="tab" aria-controls="nav-eye-prescriptions" aria-selected="false">{{ trans('terminologies.eye_prescriptions') }}</a>
+                            </li>
+                            @endcan
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="nav-tabContent">
+                            @can('patient_visits.index')
+                            <div class="tab-pane fade show active" id="nav-visits" role="tabpanel" aria-labelledby="visits-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.patient_visits.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('appointments.index')
+                            <div class="tab-pane fade" id="nav-appointments" role="tabpanel" aria-labelledby="appointments-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.appointments.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('medical_histories.index')
+                            <div class="tab-pane fade" id="nav-medical-histories" role="tabpanel" aria-labelledby="medical-histories-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.medical_histories.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('complaints.index')
+                            <div class="tab-pane fade" id="nav-complaints" role="tabpanel" aria-labelledby="complaints-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.complaints.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('eye_prescriptions.index')
+                            <div class="tab-pane fade" id="nav-eye-prescriptions" role="tabpanel" aria-labelledby="eye-prescriptions-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.eye_prescriptions.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-@if ($patientVisit_show->status == 'active')
-<form action="{{ route('patient_visits.update', $patientVisit_show->id) }}" method="POST">
-	@csrf
-	@method('PUT')
-	<div class="modal fade modal-allow-overflow" id="dischargePatientModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-md modal-dialog-centered {{-- modal-dialog-scrollable --}}">
-			<div class="modal-content">
-				<div class="modal-header">
-		        	<h4 class="modal-title">Discharge Patient</h4>
-		        	<a class="close" data-dismiss="modal-ajax">&times;</a>
-		    	</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label>Discharge/Check out Date:</label>
-					    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-					        <input type="text" name="discharge_date" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-					        <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
-					            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-					        </div>
-					    </div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-success btn-submit" type="submit">Discharge</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</form>
-@endif
+@endsection

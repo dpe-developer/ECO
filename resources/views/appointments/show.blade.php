@@ -18,7 +18,7 @@
 				</div>
 				<div class="form-group mb-0">
 					<label>Status:</label>
-					@if ($appointment->status != 'done' && $appointment->appointment_date < today())
+					@if (in_array($appointment->status, array('pending', 'confirmed')) && $appointment->appointment_date < today())
 						<span class="badge badge-danger">Due</span>
 					@endif
 					{!! $appointment->statusBadge() !!}
@@ -64,14 +64,17 @@
 				@if($appointment->status != 'declined')
 					@switch($appointment->status)
 						@case('pending')
-							@can('appointments.update')
+							@can('appointments.confirm')
 								<a class="btn btn-default text-primary" href="{{ route('appointments.confirm', $appointment->id) }}">Confirm</a>
+							@endcan
+							@can('appointments.decline')
+								<a class="btn btn-default text-danger" href="javascript:void(0)" data-toggle="modal" data-target="#declineAppointmentModal"><i class="fa fa-times"></i> Decline</a>
 							@endcan
 							@break
 						@case('confirmed')
-							@can('appointments.update')
-								@if(Auth::user()->isDoctor())
-									@if(Auth::user()->employee_id == $appointment->doctor_id)
+							@can('appointments.accept_patient')
+								@if(Auth::user()->isDoctor() && !$appointment->hasVisit())
+									@if(Auth::user()->id == $appointment->doctor_id)
 										<a class="btn btn-default text-success" href="{{ route('appointments.accept_patient', $appointment->id) }}">Accept Patient</a>
 									@endif
 								@endif
@@ -79,14 +82,11 @@
 							@break
 						@default
 					@endswitch
-					@can('appointments.decline')
-					<a class="btn btn-default text-danger" href="javascript:void(0)" data-toggle="modal" data-target="#declineAppointmentModal">Decline</a>
+					@can('appointments.cancel')
+						@if(!in_array($appointment->status, ['done', 'canceled', 'declined']) && !$appointment->hasVisit())
+							<a class="btn btn-default text-danger" href="javascript:void(0)" id="cancelAppointment" data-toggle="modal" data-target="#cancelAppointmentModal"><i class="fa fa-times"></i> Cancel Appointment</a>
+						@endif
 					@endcan
-					@if($appointment->status != 'done')
-						@can('appointments.cancel')
-						<a class="btn btn-default text-danger"  href="{{ route('appointments.cancel', $appointment->id) }}">Cancel</a>
-						@endcan
-					@endif
 				@endif
 				<button class="btn btn-default" type="button" data-dismiss="modal-ajax">Close</button>
 			</div>
@@ -125,7 +125,34 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fad fa-times"></i> Cancel</button>
-                    <button type="submit" class="btn btn-default text-success"><i class="fad fa-save"></i> Save</button>
+                    <button type="submit" class="btn btn-default text-success"><i class="fad fa-save"></i> Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@endcan
+@can('appointments.cancel')
+<form action="{{ route('appointments.cancel', $appointment->id) }}" method="POST">
+    @csrf
+    <div id="cancelAppointmentModal" class="modal fade" role="dialog" aria-labelledby="cancel-appointment-title" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cancel Appointment</h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="reasonOfDecline">Reason:</label>
+						<textarea class="form-control" name="reason" id="reasonOfDecline"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fad fa-times"></i> Cancel</button>
+                    <button type="submit" class="btn btn-default text-success"><i class="fad fa-save"></i> Submit</button>
                 </div>
             </div>
         </div>
@@ -134,6 +161,9 @@
 @endcan
 <script>
 	$(function(){
+		$('#cancelAppointment').on('click', function(){
+			$('#cancelAppointmentModal').modal('show');
+		});
 		$('#reasonOfDecline').on('change', function(){
 			if($(this).val() == 'other'){
 				$('#otherReasonOfDecline').fadeIn();

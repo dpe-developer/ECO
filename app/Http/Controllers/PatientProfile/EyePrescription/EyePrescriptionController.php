@@ -73,9 +73,11 @@ class EyePrescriptionController extends Controller
 			if($reference->children->count()){
 				$parent_reference = EyePrescriptionData::create([
 					'eye_prescription_id' => $eyePrescription->id,
-					'reference_id' => $reference->id,
 					'parent_id' => null,
 					'child_id' => null,
+					'type' => $reference->type,
+					'name' => $reference->name,
+					'description' => $reference->description,
 					'value' => $request->get($reference->id),
 					'sub_value' => $request->get('input_'.$reference->id),
 				]);
@@ -84,18 +86,22 @@ class EyePrescriptionController extends Controller
 					if($children->child->count()){
 						$children_reference = EyePrescriptionData::create([
 							'eye_prescription_id' => $eyePrescription->id,
-							'reference_id' => $children->id,
 							'parent_id' => $parent_reference->id,
 							'child_id' => null,
+							'type' => $children->type,
+							'name' => $children->name,
+							'description' => $children->description,
 							'value' => $request->get($children->id),
 							'sub_value' => $request->get('input_'.$children->id),
 						]);
 						foreach ($children->child as $child) {
 							EyePrescriptionData::create([
 								'eye_prescription_id' => $eyePrescription->id,
-								'reference_id' => $child->id,
 								'parent_id' => $parent_reference->id,
 								'child_id' => $children_reference->id,
+								'type' => $child->type,
+								'name' => $child->name,
+								'description' => $child->description,
 								'value' => $request->get($child->id),
 								'sub_value' => $request->get('input_'.$child->id),
 							]);
@@ -103,9 +109,11 @@ class EyePrescriptionController extends Controller
 					}elseif($children->child->count() == 0 && $children->child_id == null){
 						EyePrescriptionData::create([
 							'eye_prescription_id' => $eyePrescription->id,
-							'reference_id' => $children->id,
 							'parent_id' => $parent_reference->id,
 							'child_id' => null,
+							'type' => $children->type,
+							'name' => $children->name,
+							'description' => $children->description,
 							'value' => $request->get($children->id),
 							'sub_value' => $request->get('input_'.$children->id),
 						]);
@@ -114,9 +122,11 @@ class EyePrescriptionController extends Controller
 			}elseif($reference->parent_id == null && $reference->child_id == null){
 				EyePrescriptionData::create([
 					'eye_prescription_id' => $eyePrescription->id,
-					'reference_id' => $reference->id,
 					'parent_id' => null,
 					'child_id' => null,
+					'type' => $reference->type,
+					'name' => $reference->name,
+					'description' => $reference->description,
 					'value' => $request->get($reference->id),
 					'sub_value' => $request->get('input_'.$reference->id),
 				]);

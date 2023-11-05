@@ -8,16 +8,26 @@
 		<thead>
 			<tr>
 				<th>Session Date</th>
+				<th>Type</th>
 				<th>Status</th>
 				<th>Doctor</th>
 				<th>Service</th>
 				<th>Complaints</th>
+				<th>Findings</th>
+				<th>Session End</th>
 			</tr>
 		</thead>
 		<tbody>
-			@forelse ($patient->visits as $visit)
-			<tr @can('patient_visits.show') data-toggle="modal-ajax" data-href="{{ route('patient_visits.show', $visit->id) }}" data-target="#showPatientVisit" @endcan>
+			@forelse ($patient->visits()->orderBy('created_at', 'DESC')->get() as $visit)
+			<tr @can('patient_visits.show') @if($visit->status == 'done') data-toggle="tr-link" data-href="{{ route('patient_visits.show', $visit->id) }}" @endif @endcan>
 				<td>{{ Carbon::parse($visit->session_date)->format('M d,Y h:ia') }} </td>
+				<td>
+					@if($visit->appointment_id == null)
+					Walk-in
+					@else
+					<a href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('appointments.show', $visit->appointment_id) }}" data-target="#showAppointmentModal">Appointment</a>
+					@endif
+				</td>
 				<td>{{ $visit->status }}</td>
 				<td>{{ $visit->doctor->fullname('f-m-l') }}</td>
 				<td>{{ $visit->service->name ?? "" }}</td>
@@ -30,7 +40,13 @@
 					{{ $visit->admitting_diagnosis->diagnosis }}
 					@endif
 				</th> --}}
-				<td>{{ $visit->compaints }}</td>
+				<td>{{ $visit->complaints }}</td>
+				<td>{{ $visit->findings }}</td>
+				<td>
+					@if($visit->status == 'done')
+					{{ Carbon::parse($visit->session_end)->format('M d,Y h:ia') }}
+					@endif
+				</td>
 			</tr>
 			@empty
 			<tr>

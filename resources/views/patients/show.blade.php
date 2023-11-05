@@ -108,9 +108,14 @@
                                 <a class="nav-link" id="medical-histories-tab" data-toggle="tab" href="#nav-medical-histories" role="tab" aria-controls="nav-medical-histories" aria-selected="false">Medical Histories</a>
                             </li>
                             @endcan
+                            @can('complaints.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="complaints-tab" data-toggle="tab" href="#nav-complaints" role="tab" aria-controls="nav-complaints" aria-selected="false">{{ trans('terminologies.complaints') }}</a>
+                            </li>
+                            @endcan
                             @can('eye_prescriptions.index')
                             <li class="nav-item">
-                                <a class="nav-link" id="eye-prescriptions-tab" data-toggle="tab" href="#nav-eye-prescriptions" role="tab" aria-controls="nav-eye-prescriptions" aria-selected="false">Eye Prescriptions</a>
+                                <a class="nav-link" id="eye-prescriptions-tab" data-toggle="tab" href="#nav-eye-prescriptions" role="tab" aria-controls="nav-eye-prescriptions" aria-selected="false">{{ trans('terminologies.eye_prescriptions') }}</a>
                             </li>
                             @endcan
                         </ul>
@@ -140,6 +145,15 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         @include('patients.patient_profile.medical_histories.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('complaints.index')
+                            <div class="tab-pane fade" id="nav-complaints" role="tabpanel" aria-labelledby="complaints-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.complaints.index')
                                     </div>
                                 </div>
                             </div>

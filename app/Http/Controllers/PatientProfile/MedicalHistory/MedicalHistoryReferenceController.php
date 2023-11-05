@@ -33,7 +33,7 @@ class MedicalHistoryReferenceController extends Controller
 			$MedicalHistoryReferences->where('name', 'LIKE', '%'.$query.'%');
 		}
 		$data = ([
-			'references' => $MedicalHistoryReferences->paginate(10),
+			'references' => $MedicalHistoryReferences->whereNull('parent_id')->paginate(10),
 		]);
 		return view('patients.patient_profile.medical_histories.references', $data); 
     }

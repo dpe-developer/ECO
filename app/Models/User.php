@@ -106,6 +106,14 @@ class User extends Authenticatable
         return $avatar;
     }
 
+    public function isDoctor()
+    {
+        if($this->role_id == 3){
+            return true;
+        }
+        return false;
+    }
+
     /**
      * format
      * f = first name
@@ -228,14 +236,19 @@ class User extends Authenticatable
         return false;
     }
 
-    public function eyePrescriptions()
-    {
-        return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescription', 'patient_id');
-    }
-
     public function medicalHistories()
     {
         return $this->hasMany('App\Models\PatientProfile\MedicalHistory\MedicalHistory', 'patient_id');
+    }
+
+    public function complaints()
+    {
+        return $this->hasMany('App\Models\PatientProfile\Complaint\Complaint', 'patient_id');
+    }
+
+    public function eyePrescriptions()
+    {
+        return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescription', 'patient_id');
     }
     /**
      * END OF Functions for Patients

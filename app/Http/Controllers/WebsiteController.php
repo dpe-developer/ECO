@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Appointment;
+use App\Models\Announcement;
 use App\Mail\SampleMail;
 use App\Mail\RegistrationCompleteMail;
 use Illuminate\Http\Request;
@@ -27,7 +28,18 @@ class WebsiteController extends Controller
 
     public function announcements()
     {
-        return view('announcements');
+        $data = [
+            'announcements' => Announcement::orderBy('created_at', 'DESC')->get()
+        ]; 
+        return view('announcements', $data);
+    }
+
+    public function viewAnnouncement(Announcement $announcement)
+    {
+        $data = [
+            'announcement' => $announcement
+        ]; 
+        return view('view_announcement', $data);
     }
 
     public function gallery()

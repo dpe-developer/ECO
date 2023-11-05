@@ -21,24 +21,24 @@
                                 <label for="appointmentTime">Appointment Time <strong class="text-danger">*</strong></label>
                                 <select name="appointment_time" id="appointmentTime" class="form-control" required>
                                     <option></option>
-                                    <option value="9:00">9:00am</option>
-                                    <option value="9:30">9:30am</option>
-                                    <option value="10:00">10:00am</option>
-                                    <option value="10:30">10:30am</option>
-                                    <option value="11:00">11:00am</option>
-                                    <option value="11:30">11:30am</option>
-                                    <option value="12:00">12:00pm</option>
-                                    <option value="12:30">12:30pm</option>
-                                    <option value="13:00">1:00pm</option>
-                                    <option value="13:30">1:30pm</option>
-                                    <option value="14:00">2:00pm</option>
-                                    <option value="14:30">2:30pm</option>
-                                    <option value="15:00">3:00pm</option>
-                                    <option value="15:30">3:30pm</option>
-                                    <option value="16:00">4:00pm</option>
-                                    <option value="16:30">4:30pm</option>
-                                    <option value="17:00">5:00pm</option>
-                                    <option value="17:30">5:30pm</option>
+                                    <option @if(in_array('09:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 09:00:00')) class="text-danger" disabled @endif value="9:00">9:00am</option>
+                                    <option @if(in_array('09:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 09:30:00')) class="text-danger" disabled @endif value="9:30">9:30am</option>
+                                    <option @if(in_array('10:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 10:00:00')) class="text-danger" disabled @endif value="10:00">10:00am</option>
+                                    <option @if(in_array('10:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 10:30:00')) class="text-danger" disabled @endif value="10:30">10:30am</option>
+                                    <option @if(in_array('11:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 11:00:00')) class="text-danger" disabled @endif value="11:00">11:00am</option>
+                                    <option @if(in_array('11:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 11:30:00')) class="text-danger" disabled @endif value="11:30">11:30am</option>
+                                    <option @if(in_array('12:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 12:00:00')) class="text-danger" disabled @endif value="12:00">12:00pm</option>
+                                    <option @if(in_array('12:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 12:30:00')) class="text-danger" disabled @endif value="12:30">12:30pm</option>
+                                    <option @if(in_array('13:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 13:00:00')) class="text-danger" disabled @endif value="13:00">1:00pm</option>
+                                    <option @if(in_array('13:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 13:30:00')) class="text-danger" disabled @endif value="13:30">1:30pm</option>
+                                    <option @if(in_array('14:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 14:00:00')) class="text-danger" disabled @endif value="14:00">2:00pm</option>
+                                    <option @if(in_array('14:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 14:30:00')) class="text-danger" disabled @endif value="14:30">2:30pm</option>
+                                    <option @if(in_array('15:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 15:00:00')) class="text-danger" disabled @endif value="15:00">3:00pm</option>
+                                    <option @if(in_array('15:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 15:30:00')) class="text-danger" disabled @endif value="15:30">3:30pm</option>
+                                    <option @if(in_array('16:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 16:00:00')) class="text-danger" disabled @endif value="16:00">4:00pm</option>
+                                    <option @if(in_array('16:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 16:30:00')) class="text-danger" disabled @endif value="16:30">4:30pm</option>
+                                    <option @if(in_array('17:00', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 17:00:00')) class="text-danger" disabled @endif value="17:00">5:00pm</option>
+                                    <option @if(in_array('17:30', $timeTaken) || Carbon::now() > Carbon::parse($appointmentDate.' 17:30:00')) class="text-danger" disabled @endif value="17:30">5:30pm</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -63,26 +63,6 @@
                                 <label for="description">Description</label>
                                 <textarea name="description" id="description" rows="3" class="form-control"></textarea>
                             </div>
-                            {{-- <div class="form-group">
-                                <label>Proof of Identity</label>
-                                <select name="type_of_identification" class="form-control select2" required style="width: 100%">
-                                    <option></option>
-                                    <option value="Valid Driver's License">Valid Driver's License</option>
-                                    <option value="State-issued Identification Card">State-issued Identification Card</option>
-                                    <option value="Student Identification Card">Student Identification Card</option>
-                                    <option value="Social Security Card">Social Security Card</option>
-                                    <option value="Military Identification Card">Military Identification Card</option>
-                                    <option value="Passport">Passport</option>
-                                </select>
-                                <div class="row justify-content-center">
-                                    <div class="form-group col-md-6">
-                                        <img id="img" width="100%" class="img-thumbnail" style="border: none; background-color: transparent" src="{{ asset('images/image-icon.png') }}" />
-                                        <label class="btn btn-primary btn-block">
-                                            Browse&hellip;<input value="" type="file" name="proof_of_identity" style="display: none;" id="upload" accept="image/png, image/jpeg" required/>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
                 </div>

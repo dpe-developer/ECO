@@ -1,17 +1,17 @@
-<form action="{{ route('medical_histories.store') }}" method="POST" autocomplete="off">
+<form action="{{ route('complaints.store') }}" method="POST" autocomplete="off">
 	@csrf
-	<div class="modal fade" id="addMedicalHistory" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="addComplaint" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-scrollable modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
-		        	<h4 class="modal-title">Add Medical History</h4>
+		        	<h4 class="modal-title">Add {{ trans('terminologies.complaint') }}</h4>
 		        	<button type="button" class="close" data-dismiss="modal-ajax" aria-hidden="true">&times;</button>
 		    	</div>
 				<div class="modal-body text-left scrollbar-primary">
 					<input type="test" hidden name="patient" value="{{ $patient->id }}">
 					<input type="test" hidden name="visit" value="@isset($patient->activeVisit()->id){{ $patient->activeVisit()->id }}@endisset">
 					{{-- <div class="row patient-profile-form grid"> --}}
-						@foreach ($medical_history_references as $reference)
+						@foreach ($complaint_references as $reference)
 							@if ($reference->type == 'parent')
 								{{-- <div class="col-md-4 grid-item"> --}}
 									<div class="callout callout-light">
@@ -31,8 +31,8 @@
 														<li>
 															<div class="checkbox">
 															    <div class="custom-control custom-checkbox">
-																	<input @if(old($children->id) == $children->name){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $children->id }}" value="{{ $children->name }}" id="MedicalHistory_{{ $children->id }}">
-																	<label class="custom-control-label" for="MedicalHistory_{{ $children->id }}">{{ $children->name }}</label>
+																	<input @if(old($children->id) == $children->name){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $children->id }}" value="{{ $children->name }}" id="EyePrescription_{{ $children->id }}">
+																	<label class="custom-control-label" for="EyePrescription_{{ $children->id }}">{{ $children->name }}</label>
 																</div>
 															</div>
 														</li>
@@ -40,14 +40,14 @@
 														<li>
 															<div class="form-group">
 																<div class="custom-control custom-checkbox">
-																	<input @if(old($children->id) == $children->name){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $children->id }}" name="{{ $children->id }}" value="{{ $children->name }}" id="MedicalHistory_{{ $children->id }}">
-																	<label class="custom-control-label" for="MedicalHistory_{{ $children->id }}">{{ $children->name }}</label>
+																	<input @if(old($children->id) == $children->name){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $children->id }}" name="{{ $children->id }}" value="{{ $children->name }}" id="EyePrescription_{{ $children->id }}">
+																	<label class="custom-control-label" for="EyePrescription_{{ $children->id }}">{{ $children->name }}</label>
 																</div>
 																<div class="input-group input-group-sm">
 																	<span class="input-group-prepend">
 																		<span class="input-group-text">{{ $children->description }}</span>
 																	</span>
-																	<input value="{{ old('input_'.$children->id) }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $children->id }}" name="input_{{$children->id}}" id="MedicalHistory_input{{ $children->id }}" @if(old($children->id) == $children->name) @else disabled="" @endif>
+																	<input value="{{ old('input_'.$children->id) }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $children->id }}" name="input_{{$children->id}}" id="EyePrescription_input{{ $children->id }}" @if(old($children->id) == $children->name) @else disabled="" @endif>
 																</div>
 															</div>
 														</li>
@@ -75,8 +75,8 @@
 																<li>
 																	<div class="checkbox">
 																	    <div class="custom-control custom-checkbox">
-																			<input @if(old($child->id) == $child->name){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $child->id }}" value="{{ $child->name }}" id="MedicalHistory_{{ $child->id }}">
-																			<label class="custom-control-label" for="MedicalHistory_{{ $child->id }}">{{ $child->name }}</label>
+																			<input @if(old($child->id) == $child->name){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $child->id }}" value="{{ $child->name }}" id="EyePrescription_{{ $child->id }}">
+																			<label class="custom-control-label" for="EyePrescription_{{ $child->id }}">{{ $child->name }}</label>
 																		</div>
 																	</div>
 																</li>
@@ -84,14 +84,14 @@
 																<li>
 																	<div class="form-group">
 																		<div class="custom-control custom-checkbox">
-																			<input @if(old($child->id) == $child->name){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $child->id }}" name="{{ $child->id }}" value="{{ $child->name }}" id="MedicalHistory_{{ $child->id }}">
-																			<label class="custom-control-label" for="MedicalHistory_{{ $child->id }}">{{ $child->name }}</label>
+																			<input @if(old($child->id) == $child->name){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $child->id }}" name="{{ $child->id }}" value="{{ $child->name }}" id="EyePrescription_{{ $child->id }}">
+																			<label class="custom-control-label" for="EyePrescription_{{ $child->id }}">{{ $child->name }}</label>
 																		</div>
 																		<div class="input-group input-group-sm">
 																			<span class="input-group-prepend">
 																				<span class="input-group-text">{{ $child->description }}</span>
 																			</span>
-																			<input value="{{ old('input_'.$child->id) }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $child->id }}" name="input_{{$child->id}}" id="MedicalHistory_input{{ $child->id }}" @if(old($child->id) == $child->name) @else disabled="" @endif>
+																			<input value="{{ old('input_'.$child->id) }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $child->id }}" name="input_{{$child->id}}" id="EyePrescription_input{{ $child->id }}" @if(old($child->id) == $child->name) @else disabled="" @endif>
 																		</div>
 																	</div>
 																</li>
@@ -126,22 +126,22 @@
 										<div class="form-group">
 											<div class="checkbox">
 											    <div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" name="{{ $reference->id }}" value="{{ $reference->name }}" id="MedicalHistory_{{ $reference->id }}">
-													<label @if(old($reference->id) == $reference->name){{'checked'}}@endif class="custom-control-label" for="MedicalHistory_{{ $reference->id }}">{{ $reference->name }}</label>
+													<input type="checkbox" class="custom-control-input" name="{{ $reference->id }}" value="{{ $reference->name }}" id="EyePrescription_{{ $reference->id }}">
+													<label @if(old($reference->id) == $reference->name){{'checked'}}@endif class="custom-control-label" for="EyePrescription_{{ $reference->id }}">{{ $reference->name }}</label>
 												</div>
 											</div>
 										</div>
 									@elseif($reference->type == 'check_textbox')
 										<div class="form-group">
 											<div class="custom-control custom-checkbox">
-												<input @if(old($reference->id) == $reference->name){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $reference->id }}" name="{{ $reference->id }}" value="{{ $reference->name }}" id="MedicalHistory_{{ $reference->id }}">
-												<label class="custom-control-label" for="MedicalHistory_{{ $reference->id }}">{{ $reference->name }}</label>
+												<input @if(old($reference->id) == $reference->name){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $reference->id }}" name="{{ $reference->id }}" value="{{ $reference->name }}" id="EyePrescription_{{ $reference->id }}">
+												<label class="custom-control-label" for="EyePrescription_{{ $reference->id }}">{{ $reference->name }}</label>
 											</div>
 											<div class="input-group input-group-sm">
 												<span class="input-group-prepend">
 													<span class="input-group-text">{{ $reference->description }}</span>
 												</span>
-												<input value="{{ old('input_'.$reference->id) }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $reference->id }}" name="input_{{$reference->id}}" id="MedicalHistory_input{{ $reference->id }}" @if(old($reference->id) == $reference->name) @else disabled="" @endif>
+												<input value="{{ old('input_'.$reference->id) }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $reference->id }}" name="input_{{$reference->id}}" id="EyePrescription_input{{ $reference->id }}" @if(old($reference->id) == $reference->name) @else disabled="" @endif>
 											</div>
 										</div>
 									@elseif($reference->type == 'textarea')

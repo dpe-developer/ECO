@@ -26,7 +26,10 @@ class Announcement extends Model
         $daysAgo = $this->created_at->diffInDays(now());
         $duration = $secondsAgo . " seconds ago";
         if($hoursAgo > 24) {
-            $duration = $daysAgo . " days ago";
+            $duration = $daysAgo . " day ago";
+            if($daysAgo > 1){
+                $duration = $daysAgo . " days ago";
+            }
         }elseif($minutesAgo > 60) {
             $duration = $hoursAgo . " hours ago";
         }elseif($secondsAgo > 60) {

@@ -8,16 +8,16 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">{{ trans('terminologies.eye_prescription') }} References</h1>
+                    <h1 class="m-0 text-dark">{{ trans('terminologies.complaint') }} References</h1>
                 </div>
                 <div class="col-md-6 text-right">
-                    <form action="{{ route('eye_prescription_references.index') }}" method="GET" autocomplete="off">
+                    <form action="{{ route('complaint_references.index') }}" method="GET" autocomplete="off">
                         <div class="form-row">
                             <div class="form-group col">
                                 <div class="input-group">
                                     @if(isset($_GET['q']))
                                     <span class="input-group-prepend">
-                                    <a class="btn btn-success" href="{{ route('eye_prescription_references.index') }}">View All</a>
+                                    <a class="btn btn-success" href="{{ route('complaint_references.index') }}">View All</a>
                                     </span>
                                     @endif
                                     <input class="form-control" name="q" placeholder="Reference Name" @if(isset($_GET['q'])) value="{{$_GET['q']}}" @endif>
@@ -26,9 +26,9 @@
                                     </div>
                                 </div>
                             </div>
-                            @can('eye_prescription_references.create')
+                            @can('complaint_references.create')
                             <div class="form-group col-2">
-                                <button class="btn btn-default text-primary" type="button" data-toggle="modal-ajax" data-href="{{ route('eye_prescription_references.create') }}" data-target="#addPatientProfileReference"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-default text-primary" type="button" data-toggle="modal-ajax" data-href="{{ route('complaint_references.create') }}" data-target="#addPatientProfileReference"><i class="fa fa-plus"></i> Add</button>
                             </div>
                             @endcan
                         </div>
@@ -65,9 +65,9 @@
 									@if($reference->children->count())
 										<tr 
                                             @unlessrole('System Administrator')
-                                                @can('eye_prescription_references.edit')
+                                                @can('complaint_references.edit')
                                                     data-toggle="modal-ajax"
-                                                    data-href="{{ route('eye_prescription_references.edit', $children->id) }}"
+                                                    data-href="{{ route('complaint_references.edit', $children->id) }}"
                                                     data-target="#editPatientProfileReference" 
                                                 @endcan
                                             @endunlessrole
@@ -83,8 +83,8 @@
 											<th>Description</th>
 											@role('System Administrator')
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('eye_prescription_references.edit',$reference->id) }}"><i class="fad fa-edit fa-lg"></i></a>
-												<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescription_references.destroy', $reference->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
+                                                <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('complaint_references.edit',$reference->id) }}"><i class="fad fa-edit fa-lg"></i></a>
+												<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('complaint_references.destroy', $reference->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
                                             </td>
                                             @endrole
 										</tr> {{-- end of reference w/ child --}}
@@ -92,9 +92,9 @@
 											@if($child->child_id==null)
 												<tr 
 													@unlessrole('System Administrator')
-														@can('eye_prescription_references.edit')
+														@can('complaint_references.edit')
 															data-toggle="modal-ajax"
-															data-href="{{ route('eye_prescription_references.edit', $child->id) }}"
+															data-href="{{ route('complaint_references.edit', $child->id) }}"
 															data-target="#editPatientProfileReference" 
 														@endcan
 													@endunlessrole
@@ -109,15 +109,15 @@
 													<td>{{ $child->description}}</td>
 													@role('System Administrator')
                                                     <td class="text-center">
-                                                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('eye_prescription_references.edit',$reference->id) }}"><i class="fad fa-edit fa-lg"></i></a>
-														<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescription_references.destroy', $reference->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
+                                                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('complaint_references.edit', $child->id) }}"><i class="fad fa-edit fa-lg"></i></a>
+														<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('complaint_references.destroy', $child->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
                                                     </td>
                                                     @endrole
 												</tr> {{-- end of child reference w/out children --}}
 											@endif
 											@if ($child->child->count())
 												@foreach ($child->child as $children)
-													<tr @if(Auth::user()->role_id != 1) @can('eye_prescription_references.edit') class="tr-link" data-href="{{ route('eye_prescription_references.edit', $children->id) }}" @endcan @endif> {{-- child children --}}
+													<tr @if(Auth::user()->role_id != 1) @can('complaint_references.edit') class="tr-link" data-href="{{ route('complaint_references.edit', $children->id) }}" @endcan @endif> {{-- child children --}}
 														@if (Auth::user()->hasrole('System Administrator'))
 														<td>{{ $children->id }}</td>
 														@endif
@@ -126,8 +126,8 @@
 														<td>{{ $children->description }}</td>
 														@role('System Administrator')
 														<td class="text-center">
-															<a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('eye_prescription_references.edit',$children->id) }}"><i class="fad fa-edit fa-lg"></i></a>
-															<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescription_references.destroy', $children->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
+															<a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('complaint_references.edit',$children->id) }}"><i class="fad fa-edit fa-lg"></i></a>
+															<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('complaint_references.destroy', $children->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
 														</td>
 														@endrole
 													</tr> {{-- end of child children --}}
@@ -137,9 +137,9 @@
 									@else
 										<tr 
                                             @unlessrole('System Administrator')
-                                                @can('eye_prescription_references.edit')
+                                                @can('complaint_references.edit')
                                                     data-toggle="modal-ajax"
-                                                    data-href="{{ route('eye_prescription_references.edit', $reference->id) }}"
+                                                    data-href="{{ route('complaint_references.edit', $reference->id) }}"
                                                     data-target="#editPatientProfileReference" 
                                                 @endcan
                                             @endunlessrole
@@ -152,8 +152,8 @@
 											<td>{{ $reference->description }}</td>
 											@role('System Administrator')
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('eye_prescription_references.edit',$reference->id) }}"><i class="fad fa-edit fa-lg"></i></a>
-                                                <a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescription_references.destroy', $reference->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
+                                                <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('complaint_references.edit',$reference->id) }}"><i class="fad fa-edit fa-lg"></i></a>
+                                                <a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('complaint_references.destroy', $reference->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
                                             </td>
                                             @endrole
 										</tr> {{-- end of reference w/out child --}}

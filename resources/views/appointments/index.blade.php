@@ -31,7 +31,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-          }
+        }
     </style>
     @endif
 @endsection
@@ -82,6 +82,7 @@
             <div class="row">
                 <div class="col">
                     <div class="callout callout-info pt-1 pb-1">
+                        <legend>Filter</legend>
                         {{-- @foreach (request()->all() as $name => $value)
                             @if($name != "filter" && $value != null && $name != "filter_date_option")
                                 <label>{{ str_replace("filter appointment ", "", str_replace("_", " ", $name)) }}: </label>
@@ -142,7 +143,7 @@
                     <div id="appointmentCalendar"></div>
                     @else
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-sm">
+                        <table class="table table-bordered table-hover table-sm" id="appointmentsDatatable">
                             <thead>
                                 <tr>
                                     <th>Date of Appointment</th>
@@ -168,8 +169,8 @@
                                         @endcan
                                     @endunlessrole
                                 >
-									<td>
-                                        {{ date('M d, Y', strtotime($appointment->appointment_date)) }}
+									<td data-order="{{ Carbon::parse($appointment->appointment_date) }}">
+                                        {{ Carbon::parse($appointment->appointment_date)->format('M d, Y') }}
                                         @if(UserNotification::isNotSeen('appointment', $appointment->id))
                                         <span class="right badge badge-danger">new</span>
                                         @endif
@@ -197,11 +198,6 @@
 									@endhasrole
                                 </tr>
                                 @endforeach
-                                @if (count($appointments) == 0)
-                                <tr>
-                                    <td class="text-danger text-center" colspan="9">*** Empty ***</td>
-                                </tr>
-                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -292,26 +288,32 @@
                         <label>Status:</label>
                         <div class="checkbox">
                             <div class="custom-control custom-checkbox">
-                                <input @if(request()->get('filter_appointment_status')) {{ in_array('1', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="1" id="filterInventoryStatusPending">
+                                <input @if(request()->get('filter_appointment_status')) {{ in_array('pending', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="pending" id="filterInventoryStatusPending">
                                 <label class="custom-control-label" for="filterInventoryStatusPending">Pending</label>
                             </div>
                         </div>
                         <div class="checkbox">
                             <div class="custom-control custom-checkbox">
-                                <input @if(request()->get('filter_appointment_status')) {{ in_array('2', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="2" id="filterInventoryStatusConfirmed">
+                                <input @if(request()->get('filter_appointment_status')) {{ in_array('confirmed', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="confirmed" id="filterInventoryStatusConfirmed">
                                 <label class="custom-control-label" for="filterInventoryStatusConfirmed">Confirmed</label>
                             </div>
                         </div>
                         <div class="checkbox">
                             <div class="custom-control custom-checkbox">
-                                <input @if(request()->get('filter_appointment_status')) {{ in_array('3', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="3" id="filterInventoryStatusFinished">
-                                <label class="custom-control-label" for="filterInventoryStatusFinished">Finished</label>
+                                <input @if(request()->get('filter_appointment_status')) {{ in_array('done', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="done" id="filterInventoryStatusDone">
+                                <label class="custom-control-label" for="filterInventoryStatusDone">Done</label>
                             </div>
                         </div>
                         <div class="checkbox">
                             <div class="custom-control custom-checkbox">
-                                <input @if(request()->get('filter_appointment_status')) {{ in_array('4', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="4" id="filterInventoryStatusCanceled">
+                                <input @if(request()->get('filter_appointment_status')) {{ in_array('canceled', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="canceled" id="filterInventoryStatusCanceled">
                                 <label class="custom-control-label" for="filterInventoryStatusCanceled">Canceled</label>
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <div class="custom-control custom-checkbox">
+                                <input @if(request()->get('filter_appointment_status')) {{ in_array('declined', request()->get('filter_appointment_status')) ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_appointment_status[]" value="declined" id="filterInventoryStatusDeclined">
+                                <label class="custom-control-label" for="filterInventoryStatusDeclined">Declined</label>
                             </div>
                         </div>
                     </div>
@@ -330,6 +332,12 @@
 @section('script')
     @yield('modal_open_script')
     <script type="application/javascript">
+        $(document).ready(function () {
+            $('#appointmentsDatatable').DataTable({
+                order: [[0, 'desc']],
+                // columnDefs : [{"targets": 0, "type":"date"}],
+            });
+        });
         $(function () {
             // $('#filterAppointments').modal('show')
             $('#dateOption').on('change', function(){
@@ -357,19 +365,26 @@
         var calendarEl = document.getElementById('appointmentCalendar');
         var calendar = new Calendar(calendarEl, {
             plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid' ],
-            defaultView: 'dayGridMonth',
+            // defaultView: 'dayGridMonth',
+            defaultView: 'timeGrid',
             height: 'parent',
             header    : {
                 left  : 'title',
                 // center: 'dayGridMonth,timeGridWeek,timeGridDay',
-                right : 'prev,next today'
+                // right : 'prev,next today'
+                right : 'prev,next today, dayGridMonth,timeGridWeek,timeGridDay'
             },
             eventLimit: true, // allow "more" link when too many events
             views: {
+                dayGrid : {
+                    eventLimit: 18
+                },
                 timeGrid: {
-                    eventLimit: 6 // adjust to 6 only for timeGridWeek/timeGridDay
+                    eventLimit: 18 // adjust to 6 only for timeGridWeek/timeGridDay
                 },
             },
+            minTime: '09:00:00',
+            maxTime: '17:30:00',
             eventClick: function(info) {
                 var eventObj = info.event;
                 $('#loader').show();
@@ -403,6 +418,7 @@
                     title          : '{{ $appointment->patient->last_name }}, {{ $appointment->patient->first_name }}',
                     description    : 'description for All Day Event',
                     start          : '{{ $appointment->appointment_date }}',
+                    end            : '{{ Carbon::parse($appointment->appointment_date)->addMinutes(30) }}',
                     dataTarget     : '#showAppointmentModal',
                     dataHref       : '{{ route('appointments.show', $appointment->id) }}',
                     formAction     : '{{ route('appointments.update', $appointment->id) }}',
@@ -426,9 +442,13 @@
                 },
             @endforeach
             ],
-            });
-            calendar.render();
-            // $('#calendar').fullCalendar()
+            dateClick: function(info) {
+                // Handle the date click event
+                calendar.changeView('timeGridDay', info.dateStr); // Switch to timeGridDay view
+            },
+        });
+        calendar.render();
+        // $('#calendar').fullCalendar()
     </script>
     @endif
 @endsection

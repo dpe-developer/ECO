@@ -10,9 +10,11 @@ class MedicalHistoryData extends Model
 
 	protected $fillable = [
 		'medical_history_id',
-		'reference_id',
 		'parent_id',
 		'child_id',
+		'type',
+		'name',
+		'description',
 		'value',
 		'sub_value',
 	];

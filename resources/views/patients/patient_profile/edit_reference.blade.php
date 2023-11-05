@@ -81,7 +81,7 @@
 						<button class="btn btn-default" type="button" data-dismiss="modal" aria-label="Close">Cancel</button>
 					</div>
 					<div class="col text-right">
-						<a class="btn btn-default" href="{{ route($baseUrl.'.index') }}">Discard</a>
+						<button class="btn btn-default" data-dismiss="modal-ajax" type="button"><i class="fad fa-times"></i> Discard</button>
 						<button class="btn btn-default text-success" type="submit"><i class="fad fa-save"></i> Save</button>
 					</div>
 				</div>

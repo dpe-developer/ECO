@@ -30,7 +30,7 @@ class AnnouncementController extends Controller
         $announcements = Announcement::select('*');
 
         $data = [
-            'announcements' => $announcements->get()
+            'announcements' => $announcements->orderBy('created_at', 'DESC')->get()
         ];
 
         return view('announcements.index', $data);

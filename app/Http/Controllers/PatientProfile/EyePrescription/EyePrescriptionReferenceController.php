@@ -34,7 +34,7 @@ class EyePrescriptionReferenceController extends Controller
 			$EyePrescriptionReferences->where('name', 'LIKE', '%'.$query.'%');
 		}
 		$data = ([
-			'references' => $EyePrescriptionReferences->paginate(10),
+			'references' => $EyePrescriptionReferences->whereNull('parent_id')->paginate(10),
 		]);
 		return view('patients.patient_profile.eye_prescriptions.references', $data); 
 	}
@@ -108,7 +108,7 @@ class EyePrescriptionReferenceController extends Controller
 			'child_references' => EyePrescriptionReference::whereNotNull('parent_id')->whereNull('child_id')->get(),
 		];
 		return response()->json([
-			'modal_content' => view('patients.patient_profile_settings.edit', $data)->render()
+			'modal_content' => view('patients.patient_profile.edit_reference', $data)->render()
 		]);
 	}
 

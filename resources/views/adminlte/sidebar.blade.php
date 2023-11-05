@@ -6,7 +6,7 @@
     <!-- Brand Logo -->
     <a href="/" class="brand-link {{ Setting::ui('adminlte_brand_logo_variant') }}">
         <img src="{{ asset(Setting::company('company_logo')) }}" alt="AdminLTE Logo" class="brand-image {{-- img-circle elevation-3 --}}" style="opacity: .8">
-        <span class="brand-text font-weight-light">{{ config('app.name', "Laravel AdminLTE") }}</span>
+        <span class="brand-text font-weight-light">{{ config('app.client_name', "Laravel AdminLTE") }}</span>
     </a>
     <!-- Sidebar -->
     <div class="sidebar">

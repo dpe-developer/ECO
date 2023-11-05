@@ -6,21 +6,21 @@
 	</script>
 @endsection
 {{-- modal-Show Eye Prescription --}}
-<div class="modal fade" id="showEyePrescription" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+<div class="modal fade" id="showComplaint" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-scrollable modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
-	          <h4 class="modal-title">{{ trans('terminologies.eye_prescription') }} - {{ date('M d, Y h:ia', strtotime($eyePrescription_show->updated_at)) }}</h4>
+	          <h4 class="modal-title">{{ trans('terminologies.eye_prescription') }} - {{ date('M d, Y h:ia', strtotime($complaint_show->updated_at)) }}</h4>
 	          {{-- <a class="close" href="{{ route('patients.show', $patient->id) }}">&times;</a> --}}
 	          <button class="close" data-dismiss="modal-ajax"  type="button">&times;</button>
 	    	</div>
 			<div class="modal-body text-left scrollbar-primary">
 				<div class="callout callout-info">
-                	<label>Doctor:</label> {{ $eyePrescription_show->doctor->fullname()}}<br>
-                	{{-- <label>Patient:</label> {{ $eyePrescription_show->patient->patient_name($eyePrescription_show->patient_id) }} --}}
+                	<label>Doctor:</label> {{ $complaint_show->doctor->fullname()}}<br>
+                	{{-- <label>Patient:</label> {{ $complaint_show->patient->patient_name($complaint_show->patient_id) }} --}}
                 </div>
 				{{-- <div class="row patient-profile-form grid"> --}}
-					@foreach ($eyePrescription_show->result as $result)
+					@foreach ($complaint_show->result as $result)
 						@if ($result->type == 'parent')
 							{{-- <div class="col-md-4 grid-item"> --}}
 								<div class="callout callout-light">
@@ -161,10 +161,10 @@
 			<div class="modal-footer">
 				<div class="col">
 					@can('eye_prescriptions.destroy')
-					<a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescriptions.destroy', $eyePrescription_show->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+					<a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescriptions.destroy', $complaint_show->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
 					@endcan
 					@can('eye_prescriptions.edit')
-					   <a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('eye_prescriptions.edit', $eyePrescription_show->id) }}" data-target="#editEyePrescription"><i class="fad fa-edit"></i> Edit</a>
+					   <a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('eye_prescriptions.edit', $complaint_show->id) }}" data-target="#editEyePrescription"><i class="fad fa-edit"></i> Edit</a>
 					@endcan
 				</div>
 				<div class="col text-right">
