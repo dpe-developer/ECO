@@ -8,8 +8,8 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'version' => "3.3.1",
-    'client_name' => env('APP_CLIENT_NAME', 'Laravel AdminLTE'),
+    'version' => "3.5.2",
+    'client_name' => env('APP_CLIENT_NAME', 'Laravel'),
     // Twilio
     'twilio_sid' => env('TWILIO_SID'),
     'twilio_auth_token' => env('TWILIO_AUTH_TOKEN'),
@@ -258,6 +258,7 @@ return [
         /**
          * Custom Models
          */
+        'User' => App\Models\User::class,
         'UserNotification' => App\Models\UserNotification::class,
 
     ],

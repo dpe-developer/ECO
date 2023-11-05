@@ -1,9 +1,9 @@
-@php
+{{-- @php
     if(Auth::user()->hasrole('Patient')){
         header('location: ' . config('app.url'));
         exit;
     }
-@endphp
+@endphp --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\User;
+use App\Models\Service;
 use App\Models\PatientVisit;
 use App\Models\UserNotification;
 use App\Mail\AppointmentDeclinedMail;
@@ -14,6 +15,20 @@ use Carbon;
 
 class AppointmentController extends Controller
 {
+    public function __construct()
+	{
+		$this->middleware('auth');
+		$this->middleware('permission:appointments.index', ['only' => ['index']]);
+		$this->middleware('permission:appointments.create', ['only' => ['create','store']]);
+		$this->middleware('permission:appointments.show', ['only' => ['show']]);
+		$this->middleware('permission:appointments.edit', ['only' => ['edit','update']]);
+		$this->middleware('permission:appointments.destroy', ['only' => ['destroy']]);
+		$this->middleware('permission:appointments.restore', ['only' => ['restore']]);
+		$this->middleware('permission:appointments.confirm', ['only' => ['confirmAppointment']]);
+		$this->middleware('permission:appointments.accept_patient', ['only' => ['acceptPatient']]);
+		$this->middleware('permission:appointments.cancel', ['only' => ['cancelAppointment']]);
+		$this->middleware('permission:appointments.decline', ['only' => ['declineAppointment']]);
+	}
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +36,7 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
-        if(Auth::user()->role_id != 4){
+        // if(Auth::user()->role_id != 4){
             $appointments = Appointment::select('*');
             if($request->get('filter_patient')){
                 $appointments->whereIn('patient_id', $request->get('filter_patient'));
@@ -87,13 +102,13 @@ class AppointmentController extends Controller
                 'doctors' => $doctors,
             ];
             return view('appointments.index', $data);
-        }else{
+        /* }else{
             $appointments = Appointment::where('patient_id', Auth::user()->id)->get();
             $data = [
                 'appointments' => $appointments
             ];
             return view('patient_appointments.index', $data);
-        }
+        } */
     }
 
     /**
@@ -103,7 +118,14 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'patients' => User::where('role_id', 4)->get(),
+            'doctors' => User::where('role_id', 3)->get(),
+            'services' => Service::get(),
+        ];
+        return response()->json([
+            'modal_content' => view('appointments.create', $data)->render()
+        ]);
     }
 
     /**
@@ -114,7 +136,15 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $appointmentDate = Carbon::parse($request->get('appointment_date').' '.$request->get('appointment_time'));
+        Appointment::create([
+            'patient_id' => $request->get('patient'),
+            'doctor_id' => $request->get('doctor'),
+            'service_id' => $request->get('service'),
+            'appointment_date' => $appointmentDate,
+            'description' => $request->get('description'),
+        ]);
+        return back()->with('alert-success', 'Appointment successfully created');
     }
 
     /**
@@ -239,10 +269,14 @@ class AppointmentController extends Controller
         return back()->with('alert-warning', 'Appointment canceled');
     }
 
-    public function getAvailableAppointmentTime(Request $request)
+    public function getTimeTaken(Request $request)
     {
+        $timeTaken = [];
+        foreach(Appointment::whereDate('appointment_date', $request->get('appointment_date'))->whereIn('status', ['pending', 'confirmed'])->get() as $appointment){
+            $timeTaken[] = Carbon::parse($appointment->appointment_date)->format('H:i');
+        }
         return response()->json([
-            'data' => $data
+            'timeTaken' => $timeTaken
         ]);
     }
 }

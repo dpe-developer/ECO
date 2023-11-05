@@ -10,6 +10,17 @@ use Carbon;
 
 class PatientVisitController extends Controller
 {
+    public function __construct()
+	{
+		$this->middleware('auth');
+		$this->middleware('permission:patient_visits.index', ['only' => ['index']]);
+		$this->middleware('permission:patient_visits.create', ['only' => ['create','store']]);
+		$this->middleware('permission:patient_visits.show', ['only' => ['show']]);
+		$this->middleware('permission:patient_visits.edit', ['only' => ['edit','update']]);
+		$this->middleware('permission:patient_visits.destroy', ['only' => ['destroy']]);
+		$this->middleware('permission:patient_visits.restore', ['only' => ['restore']]);
+		$this->middleware('permission:patient_visits.end_visit', ['only' => ['endVisit']]);
+	}
     /**
      * Display a listing of the resource.
      *
@@ -99,7 +110,7 @@ class PatientVisitController extends Controller
             'service_id' => $request->get('service'),
             'complaints' => $request->get('complaints'),
             'findings' => $request->get('findings'),
-            'recommendation' => $request->get('recommendation'),
+            'recommendations' => $request->get('recommendations'),
             'session_start' => Carbon::now(),
         ]);
         return redirect()->route('patients.show', $patientVisit->patient_id)->with('alert-success', 'Saved');
@@ -113,7 +124,8 @@ class PatientVisitController extends Controller
      */
     public function destroy(PatientVisit $patientVisit)
     {
-        //
+        $patientVisit->delete();
+        return back()->with('alert-warning', 'Patient Visit Successfully DELETED');
     }
 
     public function endVisit(Request $request, PatientVisit $patientVisit)
@@ -122,9 +134,11 @@ class PatientVisitController extends Controller
             'status' => 'done',
             'session_end' => Carbon::now(),
         ]);
-        $patientVisit->appointment->update([
-            'status' => 'done'
-        ]);
+        if($patientVisit->appointment_id != null){
+            $patientVisit->appointment->update([
+                'status' => 'done'
+            ]);
+        }
         return redirect()->route('patients.show', $patientVisit->patient_id)->with('alert-success', 'SESSION END');
     }
 }

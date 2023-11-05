@@ -89,5 +89,11 @@ class RolePermissionSeeder extends Seeder
                 ['name', 'NOT LIKE', '%destroy%'],
             ])->get()
         );
+
+        $patient->givePermissionTo(
+            Permission::where([
+                ['name', 'appointments.cancel'],
+            ])->get()
+        );
     }
 }

@@ -65,17 +65,17 @@
 					@switch($appointment->status)
 						@case('pending')
 							@can('appointments.confirm')
-								<a class="btn btn-default text-primary" href="{{ route('appointments.confirm', $appointment->id) }}">Confirm</a>
+								<a class="btn btn-success" href="{{ route('appointments.confirm', $appointment->id) }}"><i class="fa fa-check"></i> Confirm</a>
 							@endcan
 							@can('appointments.decline')
-								<a class="btn btn-default text-danger" href="javascript:void(0)" data-toggle="modal" data-target="#declineAppointmentModal"><i class="fa fa-times"></i> Decline</a>
+								<a class="btn btn-danger" href="javascript:void(0)" data-toggle="modal" data-target="#declineAppointmentModal"><i class="fa fa-times"></i> Decline</a>
 							@endcan
 							@break
 						@case('confirmed')
 							@can('appointments.accept_patient')
 								@if(Auth::user()->isDoctor() && !$appointment->hasVisit())
 									@if(Auth::user()->id == $appointment->doctor_id)
-										<a class="btn btn-default text-success" href="{{ route('appointments.accept_patient', $appointment->id) }}">Accept Patient</a>
+										<a class="btn btn-success" href="{{ route('appointments.accept_patient', $appointment->id) }}"><i class="fa fa-check"></i> Accept Patient</a>
 									@endif
 								@endif
 							@endcan
@@ -84,7 +84,7 @@
 					@endswitch
 					@can('appointments.cancel')
 						@if(!in_array($appointment->status, ['done', 'canceled', 'declined']) && !$appointment->hasVisit())
-							<a class="btn btn-default text-danger" href="javascript:void(0)" id="cancelAppointment" data-toggle="modal" data-target="#cancelAppointmentModal"><i class="fa fa-times"></i> Cancel Appointment</a>
+							<a class="btn btn-danger" href="javascript:void(0)" id="cancelAppointment" data-toggle="modal" data-target="#cancelAppointmentModal"><i class="fa fa-times"></i> Cancel Appointment</a>
 						@endif
 					@endcan
 				@endif

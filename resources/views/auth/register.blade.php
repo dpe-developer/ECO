@@ -96,8 +96,8 @@
                     @enderror
                 </div>
                 <div class="form-outline mb-4">
-                    <input type="email" name="email" value="{{ old('email') }}" id="inputEmail" class="form-control @error('email') is-invalid @enderror" required/>
-                    <label class="form-label" for="inputEmail">Email <strong class="text-danger">*</strong></label>
+                    <input type="email" name="email" value="{{ old('email') }}" id="inputEmail" class="form-control @error('email') is-invalid @enderror"/>
+                    <label class="form-label" for="inputEmail">Email</label>
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

@@ -268,4 +268,74 @@ class User extends Authenticatable
         return Appointment::whereNotIn('id', $seenAppointments);
     }
 
+    /**
+     * Static Functions
+     */
+    public static function getName($userID, $format = null)
+    {
+        $user = self::find($userID);
+        $name = "";
+        $trashedBadge = "";
+        if($format != null){
+            $format = explode('-', $format);
+            for ($i=0; $i < count($format); $i++) { 
+                switch ($format[$i]) {
+                    case 'f':
+                        if($i == 0)
+                            $name .= $user->first_name;
+                        elseif($i == 1)
+                            $name .= $user->first_name;
+                        break;
+                    case 'm':
+                        if(!is_null($user->middle_name)){
+                            if($i == 1){
+                                $name .= ' '.$user->middle_name[0].'. ';
+                            }else{
+                                $name .= ' '.$user->middle_name[0].'. ';
+                            }
+                        }
+                        break;
+                    case 'M':
+                        if(!is_null($user->middle_name) || $user->middle_name==''){
+                            if($i == 1){
+                                $name .= ' '.$user->middle_name[0].'. ';
+                            }else{
+                                $name .= ' '.$user->middle_name[0].'. ';
+                            }
+                        }
+                        break;
+                    case 'l':
+                        if($i == 0){
+                            $name .= $user->last_name.', ';
+                        }elseif($i == 2){
+                            $name .= ' '.$user->last_name;
+                        }
+                        break;
+                    /* case 's':
+                        // if($i == 3){
+                            $name .= $user->suffix;
+                        // }
+                        break; */
+                    
+                    default:
+                    $name = $user->first_name.' '.
+                    ((is_null($user->middle_name) || $user->middle_name=='')  ? '' : $user->middle_name[0].'. ').
+                        $user->last_name;
+                        // ' '.$user->suffix;
+                        break;
+                }
+            }
+        }else{
+            $name = $user->first_name.' '.
+                ((is_null($user->middle_name) || $user->middle_name=='')  ? '' : $user->middle_name[0].'. ').
+                $user->last_name;
+        }
+
+        if($user->trashed()){
+            $trashedBadge .= ' <span class="badge badge-danger">Deleted</span>';
+        }
+		
+		return $name.$trashedBadge;
+    }
+
 }

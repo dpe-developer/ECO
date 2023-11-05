@@ -47,8 +47,25 @@ Route::group(['middleware' => ['role:System Administrator']], function () {
 
 });
 
+Route::group(['middleware' => ['role:Patient']], function () {
+	Route::get('my-profile/{username}', [
+		'as' => 'my-profile',
+		'uses' => 'WebsiteController@myProfile'
+	]);
+	Route::put('update-my-profile/{username}', [
+		'as' => 'update-my-profile',
+		'uses' => 'WebsiteController@updateMyProfile'
+	]);
+	/**
+	 * Patient Appointments
+	 */
+	Route::resource('patient_appointments', 'PatientAppointmentController')->parameters([
+		'patient_appointments' => 'appointment'
+	]);
+});
+
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-Route::group(array('middleware'=>['auth']), function() {
+Route::group(array('middleware'=>['auth', 'role:System Administrator', 'role:Administrator', 'role:Doctor']), function() {
 
 	/**
 	 * Announcements
@@ -74,6 +91,10 @@ Route::group(array('middleware'=>['auth']), function() {
 	Route::get('appointment-accept/{appointment}', [
 		'as' => 'appointments.accept_patient',
 		'uses' => 'AppointmentController@acceptPatient'
+	]);
+	Route::get('appointment/get-time-taken', [
+		'as' => 'appointments.get_time_taken',
+		'uses' => 'AppointmentController@getTimeTaken'
 	]);
 	// restore
 	Route::post('appointments_restore/{appointment}', [
@@ -101,13 +122,6 @@ Route::group(array('middleware'=>['auth']), function() {
 	 */
 	Route::resource('patients', 'PatientController')->parameters([
 		'patients' => 'user'
-	]);
-
-	/**
-	 * Patient Appointments
-	 */
-	Route::resource('patient_appointments', 'PatientAppointmentController')->parameters([
-		'patient_appointments' => 'appointment'
 	]);
 
 	/**

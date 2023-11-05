@@ -44,8 +44,8 @@
 										<textarea name="findings" id="findings" rows="3" class="form-control">{{ $patient->activeVisit()->findings }}</textarea>
 									</div>
 									<div class="form-group col-md-3">
-										<label for="recommendation">Recommendation:</label>
-										<textarea name="recommendation" id="recommendation" rows="3" class="form-control">{{ $patient->activeVisit()->recommendation }}</textarea>
+										<label for="recommendations">Recommendation:</label>
+										<textarea name="recommendations" id="recommendations" rows="3" class="form-control">{{ $patient->activeVisit()->recommendations }}</textarea>
 									</div>
 								</div>
 								<div class="row">

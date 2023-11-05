@@ -24,7 +24,7 @@
         <div class="col-md-12">
             <h1 class="heading mb-5">&nbsp;&nbsp;Announcements</h1>
             <div class="row">
-                @foreach ($announcements as $announcement)
+                @forelse ($announcements as $announcement)
                 <div class="col-md-4 mb-3">
                     <div class="card">
                         <div class="card-header">
@@ -54,7 +54,11 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="col-md-12 text-center">
+                    <h3 class="text-warning"> No Announcement yet </h3>
+                </div>
+                @endforelse
             </div>
         </div>
     </div>

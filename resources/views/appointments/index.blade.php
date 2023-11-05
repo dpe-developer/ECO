@@ -50,15 +50,13 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#filterAppointments"><i class="fa fa-search"></i> Search</button>
-                    {{-- <a class="btn btn-primary" href="{{ route('appointments.show_calendar') }}" target="_blank">Calendar</a> --}}
-                    {{-- <a class="btn btn-default text-primary" href="{{ route('appointments.queue') }}" target="_blank">Queue</a> --}}
                     @if(request()->get('view') == 'calendar')
                         <a class="btn btn-default text-primary" href="{{ route('appointments.index', ['view' => 'table']) }}">Table View</a>
                     @else
                         <a class="btn btn-default text-primary" href="{{ route('appointments.index', ['view' => 'calendar']) }}">Calendar View</a>
                     @endif
                     @can('appointments.create')
-                        <button class="btn btn-default text-primary" data-toggle="modal-ajax" data-href="{{ route('appointments.create') }}" data-target="#addAppointment"><i class="fa fa-plus"></i> Add Appointment</button>
+                        <button class="btn btn-default text-primary" data-toggle="modal-ajax" data-href="{{ route('appointments.create') }}" data-target="#createAppointmentModal"><i class="fa fa-plus"></i> {{ trans('crud.create') }} Appointment</button>
                     @endcan
                 </div>
             </div>
@@ -99,14 +97,14 @@
                         @if (request()->get('filter_patient'))
                             <label>Patient:</label>
                             @foreach (request()->get('filter_patient') as $patient)
-                                {{ Patient::getPatientName($patient) }}{{ !$loop->last ? ", " : "" }}
+                                {{ User::getName($patient) }}{{ !$loop->last ? ", " : "" }}
                             @endforeach
                             <br>
                         @endif
                         @if (request()->get('filter_doctor'))
                             <label>Doctor:</label>
                             @foreach (request()->get('filter_doctor') as $doctor)
-                                {{ Doctor::getDoctorName($doctor) }}{{ !$loop->last ? ", " : "" }}
+                                {{ User::getName($doctor) }}{{ !$loop->last ? ", " : "" }}
                             @endforeach
                             <br>
                         @endif

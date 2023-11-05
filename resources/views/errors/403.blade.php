@@ -1,4 +1,4 @@
-@extends('adminlte.app')
+{{-- @extends('adminlte.app')
 @section('content')
 <div class="content-wrapper">
     <section class="content">
@@ -8,14 +8,14 @@
                 <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Permission Denied.</h3>
                 <p>
                     {{ __($exception->getMessage() ?: 'Forbidden') }}
-                    {{-- Meanwhile, you may <a href="{{ route('home') }}">return to dashboard</a> --}}
                     Meanwhile, you may <a href="{{ url()->previous() }}">back to previous page.</a>
                 </p>
             </div>
       </div>
     </section>
   </div>
-@endsection
-{{-- @section('title', __('Forbidden'))
+@endsection --}}
+@extends('errors::illustrated-layout')
+@section('title', __('Forbidden'))
 @section('code', '403')
-@section('message', __($exception->getMessage() ?: 'Forbidden')) --}}
+@section('message', __($exception->getMessage() ?: 'Forbidden'))

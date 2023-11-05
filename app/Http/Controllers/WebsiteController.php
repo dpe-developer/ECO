@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Appointment;
 use App\Models\Announcement;
+use App\Models\Service;
+use App\Models\FileAttachment;
 use App\Mail\SampleMail;
 use App\Mail\RegistrationCompleteMail;
 use Illuminate\Http\Request;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Twilio\Rest\Client;
 use Auth;
+use Storage;
 
 class WebsiteController extends Controller
 {
@@ -23,7 +26,10 @@ class WebsiteController extends Controller
 
     public function services()
     {
-        return view('services');
+        $data = [
+            'services' => Service::orderBy('created_at', 'DESC')->get()
+        ]; 
+        return view('services', $data);
     }
 
     public function announcements()
@@ -85,7 +91,7 @@ class WebsiteController extends Controller
             'occupation' => ['string', 'max:255'],
             'contact_number' => ['string', 'max:255'],
             // 'username' => ['required', 'string', 'max:255'],
-            'email' => ['string', 'email', 'max:255', 'unique:users'],
+            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
         
@@ -108,7 +114,7 @@ class WebsiteController extends Controller
         $patient->assignRole(4);
 
         // Send SMS
-        // $this->sendPatientCredentialsSMS($patient);
+        $this->sendPatientCredentialsSMS($patient);
 
         // Send Mail
         if($request->get('email')){
@@ -139,4 +145,80 @@ class WebsiteController extends Controller
             'body' => $message
         ]);
     }
+
+    public function myProfile($username)
+    {
+        if(User::where('username', $username)->exists()){
+			$user = User::where('username', $username)->first();
+			if(Auth::user()->id == $user->id){
+				$data = [
+					'user' => $user,
+				];
+				return view('my_profile', $data);
+			}else{
+				return abort(401);
+			}
+		}else{
+			return abort(404);
+		}
+    }
+
+    public function updateMyProfile(Request $request, $username)
+	{
+		if(User::where('username', $username)->exists()){
+			$user = User::where('username', $username)->first();
+			if(Auth::user()->id == $user->id){
+				$request->validate([
+					'avatar' => 'nullable|dimensions:ratio=1/1|image|mimes:jpeg,png,jpg',
+					'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
+                    'address' => ['string', 'max:255'],
+                    'occupation' => ['string', 'max:255'],
+                    'contact_number' => ['string', 'max:255'],
+				]);
+                $email = is_null($request->get('email')) ? $user->username.'@temp.com' : $request->get('email');
+                $user->update([
+                    'address' => $request->get('address'),
+                    'occupation' => $request->get('occupation'),
+                    'contact_number' => $request->get('contact_number'),
+                    'email' => $email,
+                ]);
+				if($request->filled('password')){
+					$request->validate([
+						'password' => [/*'required',*/ 'string', 'min:6', 'confirmed']
+					]);
+					$user->update([
+						'password' => Hash::make($request->get('password')),
+					]);
+				}
+				
+				$attachment_id = null;
+				if($request->file('avatar') != null){
+					$file = $request->file('avatar');
+					$data = file_get_contents($file);
+					$base64 = 'data:image/' . $file->extension() . ';base64,' . base64_encode($data);
+					$file_name = time().'.'.$file->extension();
+					$path = 'File Attachments/User/Image';
+					$old_image = isset($user->avatar->data) ? $user->avatar->data : null;
+					if($base64 != $old_image){
+						$attachment = FileAttachment::create([
+							'file_path' => $path,
+							'file_type' => $file->extension(),
+							'file_extension' => $file->extension(),
+							'file_name' => $file_name,
+							'data' => $base64,
+						]);
+						Storage::disk('upload')->putFileAs($path, $file, $file_name);
+						$user->update([
+							'avatar_file_attachment_id' => $attachment->id
+						]);
+					}
+				}
+				return redirect()->route('my-profile', Auth::user()->username)->with('alert-success', 'Profile saved');
+			}else{
+				return abort(401);
+			}
+		}else{
+			return abort(404);
+		}
+	}
 }

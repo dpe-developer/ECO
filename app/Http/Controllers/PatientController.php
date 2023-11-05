@@ -11,6 +11,17 @@ use Auth;
 
 class PatientController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('auth');
+		$this->middleware('permission:patients.index', ['only' => ['index']]);
+		$this->middleware('permission:patients.create', ['only' => ['create','store']]);
+		$this->middleware('permission:patients.show', ['only' => ['show']]);
+		$this->middleware('permission:patients.edit', ['only' => ['edit','update']]);
+		$this->middleware('permission:patients.destroy', ['only' => ['destroy']]);
+		$this->middleware('permission:patients.restore', ['only' => ['restore']]);
+	}
+	
     public function index(Request $request)
     {
         $patients = User::select('*')->where('role_id', 4);

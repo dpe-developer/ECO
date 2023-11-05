@@ -72,9 +72,9 @@
                             <li>
                                 <a class="dropdown-item" href="{{ url('our-story') }}">Our Story</a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a class="dropdown-item" href="{{ url('our-organization') }}">Our Organization</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -100,7 +100,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                     <li>
-                        <a class="dropdown-item" href="#">My profile</a>
+                        <a class="dropdown-item" href="{{ route('my-profile', Auth::user()->username) }}">My profile</a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="{{ route('patient_appointments.index') }}">Appointments</a>
