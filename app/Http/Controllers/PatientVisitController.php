@@ -122,6 +122,9 @@ class PatientVisitController extends Controller
             'status' => 'done',
             'session_end' => Carbon::now(),
         ]);
+        $patientVisit->appointment->update([
+            'status' => 'done'
+        ]);
         return redirect()->route('patients.show', $patientVisit->patient_id)->with('alert-success', 'SESSION END');
     }
 }

@@ -25,6 +25,9 @@ class PatientVisit extends Model
         'session_end',
     ];
 
+    /**
+     * Relation
+     */
     public function patient()
     {
         return $this->belongsTo('App\Models\User', 'patient_id');
@@ -38,6 +41,11 @@ class PatientVisit extends Model
     public function service()
     {
         return $this->belongsTo('App\Models\Service', 'service_id');
+    }
+
+    public function appointment()
+    {
+        return $this->belongsTo('App\Models\Appointment', 'appointment_id');
     }
     
     public function medicalHistories()
@@ -54,6 +62,9 @@ class PatientVisit extends Model
     {
         return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescription', 'visit_id');
     }
+    /**
+     * END OF Relation
+     */
 
     
 }
