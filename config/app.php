@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'version' => "3.5.6",
+    'version' => "3.5.18",
     'client_name' => env('APP_CLIENT_NAME', 'Laravel'),
     // Twilio
     'twilio_sid' => env('TWILIO_SID'),
