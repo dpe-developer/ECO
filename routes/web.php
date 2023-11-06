@@ -65,7 +65,7 @@ Route::group(['middleware' => ['role:Patient']], function () {
 });
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-Route::group(array('middleware'=>['auth', 'role:System Administrator', 'role:Administrator', 'role:Doctor']), function() {
+Route::group(array('middleware'=>['auth', 'role:System Administrator|Administrator|Doctor']), function() {
 
 	/**
 	 * Announcements
