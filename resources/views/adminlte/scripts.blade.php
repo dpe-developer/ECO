@@ -675,10 +675,11 @@
                         $('#modalAjax').find('input[type="email"][name="'+name+'"]').val(value).addClass($(this).data('error'));
                         $('#modalAjax').find('input[type="password"][name="'+name+'"]').val(value).addClass($(this).data('error'));
                         $('#modalAjax').find('input[type="number"][name="'+name+'"]').val(value).addClass($(this).data('error'));
+                        $('#modalAjax').find('input[type="date"][name="'+name+'"]').val(value).addClass($(this).data('error'));
                         $('#modalAjax').find('input[type="text"][name="'+name+'"]').val(value).addClass($(this).data('error'));
                         $('#modalAjax').find('input[type="checkbox"][name="'+name+'"][value="'+value+'"]').prop('checked', true);
                         $('#modalAjax').find('input[type="radio"][name="'+name+'"][value="'+value+'"]').prop('checked', true);
-                        $('#modalAjax').find('input[type="radio"][name="'+name+'"][value="'+value+'"]').prop('checked', true);
+                        // $('#modalAjax').find('input[type="radio"][name="'+name+'"][value="'+value+'"]').prop('checked', true);
                         $('#modalAjax').find('select[name="'+name+'"]').val(value).trigger('change').addClass($(this).data('error'));
                     }
                 })

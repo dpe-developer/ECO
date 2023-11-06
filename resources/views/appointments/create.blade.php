@@ -15,7 +15,7 @@
                             {{-- <strong class="text-danger">Business hours is from 8:00AM to 5:00PM</strong> --}}
                             <div class="form-group">
                                 <label for="patiient">Patient <strong class="text-danger">*</strong></label>
-                                <select class="form-control select2" name="patient" id="patiient">
+                                <select class="form-control select2" name="patient" id="patiient" required>
                                     <option></option>
                                     @foreach ($patients as $patient)
                                         <option value="{{ $patient->id }}">{{ $patient->fullname() }}</option>

@@ -144,7 +144,7 @@ class AppointmentController extends Controller
             'appointment_date' => $appointmentDate,
             'description' => $request->get('description'),
         ]);
-        return back()->with('alert-success', 'Appointment successfully created');
+        return back()->with('alert-success', 'Appointment successfully CREATED');
     }
 
     /**
@@ -183,7 +183,15 @@ class AppointmentController extends Controller
      */
     public function edit(Appointment $appointment)
     {
-        //
+        $data = [
+            'patients' => User::where('role_id', 4)->get(),
+            'doctors' => User::where('role_id', 3)->get(),
+            'services' => Service::get(),
+            'appointment' => $appointment
+        ];
+        return response()->json([
+            'modal_content' => view('appointments.edit', $data)->render()
+        ]);
     }
 
     /**
@@ -195,7 +203,15 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, Appointment $appointment)
     {
-        //
+        $appointmentDate = Carbon::parse($request->get('appointment_date').' '.$request->get('appointment_time'));
+        $appointment->update([
+            'patient_id' => $request->get('patient'),
+            'doctor_id' => $request->get('doctor'),
+            'service_id' => $request->get('service'),
+            'appointment_date' => $appointmentDate,
+            'description' => $request->get('description'),
+        ]);
+        return back()->with('alert-success', 'Appointment successfully UPDATED');
     }
 
     /**
@@ -206,7 +222,8 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
-        //
+        $appointment->delete();
+        return back()->with('alert-success', 'Appointment successfully DELETED');
     }
 
     public function confirmAppointment(Request $request, Appointment $appointment)
@@ -271,8 +288,15 @@ class AppointmentController extends Controller
 
     public function getTimeTaken(Request $request)
     {
+        $appointmentDate = $request->get('appointment_date');
+        $appointmentTime = $request->get('appointment_time');
+        $appointmentDateTime = Carbon::parse($appointmentDate.' '.$appointmentTime);
         $timeTaken = [];
-        foreach(Appointment::whereDate('appointment_date', $request->get('appointment_date'))->whereIn('status', ['pending', 'confirmed'])->get() as $appointment){
+        $appointments = Appointment::whereDate('appointment_date', $appointmentDate)->whereIn('status', ['pending', 'confirmed']);
+        if($request->get('request_for') == 'edit'){
+            $appointments->where('appointment_date', '!=', $appointmentDateTime);
+        }
+        foreach($appointments->get() as $appointment){
             $timeTaken[] = Carbon::parse($appointment->appointment_date)->format('H:i');
         }
         return response()->json([

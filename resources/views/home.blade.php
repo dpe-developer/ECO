@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
   <!-- Carousel wrapper -->
-<div id="carouselBasicExample" class="carousel slide carousel-fade" data-mdb-ride="carousel">
+<div id="carouselBasicExample" class="carousel slide carousel-fade mb-5" data-mdb-ride="carousel">
   <!-- Indicators -->
   <div class="carousel-indicators">
     <button

@@ -9,7 +9,9 @@
                     <h1 class="m-0 text-dark">Patient Profile</h1>
                 </div>
                 <div class="col-md-6 text-right">
-
+                    @can('patients.edit')
+                        <a class="btn btn-info" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('patients.edit', $patient->id) }}" data-target="#editPatientModal"><i class="fa fa-edit"></i> Edit</a>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -32,7 +34,7 @@
                         <div class="row patient-info">
                             <div class="col-md-2">
                                 <div class="form-group mb-0">
-                                    <img class="img-thumbnail patient-avatar" src="{{ isset($patient->profile_image->data) ? $patient->profile_image->data : asset('images/avatar.png') }}" width="100%" />
+                                    <img class="img-thumbnail patient-avatar" src="{{ asset($patient->getAvatar()) }}" width="100%" />
                                 </div>
                             </div>
                             <div class="col-md-5">

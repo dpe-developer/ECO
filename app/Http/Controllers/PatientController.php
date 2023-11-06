@@ -95,11 +95,11 @@ class PatientController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'sex' => ['required', 'string', 'max:255'],
             'birthdate' => ['required', 'string', 'max:255'],
-            'address' => ['string', 'max:255'],
             'occupation' => ['string', 'max:255'],
             'contact_number' => ['string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255'],
             // 'username' => ['required', 'string', 'max:255'],
-            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             // 'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
         $username = time();
@@ -129,5 +129,44 @@ class PatientController extends Controller
             'services' => Service::get()
         ];
         return view('patients.show', $data);
+    }
+
+	public function edit(Request $request, User $user)
+    {
+		$data = [
+			'patient' => $user
+		];
+        return response()->json([
+            'modal_content' => view('patients.edit', $data)->render()
+        ]);
+    }
+
+	public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'sex' => ['required', 'string', 'max:255'],
+            'birthdate' => ['required', 'string', 'max:255'],
+            'occupation' => ['string', 'max:255'],
+            'contact_number' => ['string', 'max:255'],
+            'address' => ['nullable', 'string', 'max:255'],
+            // 'username' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users,email,'. $user->id],
+            // 'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+        $email = is_null($request->get('email')) ? $user->username.'@temp.com' : $request->get('email');
+        $user->update([
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'sex' => $request->get('sex'),
+            'birthdate' => $request->get('birthdate'),
+            'address' => $request->get('address'),
+            'occupation' => $request->get('occupation'),
+            'contact_number' => $request->get('contact_number'),
+            'email' => $email,
+        ]);
+
+        return back()->with('alert-success', 'Patient successfully UPDATED');
     }
 }
