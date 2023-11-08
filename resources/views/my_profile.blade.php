@@ -33,7 +33,7 @@
                             @enderror
                         </div>
                         <div class="row justify-content-center">
-                            <div class="col-sm-8">
+                            <div class="col-sm-9">
                                 <img id="img" width="100%" class="img-thumbnail" src="@isset($user->avatar->id) {{ asset($user->avatar->file_path.'/'.$user->avatar->file_name) }} @else {{ asset('images/avatar.png') }} @endisset" />
                                 <label class="btn btn-primary btn-block btn-sm">
                                     Browse&hellip;<input value="" type="file" name="avatar" style="display: none;" id="upload" accept="image/*" />
@@ -43,6 +43,10 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
+                        <div class="form-outline mb-4">
+                            <input type="text" value="{{ $user->username }}" id="inputUsername" class="form-control" readonly/>
+                            <label class="form-label" for="inputUsername">Username <strong class="text-danger">*</strong></label>
+                        </div>
                         <div class="form-outline mb-4">
                             <input type="text" name="first_name" value="{{ $user->first_name }}" id="inputFirstName" class="form-control @error('first_name') is-invalid @enderror" readonly/>
                             <label class="form-label" for="inputFirstName">First Name <strong class="text-danger">*</strong></label>
@@ -57,6 +61,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <b>Sex:</b>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input @error('sex') is-invalid @enderror" type="radio" name="sex" id="radioSexMale" value="male" @if($user->sex == 'male') checked @endif disabled/>
                             <label class="form-check-label" for="radioSexMale">Male</label>

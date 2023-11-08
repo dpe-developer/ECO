@@ -112,7 +112,7 @@ class WebsiteController extends Controller
             'password' => Hash::make($request->get('password')),
         ]);
         $patient->assignRole(4);
-
+        Auth::attempt(['username' => $patient->username, 'password' => $request->get('password')]);
         // Send SMS
         if(Setting::system('send_sms_notification')){
             $this->sendPatientCredentialsSMS($patient);
@@ -128,12 +128,18 @@ class WebsiteController extends Controller
         $data = [
             'patient' => $patient
         ];
-        return view('registration_complete', $data);
+        
+        return redirect()->route('registration_complete', $patient->username);
     }
 
-    public function patientRegistrationComplete()
+    public function patientRegistrationComplete($username)
     {
-        return view('registration_complete');
+        $patient = User::where('username', $username)->first();
+        // Auth::attempt(['username' => $patient->username, 'password' => $patient->password]);
+        $data = [
+            'patient' => $patient
+        ];
+        return view('registration_complete', $data);
     }
 
     public function sendPatientCredentialsSMS($patient)

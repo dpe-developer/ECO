@@ -46,6 +46,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
+                        <b for="">Sex: </b>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input @error('sex') is-invalid @enderror" type="radio" name="sex" id="radioSexMale" value="male" @if(old('sex') == 'male') checked @endif required/>
                             <label class="form-check-label" for="radioSexMale">Male</label>
@@ -90,7 +91,7 @@
                 </div>
                 <div class="form-outline mb-4">
                     <textarea class="form-control @error('address') is-invalid @enderror" name="address" id="textareaAddress" rows="4" required>{{ old('address') }}</textarea>
-                    <label class="form-label" for="textareaAddress">Address</label>
+                    <label class="form-label" for="textareaAddress">Address <strong class="text-danger">*</strong></label>
                     @error('address')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -104,12 +105,15 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-sm-6">
-                        <div class="form-outline mb-4">
+                        <div class="form-outline">
                             <input type="password" name="password" id="inputPassword" class="form-control @error('password') is-invalid @enderror" required/>
                             <label class="form-label" for="inputPassword">Password <strong class="text-danger">*</strong></label>
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+                        <div class="form-text text-center">
+                            Your password must consist of 8-16 characters 
                         </div>
                     </div>
                     <div class="col-sm-6">

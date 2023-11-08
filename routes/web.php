@@ -33,7 +33,7 @@ Route::get('our-organization', 'WebsiteController@ourOrganization');
 Route::get('track-appointment', 'WebsiteController@trackAppointment');
 Route::get('contact-us', 'WebsiteController@contactUs');
 Route::post('patient-registration', 'WebsiteController@patientRegistration');
-Route::get('registration-complete', 'WebsiteController@patientRegistrationComplete');
+Route::get('registration-complete/{username}', 'WebsiteController@patientRegistrationComplete')->name('registration_complete');
 
 Route::group(['middleware' => ['role:System Administrator']], function () {
 	/**
