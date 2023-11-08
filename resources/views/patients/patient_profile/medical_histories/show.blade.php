@@ -10,14 +10,17 @@
 	<div class="modal-dialog modal-dialog-scrollable modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
-	          <h4 class="modal-title">Eye Prescription - {{ date('M d, Y h:ia', strtotime($medicalHistory_show->updated_at)) }}</h4>
+	          <h4 class="modal-title">Eye Prescription</h4>
 	          {{-- <a class="close" href="{{ route('patients.show', $patient->id) }}">&times;</a> --}}
 	          <button class="close" data-dismiss="modal-ajax"  type="button">&times;</button>
 	    	</div>
 			<div class="modal-body text-left scrollbar-primary">
 				<div class="callout callout-info">
-                	<label>Doctor:</label> {{ $medicalHistory_show->doctor->fullname()}}<br>
-                	{{-- <label>Patient:</label> {{ $medicalHistory_show->patient->patient_name($medicalHistory_show->patient_id) }} --}}
+					<b>Doctor:</b> {{ $medicalHistory_show->doctor->fullname()}}<br>
+                	<b>Date Added:</b> {{ Carbon::parse($medicalHistory_show->created_at)->format('M d, Y h:i:sa') }}
+                	@if(Carbon::parse($medicalHistory_show->created_at)->ne(Carbon::parse($medicalHistory_show->updated_at)))
+					<br><b>Last Updated:</b> {{ Carbon::parse($medicalHistory_show->updated_at)->format('M d, Y h:ia') }}
+					@endif
                 </div>
 				{{-- <div class="row patient-profile-form grid"> --}}
 					@foreach ($medicalHistory_show->result as $result)
@@ -160,11 +163,11 @@
 			</div>
 			<div class="modal-footer">
 				<div class="col">
-					@can('eye_prescriptions.destroy')
-					<a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescriptions.destroy', $medicalHistory_show->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+					@can('medical_histories.destroy')
+					<a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('medical_histories.destroy', $medicalHistory_show->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
 					@endcan
-					@can('eye_prescriptions.edit')
-					   <a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('eye_prescriptions.edit', $medicalHistory_show->id) }}" data-target="#editMedicalHistory"><i class="fad fa-edit"></i> Edit</a>
+					@can('medical_histories.edit')
+					   <a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('medical_histories.edit', $medicalHistory_show->id) }}" data-target="#editMedicalHistory"><i class="fad fa-edit"></i> Edit</a>
 					@endcan
 				</div>
 				<div class="col text-right">

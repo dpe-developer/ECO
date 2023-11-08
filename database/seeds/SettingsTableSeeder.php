@@ -152,6 +152,22 @@ class SettingsTableSeeder extends Seeder
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
+                'type' => 'system',
+                'name' => 'send_sms_notification',
+                'value' => '0',
+                'default' => '0',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'type' => 'system',
+                'name' => 'send_email_notification',
+                'value' => '0',
+                'default' => '0',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
                 'type' => 'ui',
                 'name' => 'adminlte_darkmode',
                 'value' => null,

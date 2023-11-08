@@ -159,7 +159,14 @@ class MedicalHistoryController extends Controller
      */
     public function edit(MedicalHistory $medicalHistory)
     {
-        //
+        $data = [
+			'medicalHistory_edit' => $medicalHistory,
+			'patient' => $medicalHistory->patient,
+			'doctors' => User::where('role_id', 3)->get(),
+		];
+		return response()->json([
+			'modal_content' => view('patients.patient_profile.medical_histories.edit', $data)->render()
+		]);
     }
 
     /**
@@ -171,7 +178,40 @@ class MedicalHistoryController extends Controller
      */
     public function update(Request $request, MedicalHistory $medicalHistory)
     {
-        //
+        $request->validate([
+			'doctor' => ['required'],
+		]);
+
+		$isUpdated = false;
+
+		$medicalHistory->update([
+			'doctor_id' => $request->get('doctor'),
+		]);
+
+		if($medicalHistory->doctor_id != $request->get('doctor')){
+			$isUpdated = true;
+		}
+
+		foreach ($medicalHistory->result as $result) {
+			$medicalHistoryData = MedicalHistoryData::find($result->id);
+			if(isset($medicalHistoryData->id)){
+				if($medicalHistoryData->value != $request->get($result->id) || $medicalHistoryData->sub_value != $request->get('input_'.$result->id)){
+					$isUpdated = true;
+					$medicalHistoryData->update([
+						'value' => $request->get($result->id),
+						'sub_value' => $request->get('input_'.$result->id),
+					]);
+				}
+			}
+		}
+
+		if($isUpdated){
+			$medicalHistory->update([
+				'updated_at' => Carbon::now(),
+			]);
+		}
+
+		return redirect()->route('patients.show', $medicalHistory->patient_id)->with('alert-sucess', 'Medical History UPDATED');
     }
 
     /**
@@ -182,6 +222,7 @@ class MedicalHistoryController extends Controller
      */
     public function destroy(MedicalHistory $medicalHistory)
     {
-        //
+        $medicalHistory->delete();
+		return back()->with('alert-warning', trans('terminologies.medical_history').' DELETED');
     }
 }

@@ -1,7 +1,7 @@
 @section('modal_open_script')
 	<script type="application/javascript">
 		$(document).ready(function() {
-			$('#editVitalInformation').modal('show');
+			$('#editEyePrescription').modal('show');
 		});
 	</script>
 	<script type="application/javascript">
@@ -14,202 +14,187 @@
 		});
 	</script>
 @endsection
-{{-- modal-Edit Eye Prescription --}}
-<form action="{{ route('vital_information.update', $vitalInformation_edit->id) }}" method="POST">
+{{-- modal-Edit Vital Information --}}
+<form action="{{ route('eye_prescriptions.update', $eyePrescription_edit->id) }}" method="POST">
 @csrf
 @method('PUT')
-	<div class="modal fade" id="editVitalInformation" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-scrollable modal-lg" style="max-width: 1200px">
+	<div class="modal fade" id="editEyePrescription" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
-		        	<h4 class="modal-title">Edit {{ trans('terminologies.eye_prescription') }} - {{ date('F d, Y h:ia', strtotime($vitalInformation_edit->updated_at)) }}</h4>
-		        	<button class="close" type="button" data-toggle="modal" data-target="#closeEditVitalInformation">&times;</button>
-		        	{{-- <a class="close" href="{{ route('patients.show', $vitalInformation_edit->patient_id) }}">&times;</a> --}}
+		        	<h4 class="modal-title">Edit {{ trans('terminologies.eye_prescription') }} - {{ date('M d, Y h:ia', strtotime($eyePrescription_edit->created_at)) }}</h4>
+		        	<button class="close" type="button" data-toggle="modal" data-target="#closeEditEyePrescription">&times;</button>
+		        	{{-- <a class="close" href="{{ route('patients.show', $eyePrescription_edit->patient_id) }}">&times;</a> --}}
 		    	</div>
 				<div class="modal-body text-left scrollbar-primary">
-					<div class="row patient-profile-form grid">
-						@foreach ($vitalInformation_edit->result as $result)
-							@if ($result->reference->type == 'parent')
-								<div class="col-md-4 grid-item">
-									<div class="callout callout-light">
-										<legend>{{ $result->reference->name }}:</legend>
-										<fieldset class="form-group">
-											<ul class="children-references">
-											@foreach ($result->children as $children)
-												@if($children->child->count() == 0 && $children->child_id == null)
-													@if($children->reference->type == 'text')
+					@foreach ($eyePrescription_edit->result as $result)
+						@if ($result->type == 'parent')
+							<div class="callout callout-light">
+								<legend>{{ $result->name }}:</legend>
+								<fieldset class="form-group">
+									<ul class="children-references">
+									@foreach ($result->children as $children)
+										@if($children->child->count() == 0 && $children->child_id == null)
+											@if($children->type == 'text')
+												<li>
+													<div class="form-group">
+														<label>{{ $children->name }}:</label>
+														<input value="{{ $children->value}}" class="form-control" type="text" name="{{ $children->id }}">
+													</div>
+												</li>
+											@elseif($children->type == 'checkbox')
+												<li>
+													<div class="checkbox">
+														<div class="custom-control custom-checkbox">
+															<input @if($children->value != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $children->id }}" value="{{ $children->name }}" id="editEyePrescription_{{ $children->id }}">
+															<label class="custom-control-label" for="editEyePrescription_{{ $children->id }}">{{ $children->name }}</label>
+														</div>
+													</div>
+												</li>
+											@elseif($children->type == 'check_textbox')
+												<li>
+													<div class="form-group">
+														<div class="custom-control custom-checkbox">
+															<input @if($children->value != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $children->id }}" name="{{ $children->id }}" value="{{ $children->name }}" id="editEyePrescription_{{ $children->id }}">
+															<label class="custom-control-label" for="editEyePrescription_{{ $children->id }}">{{ $children->name }}</label>
+														</div>
+														<div class="input-group input-group-sm">
+															<span class="input-group-prepend">
+																<div class="input-group-text">
+																	{{ $children->description }}
+																</div>	
+															</span>
+															<input value="{{ $children->sub_value}}" class="form-control form-control-sm check-textbox-input" data-id="{{ $children->id }}" name="input_{{$children->id}}" id="editEyePrescription_input{{ $children->id }}" @if($children->value == null) disabled="" @endif>
+														</div>
+													</div>
+												</li>
+											@elseif($children->type == 'textarea')
+												<li>
+													<div class="form-group">
+														<label>{{ $children->name }}:</label>
+														<textarea class="form-control" name="{{ $children->id }}">{{ $children->value}}</textarea>
+													</div>
+												</li>
+											@endif
+										@elseif($children->child->count())
+											<li><label style="font-weight: bold">{{ $children->name }}:</label></li>
+											<ul class="child-references" style="list-style-type: circle;">
+												@foreach ($children->child as $child)
+													@if($child->type == 'text')
 														<li>
 															<div class="form-group">
-																<label>{{ $children->reference->name }}:</label>
-																<input value="{{ $children->result }}" class="form-control" type="text" name="{{ $children->id }}">
+																<label>{{ $child->name }}:</label>
+																<input value="{{ $child->value}}" class="form-control form-control-sm" type="text" name="{{ $child->id }}">
 															</div>
 														</li>
-													@elseif($children->reference->type == 'checkbox')
+													@elseif($child->type == 'checkbox')
 														<li>
 															<div class="checkbox">
-															    <div class="custom-control custom-checkbox">
-																	<input @if($children->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $children->id }}" value="{{ $children->reference->name }}" id="editVitalInformation_{{ $children->id }}">
-																	<label class="custom-control-label" for="editVitalInformation_{{ $children->id }}">{{ $children->reference->name }}</label>
+																<div class="custom-control custom-checkbox">
+																	<input @if($child->value != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $child->id }}" value="{{ $child->name }}" id="editEyePrescription_{{ $child->id }}">
+																	<label class="custom-control-label" for="editEyePrescription_{{ $child->id }}">{{ $child->name }}</label>
 																</div>
 															</div>
 														</li>
-													@elseif($children->reference->type == 'check_textbox')
+													@elseif($child->type == 'check_textbox')
 														<li>
 															<div class="form-group">
 																<div class="custom-control custom-checkbox">
-																	<input @if($children->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $children->id }}" name="{{ $children->id }}" value="{{ $children->reference->name }}" id="editVitalInformation_{{ $children->id }}">
-																	<label class="custom-control-label" for="editVitalInformation_{{ $children->id }}">{{ $children->reference->name }}</label>
+																	<input @if($child->value != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $child->id }}" name="{{ $child->id }}" value="{{ $child->name }}" id="editEyePrescription_{{ $child->id }}">
+																	<label class="custom-control-label" for="editEyePrescription_{{ $child->id }}">{{ $child->name }}</label>
 																</div>
 																<div class="input-group input-group-sm">
 																	<span class="input-group-prepend">
 																		<div class="input-group-text">
-																			{{ $children->reference->description }}
+																			{{ $child->description }}
 																		</div>	
 																	</span>
-																	<input value="{{ $children->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $children->id }}" name="input_{{$children->id}}" id="editVitalInformation_input{{ $children->id }}" @if($children->result == null) disabled="" @endif>
+																	<input value="{{ $child->sub_value}}" class="form-control form-control-sm check-textbox-input" data-id="{{ $child->id }}" name="input_{{$child->id}}" id="editEyePrescription_input{{ $child->id }}" @if($child->value == null) disabled="" @endif>
 																</div>
 															</div>
 														</li>
-													@elseif($children->reference->type == 'textarea')
+													@elseif($child->type == 'textarea')
 														<li>
 															<div class="form-group">
-																<label>{{ $children->reference->name }}:</label>
-																<textarea class="form-control" name="{{ $children->id }}">{{ $children->result }}</textarea>
+																<label>{{ $child->name }}:</label>
+																<textarea class="form-control" name="{{ $child->id }}">{{ $child->value}}</textarea>
 															</div>
 														</li>
 													@endif
-												@elseif($children->child->count())
-													<li><label style="font-weight: bold">{{ $children->reference->name }}:</label></li>
-													<ul class="child-references" style="list-style-type: circle;">
-														@foreach ($children->child as $child)
-															@if($child->reference->type == 'text')
-																<li>
-																	<div class="form-group">
-																		<label>{{ $child->reference->name }}:</label>
-																		<input value="{{ $child->result }}" class="form-control form-control-sm" type="text" name="{{ $child->id }}">
-																	</div>
-																</li>
-															@elseif($child->reference->type == 'checkbox')
-																<li>
-																	<div class="checkbox">
-																	    <div class="custom-control custom-checkbox">
-																			<input @if($child->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $child->id }}" value="{{ $child->reference->name }}" id="editVitalInformation_{{ $child->id }}">
-																			<label class="custom-control-label" for="editVitalInformation_{{ $child->id }}">{{ $child->reference->name }}</label>
-																		</div>
-																	</div>
-																</li>
-															@elseif($child->reference->type == 'check_textbox')
-																<li>
-																	<div class="form-group">
-																		<div class="custom-control custom-checkbox">
-																			<input @if($child->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $child->id }}" name="{{ $child->id }}" value="{{ $child->reference->name }}" id="editVitalInformation_{{ $child->id }}">
-																			<label class="custom-control-label" for="editVitalInformation_{{ $child->id }}">{{ $child->reference->name }}</label>
-																		</div>
-																		<div class="input-group input-group-sm">
-																			<span class="input-group-prepend">
-																				<div class="input-group-text">
-																					{{ $child->reference->description }}
-																				</div>	
-																			</span>
-																			<input value="{{ $child->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $child->id }}" name="input_{{$child->id}}" id="editVitalInformation_input{{ $child->id }}" @if($child->result == null) disabled="" @endif>
-																		</div>
-																	</div>
-																</li>
-															@elseif($child->reference->type == 'textarea')
-																<li>
-																	<div class="form-group">
-																		<label>{{ $child->reference->name }}:</label>
-																		<textarea class="form-control" name="{{ $child->id }}">{{ $child->result }}</textarea>
-																	</div>
-																</li>
-															@endif
-														@endforeach
-													</ul>
-												@endif
-											@endforeach
+												@endforeach
 											</ul>
-										</fieldset>
-									</div>
-								</div> {{-- ./col-md-4 End of Reference with Children|Child --}}
-								{{-- <hr> --}}
-							@elseif($result->parent_id == null)
-								<div class="col-md-4 grid-item">
-									<div class="callout callout-light">
-										@if($result->reference->type == 'text')
-											<div class="form-group">
-												<label>{{ $result->reference->name }}:</label>
-												<input value="{{ $result->result }}" class="form-control" type="text" name="{{ $result->id }}">
-											</div>
-										@elseif($result->reference->type == 'checkbox')
-											<div class="form-group">
-												<div class="checkbox">
-												    <div class="custom-control custom-checkbox">
-														<input @if($result->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $result->id }}" value="{{ $result->reference->name }}" id="editVitalInformation_{{ $result->id }}">
-														<label class="custom-control-label" for="editVitalInformation_{{ $result->id }}">{{ $result->reference->name }}</label>
-													</div>
-												</div>
-											</div>
-										@elseif($result->reference->type == 'check_textbox')
-											<div class="form-group">
-												<div class="custom-control custom-checkbox">
-													<input @if($result->result != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $result->id }}" name="{{ $result->id }}" value="{{ $result->reference->name }}" id="editVitalInformation_{{ $result->id }}">
-													<label class="custom-control-label" for="editVitalInformation_{{ $result->id }}">{{ $result->reference->name }}</label>
-												</div>
-												<div class="input-group input-group-sm">
-													<span class="input-group-prepend">
-														<div class="input-group-text">
-															{{ $result->reference->description }}
-														</div>	
-													</span>
-													<input value="{{ $result->sub_result }}" class="form-control form-control-sm check-textbox-input" data-id="{{ $result->id }}" name="input_{{$result->id}}" id="editVitalInformation_input{{ $result->id }}" @if($result->result == null) disabled="" @endif>
-												</div>
-											</div>
-										@elseif($result->reference->type == 'textarea')
-											<div class="form-group">
-												<label>{{ $result->reference->name }}:</label>
-												<textarea class="form-control" name="{{ $result->id }}">{{ $result->result }}</textarea>
-											</div>
 										@endif
+									@endforeach
+									</ul>
+								</fieldset>
+							</div>
+						@elseif($result->parent_id == null)
+							<div class="callout callout-light">
+								@if($result->type == 'text')
+									<div class="form-group">
+										<label>{{ $result->name }}:</label>
+										<input value="{{ $result->value}}" class="form-control" type="text" name="{{ $result->id }}">
 									</div>
-								</div>
-							@endif
-						@endforeach
-					</div> {{-- End of grid --}}
-					<div class="col-md-4">
-						<div class="form-group">
-							<label>Doctor:</label>
-							<select class="form-control select2" name="doctor" style="width: 100%">
-								<option></option>
-								@foreach ($doctors as $doctor)
-									<option @if($vitalInformation_edit->doctor_id == $doctor->id){{'selected'}}@endif value="{{ $doctor->id }}">
-										{{ $doctor->employeeName() }}
-									</option>
-								@endforeach
-							</select>
-						</div>
+								@elseif($result->type == 'checkbox')
+									<div class="form-group">
+										<div class="checkbox">
+											<div class="custom-control custom-checkbox">
+												<input @if($result->value != null){{'checked'}}@endif type="checkbox" class="custom-control-input" name="{{ $result->id }}" value="{{ $result->name }}" id="editEyePrescription_{{ $result->id }}">
+												<label class="custom-control-label" for="editEyePrescription_{{ $result->id }}">{{ $result->name }}</label>
+											</div>
+										</div>
+									</div>
+								@elseif($result->type == 'check_textbox')
+									<div class="form-group">
+										<div class="custom-control custom-checkbox">
+											<input @if($result->value != null){{'checked'}}@endif type="checkbox" class="custom-control-input check-textbox" data-id="{{ $result->id }}" name="{{ $result->id }}" value="{{ $result->name }}" id="editEyePrescription_{{ $result->id }}">
+											<label class="custom-control-label" for="editEyePrescription_{{ $result->id }}">{{ $result->name }}</label>
+										</div>
+										<div class="input-group input-group-sm">
+											<span class="input-group-prepend">
+												<div class="input-group-text">
+													{{ $result->description }}
+												</div>	
+											</span>
+											<input value="{{ $result->sub_value}}" class="form-control form-control-sm check-textbox-input" data-id="{{ $result->id }}" name="input_{{$result->id}}" id="editEyePrescription_input{{ $result->id }}" @if($result->value == null) disabled="" @endif>
+										</div>
+									</div>
+								@elseif($result->type == 'textarea')
+									<div class="form-group">
+										<label>{{ $result->name }}:</label>
+										<textarea class="form-control" name="{{ $result->id }}">{{ $result->value}}</textarea>
+									</div>
+								@endif
+							</div>
+						@endif
+					@endforeach
+					<div class="form-group">
+						<label>Doctor:</label>
+						<select class="form-control select2" name="doctor" style="width: 100%">
+							<option></option>
+							@foreach ($doctors as $doctor)
+								<option @if($eyePrescription_edit->doctor_id == $doctor->id){{'selected'}}@endif value="{{ $doctor->id }}">
+									{{ $doctor->fullname() }}
+								</option>
+							@endforeach
+						</select>
 					</div>
 				</div> {{-- ./modal-body --}}
 				<div class="modal-footer">
 					<div class="col">
-						@if ($vitalInformation_edit->trashed())
-	                		@can('vital_information.restore')
-						    <a class="btn btn-default text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('vital_information.restore', $vitalInformation_edit->id) }}"><i class="fad fa-download"></i> Restore</a>
-							@endcan
-						@else
-							@can('vital_information.destroy')
-						    <a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('vital_information.destroy', $vitalInformation_edit->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
-							@endcan
-						@endif
+						@can('eye_prescriptions.destroy')
+						<a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescriptions.destroy', $eyePrescription_edit->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+						@endcan
 					</div>
 					<div class="col text-right">
-						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#closeEditVitalInformation">Cancel</button>
+						<button class="btn btn-default" type="button" data-toggle="modal" data-target="#closeEditEyePrescription">Cancel</button>
 						<button class="btn btn-default text-success" type="submit"><i class="fad fa-save"></i> Save</button>
 					</div>
 				</div> {{-- ./modal-footer --}}
 			</div> {{-- ./modal-content --}}
 		</div> {{-- ./modal-dialog --}}
 	</div> {{-- ./modal --}}
-	<div class="modal fade" id="closeEditVitalInformation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="closeEditEyePrescription" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-md modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header text-center">
@@ -224,7 +209,7 @@
 					</div>
 					<div class="col text-right">
 						<button class="btn btn-default" type="button" data-dismiss="modal-ajax"><i class="fa fa-times"></i> Discard</button>
-						{{-- <a class="btn btn-default" href="{{ route('patients.show', $vitalInformation_edit->patient_id) }}">Discard</a> --}}
+						{{-- <a class="btn btn-default" href="{{ route('patients.show', $eyePrescription_edit->patient_id) }}">Discard</a> --}}
 						<button class="btn btn-default text-success" type="submit"><i class="fad fa-save"></i> Save</button>
 					</div>
 				</div>

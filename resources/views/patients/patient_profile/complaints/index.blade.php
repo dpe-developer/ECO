@@ -36,8 +36,8 @@
 						</td>
 						@role('System Administrator')
 		        		<td class="text-center">
-							<a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showEyePrescription" data-href="{{ route('complaints.show',$complaint->id) }}"><i class="fad fa-file fa-lg"></i></a>
-							<a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editEyePrescription" data-href="{{ route('complaints.edit',$complaint->id) }}"><i class="fad fa-edit fa-lg"></i></a>
+							<a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#showComplaint" data-href="{{ route('complaints.show',$complaint->id) }}"><i class="fad fa-file fa-lg"></i></a>
+							<a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editComplaint" data-href="{{ route('complaints.edit',$complaint->id) }}"><i class="fad fa-edit fa-lg"></i></a>
 							<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('complaints.destroy', $complaint->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
 		              	</td>
 		              	@endrole

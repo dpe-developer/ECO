@@ -8,12 +8,18 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'version' => "3.5.18",
+    'version' => "3.6.1",
     'client_name' => env('APP_CLIENT_NAME', 'Laravel'),
+
     // Twilio
     'twilio_sid' => env('TWILIO_SID'),
     'twilio_auth_token' => env('TWILIO_AUTH_TOKEN'),
     'twilio_number' => env('TWILIO_NUMBER'),
+
+    // Infobip
+    'infobip_api_prefix' => env('INFOBIP_API_PREFIX'),
+    'infobip_api_key' => env('INFOBIP_API_KEY'),
+    'infobip_api_base_url' => env('INFOBIP_API_BASE_URL'),
 
     /*
     |--------------------------------------------------------------------------

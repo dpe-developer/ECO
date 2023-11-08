@@ -13,6 +13,8 @@ class EyePrescription extends Model
 		'visit_id',
 		'doctor_id',
 		'remarks',
+		'created_at',
+		'updated_at',
 	];
 
 	public function result()

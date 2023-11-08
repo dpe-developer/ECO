@@ -134,7 +134,7 @@ class EyePrescriptionController extends Controller
 		}
 
 		return redirect()->route('patients.show', $request->patient)
-					->with('alert-success', 'Eye Prescription successfully added');
+					->with('alert-success', trans('terminologies.eye_prescription').' successfully ADDED');
     }
 
     /**
@@ -160,7 +160,14 @@ class EyePrescriptionController extends Controller
      */
     public function edit(EyePrescription $eyePrescription)
     {
-        //
+        $data = [
+			'eyePrescription_edit' => $eyePrescription,
+			'patient' => $eyePrescription->patient,
+			'doctors' => User::where('role_id', 3)->get()
+		];
+		return response()->json([
+			'modal_content' => view('patients.patient_profile.eye_prescriptions.edit', $data)->render()
+		]);
     }
 
     /**
@@ -172,7 +179,40 @@ class EyePrescriptionController extends Controller
      */
     public function update(Request $request, EyePrescription $eyePrescription)
     {
-        //
+        $request->validate([
+			'doctor' => ['required'],
+		]);
+		
+		$isUpdated = false;
+
+		$eyePrescription->update([
+			'doctor_id' => $request->get('doctor'),
+		]);
+
+		if($eyePrescription->doctor_id != $request->get('doctor')){
+			$isUpdated = true;
+		}
+
+		foreach ($eyePrescription->result as $result) {
+			$eyePrescriptionData = EyePrescriptionData::find($result->id);
+			if(isset($eyePrescriptionData->id)){
+				if($eyePrescriptionData->value != $request->get($result->id) || $eyePrescriptionData->sub_value != $request->get('input_'.$result->id)){
+					$isUpdated = true;
+					$eyePrescriptionData->update([
+						'value' => $request->get($result->id),
+						'sub_value' => $request->get('input_'.$result->id),
+					]);
+				}
+			}
+		}
+
+		if($isUpdated){
+			$eyePrescription->update([
+				'updated_at' => Carbon::now(),
+			]);
+		}
+
+		return redirect()->route('patients.show', $eyePrescription->patient_id)->with('alert-success', trans('terminologies.eye_prescription').' UPDATED');
     }
 
     /**
@@ -183,6 +223,7 @@ class EyePrescriptionController extends Controller
      */
     public function destroy(EyePrescription $eyePrescription)
     {
-        //
+        $eyePrescription->delete();
+		return back()->with('alert-warning', trans('terminologies.eye_prescription').' DELETED');
     }
 }

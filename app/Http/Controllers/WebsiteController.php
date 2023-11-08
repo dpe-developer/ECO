@@ -7,7 +7,7 @@ use App\Models\Appointment;
 use App\Models\Announcement;
 use App\Models\Service;
 use App\Models\FileAttachment;
-use App\Mail\SampleMail;
+use App\Models\Setting;
 use App\Mail\RegistrationCompleteMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -114,11 +114,15 @@ class WebsiteController extends Controller
         $patient->assignRole(4);
 
         // Send SMS
-        $this->sendPatientCredentialsSMS($patient);
+        if(Setting::system('send_sms_notification')){
+            $this->sendPatientCredentialsSMS($patient);
+        }
 
         // Send Mail
-        if($request->get('email')){
-            Mail::to($patient->email)->send(new RegistrationCompleteMail($patient));
+        if(Setting::system('send_email_notification')){
+            if($request->get('email')){
+                Mail::to($patient->email)->send(new RegistrationCompleteMail($patient));
+            }
         }
 
         $data = [
@@ -129,7 +133,6 @@ class WebsiteController extends Controller
 
     public function patientRegistrationComplete()
     {
-        // Mail::to("dpe.developer001@gmail.com")->send(new SampleMail());
         return view('registration_complete');
     }
 
@@ -139,7 +142,7 @@ class WebsiteController extends Controller
         $auth_token = config("app.twilio_auth_token");
         $twilio_number = config("app.twilio_number");
         $client = new Client($account_sid, $auth_token);
-        $message = "\n\nHi ". $patient->first_name ." ". $patient->last_name .". This is your login credentials on https://dizonvisionclinic.dpe \n\nUsername: 1234567890";
+        $message = "\n\nHi ". $patient->first_name ." ". $patient->last_name .". You successfully registered on ". config('app.url') .". Your can now use your Username or Email to login to our system. \n\nUsername: ". $patient->username ."\nTo protect you account, please do not share your login credentials.";
         $client->messages->create('+639673700022', [
             'from' => $twilio_number,
             'body' => $message

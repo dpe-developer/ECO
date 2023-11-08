@@ -10,14 +10,17 @@
 	<div class="modal-dialog modal-dialog-scrollable modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
-	          <h4 class="modal-title">{{ trans('terminologies.eye_prescription') }} - {{ date('M d, Y h:ia', strtotime($eyePrescription_show->updated_at)) }}</h4>
+	          <h4 class="modal-title">{{ trans('terminologies.eye_prescription') }}</h4>
 	          {{-- <a class="close" href="{{ route('patients.show', $patient->id) }}">&times;</a> --}}
 	          <button class="close" data-dismiss="modal-ajax"  type="button">&times;</button>
 	    	</div>
 			<div class="modal-body text-left scrollbar-primary">
 				<div class="callout callout-info">
-                	<label>Doctor:</label> {{ $eyePrescription_show->doctor->fullname()}}<br>
-                	{{-- <label>Patient:</label> {{ $eyePrescription_show->patient->patient_name($eyePrescription_show->patient_id) }} --}}
+                	<b>Doctor:</b> {{ $eyePrescription_show->doctor->fullname()}}<br>
+					<b>Date Added:</b> {{ Carbon::parse($eyePrescription_show->created_at)->format('M d, Y h:i:sa') }}
+                	@if(Carbon::parse($eyePrescription_show->created_at)->ne(Carbon::parse($eyePrescription_show->updated_at)))
+					<br><b>Last Updated:</b> {{ Carbon::parse($eyePrescription_show->updated_at)->format('M d, Y h:ia') }}
+					@endif
                 </div>
 				{{-- <div class="row patient-profile-form grid"> --}}
 					@foreach ($eyePrescription_show->result as $result)

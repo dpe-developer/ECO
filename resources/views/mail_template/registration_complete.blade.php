@@ -9,10 +9,13 @@
 <body>
     <h3>Registration Complete</h3>
     <p>
-        Hello {{ $patient->fullname('f-m-l') }}. You successfully registered on <a href="{{ config('app.url') }}" target="_blank">Dizon Vision Clinic</a>. Your can now use your Username or Email to login to our system.
+        Hello {{ $patient->fullname() }}. You successfully registered on <a href="{{ config('app.url') }}" target="_blank">Dizon Vision Clinic</a>. Your can now use your Username or Email to login to our system.
     </p>
     <p>
-        <b>Username/Patient ID: </b> {{ $patient->username }}
+        <b>Username: </b> {{ $patient->username }}
+    </p>
+    <p>
+        <strong><i>To protect you account, please do not share your login credentials.</i></strong>
     </p>
 </body>
 </html>

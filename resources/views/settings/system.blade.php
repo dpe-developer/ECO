@@ -16,6 +16,16 @@
         <input id="usersCanCustomizeUI" type="checkbox" name="users_can_customize_ui" @if($systemSetting['users_can_customize_ui'] == '1') checked @endif data-bootstrap-switch value="1">
         <label for="usersCanCustomizeUI">Users can customize UI</label>
     </div>
+    <div class="form-group">
+        <input type="hidden" name="send_sms_notification" value="">
+        <input id="sendSmsNotification" type="checkbox" name="send_sms_notification" @if($systemSetting['send_sms_notification'] == '1') checked @endif data-bootstrap-switch value="1">
+        <label for="sendSmsNotification">Send SMS Notofication</label>
+    </div>
+    <div class="form-group">
+        <input type="hidden" name="send_email_notification" value="">
+        <input id="sendEmailNotification" type="checkbox" name="send_email_notification" @if($systemSetting['send_email_notification'] == '1') checked @endif data-bootstrap-switch value="1">
+        <label for="sendEmailNotification">Send Email Notification</label>
+    </div>
 </form>
 <div class="modal fade" id="systemSettingsResetModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md">

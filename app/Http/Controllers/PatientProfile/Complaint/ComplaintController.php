@@ -160,7 +160,14 @@ class ComplaintController extends Controller
      */
     public function edit(Complaint $complaint)
     {
-        //
+        $data = [
+			'complaint_edit' => $complaint,
+			'patient' => $complaint->patient,
+			'doctors' => User::where('role_id', 3)->get()
+		];
+		return response()->json([
+			'modal_content' => view('patients.patient_profile.complaints.edit', $data)->render()
+		]);
     }
 
     /**
@@ -172,7 +179,40 @@ class ComplaintController extends Controller
      */
     public function update(Request $request, Complaint $complaint)
     {
-        //
+        $request->validate([
+			'doctor' => ['required'],
+		]);
+		
+		$isUpdated = false;
+
+		$complaint->update([
+			'doctor_id' => $request->get('doctor'),
+		]);
+
+		if($complaint->doctor_id != $request->get('doctor')){
+			$isUpdated = true;
+		}
+
+		foreach ($complaint->result as $result) {
+			$complaintData = ComplaintData::find($result->id);
+			if(isset($complaintData->id)){
+				if($complaintData->value != $request->get($result->id) || $complaintData->sub_value != $request->get('input_'.$result->id)){
+					$isUpdated = true;
+					$complaintData->update([
+						'value' => $request->get($result->id),
+						'sub_value' => $request->get('input_'.$result->id),
+					]);
+				}
+			}
+		}
+
+		if($isUpdated){
+			$complaint->update([
+				'updated_at' => Carbon::now(),
+			]);
+		}
+
+		return redirect()->route('patients.show', $complaint->patient_id)->with('alert-success', trans('terminologies.complaint').' UPDATED');
     }
 
     /**
@@ -183,6 +223,7 @@ class ComplaintController extends Controller
      */
     public function destroy(Complaint $complaint)
     {
-        //
+        $complaint->delete();
+		return back()->with('alert-warning', trans('terminologies.complaint').' DELETED');
     }
 }
