@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\RouteCollection;
 use App\Models\User;
+use App\Models\Appointment;
+use App\Models\Patient;
 use App\Models\RolePermission\Role;
 use App\Models\RolePermission\Permission;
 use App\Models\LoginInfo;
+use Carbon;
 use Twilio\Rest\Client;
 use InfobipAPI;
 use SendSMSApi;
@@ -68,10 +71,10 @@ class DashboardController extends Controller
 
         // return view('home');
         $data = [
-            'users' => User::where('id', '!=', 1)->get(),
-            'loginInfos' => LoginInfo::get(),
-            'permissions' => Permission::get(),
-            'roles' => Role::get(),
+            'patients' => User::where('role_id', 4)->count(),
+            'pendingAppointments' => Appointment::where('status', 'pending')->count(),
+            'confirmedAppointments' => Appointment::where('status', 'confirmed')->count(),
+            'appointmentsToday' => Appointment::whereDate('appointment_date', Carbon::today())->count(),
         ];
         return view('dashboard', $data);
     }

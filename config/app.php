@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'version' => "3.6.1",
+    'version' => "3.6.11",
     'client_name' => env('APP_CLIENT_NAME', 'Laravel'),
 
     // Twilio
@@ -264,6 +264,7 @@ return [
         /**
          * Custom Models
          */
+        'Appointment' => App\Models\Appointment::class,
         'User' => App\Models\User::class,
         'UserNotification' => App\Models\UserNotification::class,
 

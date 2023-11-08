@@ -99,6 +99,11 @@
                     {{ Auth::user()->last_name }}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                    @if(Auth::user()->role_id != 3)
+                    <li>
+                        <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                    </li>
+                    @endif
                     <li>
                         <a class="dropdown-item" href="{{ route('my-profile', Auth::user()->username) }}">My profile</a>
                     </li>

@@ -29,57 +29,53 @@
         <div class="container-fluid">
             <!-- Info boxes -->
             <div class="row">
-                <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-users"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Users</span>
-                            <span class="info-box-number">{{ $users->count() }}</span>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{ $pendingAppointments }}</h3>
+                            <p>Pending Appointments</p>
                         </div>
-                        <!-- /.info-box-content -->
+                        <div class="icon">
+                            <i class="fa fa-calendar-clock"></i>
+                        </div>
+                        <a href="{{ route('appointments.index', ['filter' => 1, 'filter_appointment_status' => array('pending')]) }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                    <!-- /.info-box -->
                 </div>
-                <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-sign-in"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Logins</span>
-                            <span class="info-box-number">
-                            {{ $loginInfos->count() }}
-                            </span>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-primary">
+                        <div class="inner">
+                            <h3>{{ $confirmedAppointments }}</h3>
+                            <p>Confirmed Appointments</p>
                         </div>
-                        <!-- /.info-box-content -->
+                        <div class="icon">
+                            <i class="fa fa-calendar-check"></i>
+                        </div>
+                        <a href="{{ route('appointments.index', ['filter' => 1, 'filter_appointment_status' => array('confirmed')]) }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                    <!-- /.info-box -->
                 </div>
-                <!-- /.col -->
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-user-tag"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Roles</span>
-                            <span class="info-box-number">{{ $roles->count() }}</span>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{ $appointmentsToday }}</h3>
+                            <p>Appointments Today</p>
                         </div>
-                        <!-- /.info-box-content -->
+                        <div class="icon">
+                            <i class="fa fa-calendar-day"></i>
+                        </div>
+                        <a href="{{ route('appointments.index', ['view' => 'calendar', 'filter' => 1, 'filter_date_option' => 'today']) }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                    <!-- /.info-box -->
                 </div>
-                <!-- /.col -->
-                <!-- fix for small devices only -->
-                <div class="clearfix hidden-md-up"></div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-list"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Permisisons</span>
-                            <span class="info-box-number">{{ $permissions->count() }}</span>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $patients }}</h3>
+                            <p>Total Patients</p>
                         </div>
-                        <!-- /.info-box-content -->
+                        <div class="icon">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <a href="{{ route('appointments.index', ['view' => 'calendar', 'filter' => 1, 'filter_date_option' => 'today']) }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                    <!-- /.info-box -->
                 </div>
             </div>
             <!-- /.row -->

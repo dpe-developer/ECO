@@ -38,6 +38,8 @@ class AppointmentController extends Controller
     {
         // if(Auth::user()->role_id != 4){
             $appointments = Appointment::select('*');
+            $dateFrom = null;
+		    $dateTo = null;
             if($request->get('filter_patient')){
                 $appointments->whereIn('patient_id', $request->get('filter_patient'));
             }
@@ -100,6 +102,10 @@ class AppointmentController extends Controller
                 'appointments' => $appointments->orderBy('created_at', 'DESC')->get(),
                 'patients' => $patients,
                 'doctors' => $doctors,
+                'dateRange' => [
+                    'dateFrom' => $dateFrom,
+                    'dateTo' => $dateTo
+                ]
             ];
             return view('appointments.index', $data);
         /* }else{
