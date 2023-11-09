@@ -19,7 +19,7 @@
     <div class="form-group">
         <input type="hidden" name="send_sms_notification" value="">
         <input id="sendSmsNotification" type="checkbox" name="send_sms_notification" @if($systemSetting['send_sms_notification'] == '1') checked @endif data-bootstrap-switch value="1">
-        <label for="sendSmsNotification">Send SMS Notofication</label>
+        <label for="sendSmsNotification">Send SMS Notification</label>
     </div>
     <div class="form-group">
         <input type="hidden" name="send_email_notification" value="">
