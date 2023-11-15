@@ -3,9 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title">Appointment</h5>
-				<button class="close" data-dismiss="modal-ajax" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<button type="button" class="btn-close" data-dismiss="modal-ajax" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<div class="form-group mb-0">
@@ -39,11 +37,11 @@
 				</div>
 				<div class="form-group mb-0">
 					<label>Patient:</label>
-					{!! $appointment->patient->fullname() !!}
+					{{ $appointment->patient->fullname('f-m-l') }}
 				</div>
 				<div class="form-group mb-0">
 					<label>Doctor:</label>
-					{!! $appointment->doctor->fullname() !!}
+					{{ $appointment->doctor->fullname('f-m-l') }}
 				</div>
                 <div class="form-group mb-0">
 					<label>Service:</label>
@@ -73,11 +71,10 @@
 							@break
 						@case('confirmed')
 							@can('appointments.accept_patient')
-								{{-- @if(Auth::user()->isDoctor() && !$appointment->hasVisit()) --}}
-								@if(!$appointment->hasVisit())
-									{{-- @if(Auth::user()->id == $appointment->doctor_id) --}}
+								@if(Auth::user()->isDoctor() && !$appointment->hasVisit())
+									@if(Auth::user()->id == $appointment->doctor_id)
 										<a class="btn btn-success" href="{{ route('appointments.accept_patient', $appointment->id) }}"><i class="fa fa-check"></i> Accept Patient</a>
-									{{-- @endif --}}
+									@endif
 								@endif
 							@endcan
 							@break

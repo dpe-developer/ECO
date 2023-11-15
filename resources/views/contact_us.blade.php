@@ -28,29 +28,29 @@
         <div class="col-md-6">
             <h1 class="heading">&nbsp;Inquiry</h1>
             <p>Get in Touch. We're Listening</p>
-            <form action="submit-contact-us" method="POST" autocomplete="off">
+            <form action="{{ route('submit_inquiry') }}" method="POST" autocomplete="off">
                 @csrf
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="form-outline">
-                            <input type="text" id="inputYourName" class="form-control" required/>
-                            <label class="form-label" for="inputYourName">Your Name</label>
+                            <input type="text" name="name" @isset(Auth::user()->id) value="{{ old('name', Auth::user()->fullname()) }}" readonly @else value="{{ old('name') }}" @endisset id="inputYourName" class="form-control" required/>
+                            <label class="form-label" for="inputYourName">Your Name <strong class="text-danger">*</strong></label>
                           </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-outline">
-                            <input type="text" id="inputYourEmailAddress" class="form-control" required/>
-                            <label class="form-label" for="inputYourEmailAddress">Your Email Address</label>
+                            <input type="email" name="email" @isset(Auth::user()->id) value="{{ old('email', (explode('@', Auth::user()->email)[1] != 'temp.com') ? Auth::user()->email : '' ) }}" @else value="{{ old('email') }}" @endisset id="inputYourEmailAddress" class="form-control" required/>
+                            <label class="form-label" for="inputYourEmailAddress">Your Email Address <strong class="text-danger">*</strong></label>
                         </div>
                     </div>
                 </div>
                 <div class="form-outline mb-4">
-                    <input type="text" id="inputSubject" class="form-control" required/>
-                    <label class="form-label" for="inputSubject">Subject</label>
+                    <input type="text" name="subject" value="{{ old('subject') }}" id="inputSubject" class="form-control" required/>
+                    <label class="form-label" for="inputSubject">Subject <strong class="text-danger">*</strong></label>
                 </div>
                 <div class="form-outline mb-4">
-                    <textarea class="form-control" id="textareaMessage" rows="4" required></textarea>
-                    <label class="form-label" for="textareaMessage">Message</label>
+                    <textarea class="form-control" name="message" id="textareaMessage" rows="4" required>{{ old('message') }}</textarea>
+                    <label class="form-label" for="textareaMessage">Message <strong class="text-danger">*</strong></label>
                 </div>
                 <button type="submit" class="btn btn-primary mb-4 text-right" style="">Send</button>
             </form>

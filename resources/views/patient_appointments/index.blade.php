@@ -7,12 +7,17 @@
     <link rel="stylesheet" href="{{ asset('plugins/fullcalendar-bootstrap/main.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}" /> --}}
     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('AdminLTE-3.2.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <style type="text/css">
         /* html, body {
             overflow: hidden;
         } */
+        
         label {
             font-weight: bold;
+        }
+        .fc-dayGrid-view .fc-body .fc-row {
+            min-height: 5em;
         }
         .fc-content:hover {
             cursor: pointer;
@@ -48,7 +53,67 @@
     <h1 class="heading">&nbsp;Appointment</h1>
     <div class="row justify-content-center mb-5">
         <div class="col">
-            <div id="calendar"></div>
+            <!-- Tabs navs -->
+            <ul class="nav nav-tabs mb-3" id="ex-with-icons" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="ex-with-icons-tab-1" data-mdb-toggle="tab" href="#ex-with-icons-tabs-1" role="tab"
+                    aria-controls="ex-with-icons-tabs-1" aria-selected="true"><i class="fas fa-calendar fa-fw me-2"></i>Calendar</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="ex-with-icons-tab-2" data-mdb-toggle="tab" href="#ex-with-icons-tabs-2" role="tab"
+                    aria-controls="ex-with-icons-tabs-2" aria-selected="false"><i class="fas fa-clock-rotate-left fa-fw me-2"></i>Appointment History</a>
+                </li>
+            </ul>
+            <!-- Tabs navs -->
+            
+            <!-- Tabs content -->
+            <div class="tab-content" id="ex-with-icons-content">
+                <div class="tab-pane fade show active" id="ex-with-icons-tabs-1" role="tabpanel" aria-labelledby="ex-with-icons-tab-1">
+                    <h4 class="text-danger text-center">Click a date on calendar to set an appointment.</h4>
+                    <div id="calendar"></div>
+                </div>
+                <div class="tab-pane fade" id="ex-with-icons-tabs-2" role="tabpanel" aria-labelledby="ex-with-icons-tab-2">
+                    <table class="table table-bordered table-hover" id="appointmentsDatatable">
+                        <thead>
+                            <tr>
+                                <th>Date of Appointment</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Doctor</th>
+                                <th>Description</th>
+                                @hasrole('System Administrator')
+                                <th class="text-center">Action</th>
+                                @endhasrole
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($appointments as $appointment)
+                            <tr
+                                data-toggle="modal-ajax" 
+                                data-href="{{ route('patient_appointments.show', $appointment->id) }}" 
+                                data-target="#showAppointmentModal" 
+                            >
+                                <td data-order="{{ Carbon::parse($appointment->appointment_date) }}">
+                                    {{ Carbon::parse($appointment->appointment_date)->format('M d, Y') }}
+                                </td>
+                                <td>{{ date('h:ia', strtotime($appointment->appointment_date)) }}</td>
+                                <td>
+                                    @if ($appointment->status != 'done' && $appointment->appointment_date < today())
+                                        <span class="badge badge-danger">Due</span>
+                                    @endif
+                                    {!! $appointment->statusBadge() !!}
+                                </td>
+                                <td>
+                                    {{ $appointment->doctor->fullname('f-m-l') }}
+                                </td>
+                                <td>{{ $appointment->description }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Tabs content -->
         </div>
     </div>
 </div>
@@ -64,6 +129,8 @@
     <script src="{{ asset('plugins/fullcalendar-timegrid/main.min.js') }}"></script>
     <script src="{{ asset('plugins/fullcalendar-interaction/main.min.js') }}"></script>
     <script src="{{ asset('plugins/fullcalendar-bootstrap/main.min.js') }}"></script>
+    <script src="{{ asset('AdminLTE-3.2.0/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('AdminLTE-3.2.0/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script>
         $(function () {
             /* $(document).on('click', '[data-dismiss="modal-ajax"]', function() {
@@ -174,13 +241,13 @@
                 events: [
                 @foreach ($appointments as $appointment)
                     {
-                        title          : '{{ $appointment->description }}',
+                        title          : '- {{ $appointment->status }}',
                         description    : 'description for All Day Event',
                         start          : '{{ $appointment->appointment_date }}',
                         end            : '{{ Carbon::parse($appointment->appointment_date)->addMinutes(30) }}',
                         dataTarget     : '#showAppointmentModal',
-                        dataHref       : '{{ route("appointments.show", $appointment->id) }}',
-                        formAction     : '{{ route("appointments.update", $appointment->id) }}',
+                        dataHref       : '{{ route("patient_appointments.show", $appointment->id) }}',
+                        formAction     : '{{ route("patient_appointments.update", $appointment->id) }}',
                         allDay         : false,
                         @if($appointment->status == 'pending')
                         backgroundColor: '#ffc107', //color: warning
@@ -206,5 +273,13 @@
             calendar.render();
             // $('#calendar').fullCalendar()
         });
-    </script> 
+    </script>
+    {{-- <script type="application/javascript">
+        $(document).ready(function () {
+            $('#appointmentsDatatable').DataTable({
+                order: [[0, 'desc']],
+                // columnDefs : [{"targets": 0, "type":"date"}],
+            });
+        });
+    </script> --}}
 @endsection

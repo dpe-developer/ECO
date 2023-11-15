@@ -34,8 +34,9 @@
     <div class="carousel-item active">
       <img src="{{ asset('website/carousel/carousel_1.jpg') }}" class="d-block w-100" alt="Sunset Over the City"/>
       <div class="carousel-caption d-none d-md-block">
-        <h1 style="color: #fff212; text-shadow: 2px 2px 5px #0098da;">Your Vision is Our Priority</h1>
-        <h5>See the World Clearly with Duzon Vision Clinic.</h5>
+        <h1 style="color: #ffffff; text-shadow: 2px 2px 5px #000000;">Your Vision is Our Priority</h1>
+        {{-- <h1 style="color: #fff212; text-shadow: 2px 2px 5px #0098da;">Your Vision is Our Priority</h1> --}}
+        <h5>See the World Clearly with Dizon Vision Clinic.</h5>
       </div>
     </div>
 

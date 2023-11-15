@@ -26,7 +26,7 @@ class PatientVisit extends Model
     ];
 
     /**
-     * Relation
+     * Relations
      */
     public function patient()
     {
@@ -47,6 +47,11 @@ class PatientVisit extends Model
     {
         return $this->belongsTo('App\Models\Appointment', 'appointment_id');
     }
+
+    public function findings()
+    {
+        return $this->hasMany('App\Models\PatientFindings', 'visit_id');
+    }
     
     public function medicalHistories()
     {
@@ -63,7 +68,7 @@ class PatientVisit extends Model
         return $this->hasMany('App\Models\PatientProfile\EyePrescription\EyePrescription', 'visit_id');
     }
     /**
-     * END OF Relation
+     * END OF Relations
      */
 
     

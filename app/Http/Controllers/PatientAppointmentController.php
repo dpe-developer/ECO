@@ -18,7 +18,7 @@ class PatientAppointmentController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::where('patient_id', Auth::user()->id)->get();
+        $appointments = Appointment::where('patient_id', Auth::user()->id)->orderBy('appointment_date', 'DESC')->get();
         $data = [
             'appointments' => $appointments
         ];
@@ -75,7 +75,16 @@ class PatientAppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
-        //
+        if(Auth::user()->id != $appointment->patient_id){
+            return abort(404);
+        }
+        $data = ([
+			'appointment' => $appointment,
+		]);
+        
+		return response()->json([
+			'modal_content' => view('patient_appointments.show', $data)->render()
+		]);
     }
 
     /**

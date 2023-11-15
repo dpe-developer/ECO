@@ -151,21 +151,17 @@
                                     <th>Patient Name</th>
                                     <th>Doctor</th>
 									<th>Description</th>
-									@hasrole('System Administrator')
-									<th class="text-center">Action</th>
-									@endhasrole
+									<th>Date Added</th>
                                 </tr>
                             </thead>
                             <tbody>
 								@foreach ($appointments as $appointment)
                                 <tr 
-                                    @unlessrole('System Administrator') 
-                                        @can('appointments.show') 
-                                            data-toggle="modal-ajax" 
-                                            data-href="{{ route('appointments.show', $appointment->id) }}" 
-                                            data-target="#showAppointmentModal" 
-                                        @endcan
-                                    @endunlessrole
+                                    @can('appointments.show') 
+                                        data-toggle="modal-ajax" 
+                                        data-href="{{ route('appointments.show', $appointment->id) }}" 
+                                        data-target="#showAppointmentModal" 
+                                    @endcan
                                 >
 									<td data-order="{{ Carbon::parse($appointment->appointment_date) }}">
                                         {{ Carbon::parse($appointment->appointment_date)->format('M d, Y') }}
@@ -182,18 +178,15 @@
 									</td>
 									<td>{{ $appointment->patient->username }}</td>
 									<td>
-										{{ $appointment->patient->fullname('f-m-l') }}
+										{!! $appointment->patient->fullname() !!}
 									</td>
 									<td>
-										{{ $appointment->doctor->fullname('f-m-l') }}
+										{!! $appointment->doctor->fullname() !!}
 									</td>
 									<td>{{ $appointment->description }}</td>
-									@hasrole('System Administrator')
-									<td class="text-center">
-                                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('appointments.show', $appointment->id) }}" data-target="#showAppointmentModal"><i class="fad fa-file fa-lg"></i></a>
-                                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('appointments.edit', $appointment->id) }}" data-target="#editAppointmentModal"><i class="fad fa-edit fa-lg"></i></a>
+                                    <td data-order="{{ Carbon::parse($appointment->created_at) }}">
+                                        {{ Carbon::parse($appointment->created_at)->format('M d, Y h:ia') }}
                                     </td>
-									@endhasrole
                                 </tr>
                                 @endforeach
                             </tbody>

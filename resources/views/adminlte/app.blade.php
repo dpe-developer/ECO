@@ -22,7 +22,7 @@
     <script type="text/javascript" src="{{ asset('AdminLTE-3.2.0/plugins/jquery/jquery.min.js') }}"></script>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="{{ asset('css/font/fonts.googleapis.com-css-family=Source+Sans+Pro;300,400,400i,700.css') }}">
     <!-- Font Awesome Icons -->
     {{-- <link rel="stylesheet" href="{{ asset('AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css') }}"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('web fonts/fontawesome-pro-5.12.0-web/css/all.min.css') }}"> --}}
@@ -83,7 +83,8 @@
         <!-- /.control-sidebar -->
         <!-- Main Footer -->
         <footer class="main-footer">
-            <strong>Copyright &copy; {{ date('Y') }} <a href="#">{{ config('app.client_name') }}</a>.</strong>
+            {{-- <strong>Copyright &copy; {{ date('Y') }} <a href="#">{{ config('app.client_name') }}</a>.</strong> --}}
+            <strong>Copyright &copy; {{ date('Y') }} <a href="#">ECO</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Version</b> {{ config('app.version') }}

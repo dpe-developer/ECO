@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsTableSeeder::class);
         $this->call(ServiceTableSeeder::class);
         $this->call(ReferencesSeeder::class);
+        $this->call(FindingsTableSeeder::class);
     }
 }

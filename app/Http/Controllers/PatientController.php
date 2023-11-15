@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\PatientVisit;
 use App\Models\Service;
+use App\Models\Finding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Auth;
@@ -38,16 +39,7 @@ class PatientController extends Controller
 			->addColumn('patientID', function($row){
 				return $row->patient_id;
 			})
-			->addColumn('action', function($row){
-				$action = '<a style="margin-right: 10px" href="'.route('patients.show', $row->id).'"><i class="fad fa-file-user fa-lg"></i></a>';
-				if($row->trashed()){
-					$action .= '<a class="text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="'.route('patients.restore', $row->id).'"><i class="fad fa-download fa-lg"></i></a>';
-				}else{
-					$action .= '<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="'.route('patients.destroy', $row->id).'"><i class="fad fa-trash-alt fa-lg"></i></a>';
-				}
-				return $action;
-			})
-			->rawColumns(['action', 'patientID'])
+			->rawColumns(['patientID'])
 			->addIndexColumn()
 			->make(true);
 		}else{
@@ -55,6 +47,15 @@ class PatientController extends Controller
 				$patients->where('patient_id', 'LIKE', '%'.$request->get('patient_search').'%')
 				->orwhere(DB::raw('CONCAT(first_name," ", last_name)'), 'LIKE', '%'.$request->get('patient_search').'%');
 			}
+            if($request->get('filter_findings')){
+                $patientIDs = [];
+                foreach($request->get('filter_findings') as $finding){
+                    foreach(PatientVisit::where('findings', 'LIKE', '%'.$finding.'%')->get() as $patientVisit){
+                        $patientIDs[] = $patientVisit->patient_id;
+                    }
+                }
+                $patients->whereIn('id', $patientIDs);
+            }
 			if($request->get('filter_active')){
 				$activePatientIDs = PatientVisit::where('status', 'active')->get('patient_id');
 				$patients->whereIn('id', $activePatientIDs);
@@ -75,7 +76,8 @@ class PatientController extends Controller
 			}
 			$data = [
 				'patients' => $patients->get(),
-				'doctors' => User::where('role_id', 3)->get()
+				'doctors' => User::where('role_id', 3)->get(),
+				'findings' => Finding::get(),
 			];
 			return view('patients.index', $data);
 		}
@@ -103,7 +105,7 @@ class PatientController extends Controller
             // 'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
         $username = time();
-        $email = is_null($request->get('email')) ? $username.'@dizonvizionclinic.com' : $request->get('email');
+        $email = is_null($request->get('email')) ? $username.'@temp.com' : $request->get('email');
         $patient = User::create([
             'role_id' => 4,
             'first_name' => $request->get('first_name'),
@@ -122,11 +124,16 @@ class PatientController extends Controller
         return back()->with('alert-success', 'Patient successfully registered');
     }
 
-    public function show(User $user)
+    public function show($userID)
     {
+        $user = User::select('*');
+        if(Auth::user()->hasRole('System Administrator')){
+            $user->withTrashed();
+        }
         $data = [
-            'patient' => $user,
-            'services' => Service::get()
+            'patient' => $user->where('id', $userID)->first(),
+            'services' => Service::get(),
+            'findings' => Finding::get(),
         ];
         return view('patients.show', $data);
     }
@@ -169,4 +176,22 @@ class PatientController extends Controller
 
         return back()->with('alert-success', 'Patient successfully UPDATED');
     }
+    
+    public function destroy(User $user)
+	{
+        if (request()->get('permanent')) {
+            $user->forceDelete();
+        }else{
+            $user->delete();
+        }
+        return redirect()->route('patients.index')->with('alert-warning', 'Patient Successfully DELETED');
+	}
+
+	public function restore($user)
+	{
+		$user = User::withTrashed()->find($user);
+		$user->restore();
+		return back()->with('alert-success', $user->username.' Successfully Restored');
+		// return redirect()->route('users.index')->with('alert-success','User successfully restored');
+	}
 }

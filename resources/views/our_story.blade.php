@@ -25,19 +25,17 @@
         <div class="col-md-8">
             <h1 class="heading">&nbsp;&nbsp;Our Story</h1>
             <p class="lead" style="text-indent: 50px">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Porta nibh venenatis cras sed felis eget velit. Iaculis urna id volutpat lacus laoreet non curabitur gravida.
-                Volutpat diam ut venenatis tellus in metus vulputate eu scelerisque. Massa ultricies mi quis hendrerit dolor magna eget.
+                Dizon Vision Clinic is an eye clinic started in the year 2009 by Dr. Junn C. Dizon as a sole proprietorship.
+                He trained for Sports Vision which became his foundation for optometry in 2008. From there, he became innovative and worked on visual therapy and color vision therapy.
+                Dr. Dizon started the clinic as a commercial optometrist before leveling up to a professional practice.
+                The clinic services include Preventive and Rehabilitative Optometry, Sports Vision Optometry, Low Vision Optometry, Vision Therapy, and Color Vision Phototherapy. 
             </p>
             <p class="lead" style="text-indent: 50px">
-                Vel turpis nunc eget lorem dolor sed viverra ipsum nunc. Neque ornare aenean euismod elementum nisi quis eleifend quam.
-                Quis auctor elit sed vulputate mi sit amet mauris commodo. Dignissim sodales ut eu sem integer vitae justo eget.
-                Blandit turpis cursus in hac habitasse platea dictumst quisque sagittis. Netus et malesuada fames ac turpis egestas sed tempus urna.
-                Arcu dui vivamus arcu felis bibendum ut tristique et. Feugiat vivamus at augue eget arcu dictum varius duis.
+                Dizon Vision Clinic's Mission is to provide the best vision care services to all patients and people who are in need and shall receive treatment in all equality.
+                It envisions to be a nationally  recognized eye healthcare clinic accommodating more patients ad promoting its affordable services to most people by 2035. 
             </p>
             <p class="lead" style="text-indent: 50px">
-                Lacus suspendisse faucibus interdum posuere lorem. Placerat orci nulla pellentesque dignissim enim sit amet venenatis urna.
-                Amet luctus venenatis lectus magna fringilla urna porttitor. Dictum non consectetur a erat nam at. Urna porttitor rhoncus dolor purus non enim.
+                Back in 2013, Dizon Vision Clinic was awarded as the Baguio Outstanding Citizen Award in the Field of Community Services.
             </p>
         </div>
     </div>

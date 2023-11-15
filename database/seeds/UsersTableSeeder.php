@@ -31,8 +31,8 @@ class UsersTableSeeder extends Seeder
         $doctor = User::create([
             'role_id' => '3',
             'username' => 'drjunncdizon',
-            'first_name' => 'Marcelino',
-            'last_name' => 'Dizon Jr.',
+            'first_name' => 'Junn',
+            'last_name' => 'Dizon',
             'email' => 'drjunncdizon@yahoo.com',
             'password' => bcrypt('asdasd'),
         ]);

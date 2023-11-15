@@ -43,51 +43,33 @@
 	                              <th>Patient ID</th>
 	                              <th>Name</th>
 	                              <th>Sex</th>
-	                              @if(!isset($_GET['patient_search']) && is_null(request()->get('filter')))
-	                              <th></th>
-	                              @endif
-	                              @role('System Administrator')
-	                              <th></th>
-	                              @endrole
+	                              <th>Occupation</th>
 	                           </tr>
 	                        </thead>
 	                        <tbody>
 								@if(isset($_GET['patient_search']) || request()->get('filter') == 1)
 									@forelse ($patients as $patient)
 									<tr
-										@unlessrole('System Administrator')
-											@can('patients.show')
-												class="tr-link"
-												data-href="{{ route('patients.show', $patient->id) }}"
-											@endcan
-										@else 
-											class="{{ $patient->trashed() ? 'table-danger' : '' }}" 
-										@endunlessrole
-										>
+										@can('patients.show')
+											class="tr-link"
+											data-href="{{ route('patients.show', $patient->id) }}"
+										@endcan
+									>
 										<td>{{ $patient->username }}</td>
 										<td>
-											{{ $patient->first_name }}
-											{{ $patient->last_name }}
+											{{ $patient->fullname() }}
 										</td>
 										<td>
 											{{ $patient->sex }}
 										</td>
-										@role('System Administrator')
-										<td class="text-center">
-											<a href="{{ route('patients.show',$patient->id) }}"><i class="fad fa-file-user fa-lg"></i></a>
-											@if ($patient->trashed())
-												<a class="text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('patients.restore', $patient->id) }}"><i class="fad fa-download fa-lg"></i></a>
-											@else
-												<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('patients.destroy', $patient->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
-											@endif
+										<td>
+											{{ $patient->occupation }}
 										</td>
-										@endrole
 									@empty
 									<tr>
 										<td colspan="6" class="text-danger text-center">*** EMPTY ***</td>
 									</tr>
 									@endforelse
-									</tr>
 								@else
 									<tr>
 										<td colspan="6" class="text-info text-center">Loading <i class="fa fa-spinner fa-pulse fa-spin fa-lg"></i></td>
@@ -96,33 +78,6 @@
 							</tbody>
 	                    </table>
 					</div>
-					{{-- @if(config('app.env') == 'local')
-					@role('System Administrator')
-					<div class="col-md-3">
-						<div class="card">
-							<div class="card-header">
-								Insert Dummy Patient
-							</div>
-							<div class="card-body">
-								<form class="form-horizontal" action="{{ route('random_identity.insert_patient') }}" method="post" enctype="multipart/form-data">
-									@csrf
-							        <hr>
-									<div class="form-group">
-										<label>Number of Patients: </label>
-										<input class="form-control" type="number" name="number" max="15000" min="1" value="1">
-									</div>
-									<div class="form-group">
-										<label>Date: </label>
-										<input class="form-control" type="date" name="date_created">
-									</div>
-									<hr>
-									<button type="submit" class="btn btn-danger">Submit</button>					
-								</form>
-							</div>
-						</div>
-					</div>	
-					@endrole
-					@endif --}}
 				</div>
 			</div>
 		</div>
@@ -139,6 +94,15 @@
 				<form action="{{ route('patients.index') }}" action="GET" autocomplete="off">
 					<div class="modal-body">
 						<input type="hidden" name="filter" value="1">
+						<div class="form-group">
+							<label>Findings:</label>
+							<select name="filter_findings[]" class="form-control select2" multiple>
+								@foreach ($findings as $finding)
+								<option @if(request()->get('filter_doctor')) {{ in_array($finding->name, request()->get('filter_findings')) ? 'selected' : '' }} @endif value="{{ $finding->name }}">
+									{{ $finding->name }}
+								</option>
+								@endforeach
+						</select>
 						{{-- <div class="form-group">
 							<label>Doctor:</label>
 							<select name="filter_doctor[]" class="form-control select2" multiple>
@@ -184,7 +148,7 @@
 								</div>
 							</div>
 						</div> --}}
-						<div class="form-group">
+						{{-- <div class="form-group">
 							<div class="checkbox">
 								<div class="custom-control custom-checkbox">
 									<input @if(request()->get('filter_active')) {{ request()->get('filter_active') ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_active" value="1" id="filterActive">
@@ -203,7 +167,7 @@
 									<label class="custom-control-label" for="filterOutpatient">Outpatient</label>
 								</div>
 							</div>
-						</div>
+						</div> --}}
 					</div>
 					<div class="modal-footer">
 						@if (request()->get('filter'))
@@ -243,21 +207,17 @@
 							}
 						},
 						{data: 'sex', name: 'sex'},
+						{data: 'occupation', name: 'occupation'},
 						{data: 'first_name', name: 'first_name', 'visible': false},
-						@role('System Administrator')
-						{data: 'action', name: 'action', orderable: false, className: 'text-center'},
-						@endrole
 					],
 					order: [
 						[0, 'desc']
 					]
 				});
-				@if(!Auth::user()->hasrole('System Administrator'))
 				$('#patientsTable tbody').on('click', 'tr', function () {
 					var data = table.row( this ).data();
 					window.location.href = 'patients/'+data.id;
 				});
-				@endif
             @else
             	var table = $('#patientsTable').DataTable();
             @endif

@@ -55,7 +55,7 @@
                             @enderror
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input @error('sex') is-invalid @enderror" type="radio" name="sex" id="radioSexFemale" value="remale" @if(old('sex') == 'remale') checked @endif required/>
+                            <input class="form-check-input @error('sex') is-invalid @enderror" type="radio" name="sex" id="radioSexFemale" value="female" @if(old('sex') == 'female') checked @endif required/>
                             <label class="form-check-label" for="radioSexFemale">Female</label>
                         </div>
                     </div>

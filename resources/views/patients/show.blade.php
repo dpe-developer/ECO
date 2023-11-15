@@ -9,9 +9,19 @@
                     <h1 class="m-0 text-dark">Patient Profile</h1>
                 </div>
                 <div class="col-md-6 text-right">
+                    @if ($patient->trashed())
+						@can('patients.restore')
+						<a class="btn bg-gradient-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('patients.restore', $patient->id) }}"><i class="fas fa-download"></i> Restore</a>
+						@endcan
+					@else
+						@can('patients.destroy')
+						<a class="btn bg-gradient-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('patients.destroy', $patient->id) }}" data-message="This will also delete all the records of the patient."><i class="fas fa-trash-alt"></i> Delete</a>
+						@endcan
+					@endif
                     @can('patients.edit')
-                        <a class="btn btn-info" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('patients.edit', $patient->id) }}" data-target="#editPatientModal"><i class="fa fa-edit"></i> Edit</a>
+                        <a class="btn bg-gradient-info" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('patients.edit', $patient->id) }}" data-target="#editPatientModal"><i class="fa fa-edit"></i> Edit</a>
                     @endcan
+                    <a class="btn bg-gradient-secondary" href="{{ route('patients.index') }}"><i class="fa fa-arrow-left"></i> Back</a>
                 </div>
             </div>
         </div>
@@ -21,10 +31,10 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-outline card-primary collapsed-card">
-                    <div class="card-header">
+                    <div class="card-header" data-card-widget="collapse" style="cursor: pointer">
                         <h2 class="card-title">
                             <strong>{{ $patient->username }}</strong> -
-                            {{ $patient->fullname('f-m-l') }}
+                            {!! $patient->fullname() !!}
                         </h2>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
@@ -176,4 +186,11 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('style')
+    @yield('active_visit_styles')
+@endsection
+@section('script')
+    @yield('active_visit_scripts')
 @endsection

@@ -24,7 +24,7 @@ class Appointment extends Model
 
     public function patient()
     {
-        return $this->belongsTo('App\Models\User', 'patient_id');
+        return $this->belongsTo('App\Models\User', 'patient_id')->withTrashed();
     }
 
     public function doctor()

@@ -1,3 +1,6 @@
+@section('active_visit_styles')
+	<link rel="stylesheet" href="{{ asset('AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+@endsection
 <div class="row">
 	<div class="col-md-12">
 		<div class="card card-outline card-primary active-patient-profile">
@@ -10,13 +13,24 @@
 				</div>
 			</div>
 			<div class="card-body">
+				{{-- <div class="row">
+					<div class="col-md-12">
+						<div class="callout callout-warning">
+							<legend>Findings:</legend>
+							<ul>
+							@foreach(json_decode($patient->activeVisit()->findings) as $finding)
+								<li>{{ $finding }}</li>
+							@endforeach
+							</ul>
+						</div>
+					</div>
+				</div> --}}
 				<form action="{{ route('patient_visits.update', $patient->activeVisit()->id) }}" method="POST">
 					@csrf
 					@method('PUT')
 					<div class="row">
 						<div class="col-md-12">
 							<div class="callout callout-info">
-								<legend>VTFP Session</legend>
 								<div class="row">
 									<div class="form-group col-md-3">
 										<label for="service">Service:</label>
@@ -27,23 +41,28 @@
 											@endforeach
 										</select>
 									</div>
-									{{-- <div class="form-group col-md-3">
-										<label for="admittingDiagnosis">Admiting Diagnosis:</label>
-										<textarea name="admitting_diagnosis" id="admittingDiagnosis" rows="3" class="form-control"></textarea>
+									<div class="form-group col-md-9">
+										<div class="callout callout-warning">
+											<label for="findings">Findings:</label>
+											<div class="row">
+												@foreach ($findings as $finding)
+													<div class="col-md-3">
+														<div class="icheck-primary d-inline">
+															<input type="checkbox" name="findings[]" @if(!is_null($patient->activeVisit()->findings)) @if(in_array($finding->name, json_decode($patient->activeVisit()->findings))) checked @endif @endif value="{{ $finding->name }}" id="finding_{{ $finding->id }}">
+															<label for="finding_{{ $finding->id }}">
+															{{ $finding->name }}
+															</label>
+														</div>
+													</div>
+												@endforeach
+											</div>
+										</div>
 									</div>
-									<div class="form-group col-md-3">
-										<label for="finalDiagnosis">Final Diagnosis:</label>
-										<textarea name="final_diagnosis" id="finalDiagnosis" rows="3" class="form-control"></textarea>
-									</div> --}}
-									<div class="form-group col-md-3">
+									<div class="form-group col-md-6">
 										<label for="complaints">Complaints:</label>
 										<textarea name="complaints" id="complaints" rows="3" class="form-control">{{ $patient->activeVisit()->complaints }}</textarea>
 									</div>
-									<div class="form-group col-md-3">
-										<label for="findings">Findings:</label>
-										<textarea name="findings" id="findings" rows="3" class="form-control">{{ $patient->activeVisit()->findings }}</textarea>
-									</div>
-									<div class="form-group col-md-3">
+									<div class="form-group col-md-6">
 										<label for="recommendations">Recommendation:</label>
 										<textarea name="recommendations" id="recommendations" rows="3" class="form-control">{{ $patient->activeVisit()->recommendations }}</textarea>
 									</div>
@@ -157,56 +176,6 @@
 	</div>
 </div>
 
-@section('active_visit_script')
-	<script type="text/javascript">
-		$(function() {
-            /*$('[data-toggle="popover-hover"]').popover({
-                html: true,
-                sanitize: false
-            })*/
-			// Show bootstrap popover on hover
-			$('[data-toggle="popover-hover"]').popover({
-					trigger: "manual",
-					html: true,
-					sanitize: false,
-					// animation: false
-				})
-				.on("mouseenter", function () {
-					var _this = this;
-					$(this).popover("show");
-					$(".popover").on("mouseleave", function () {
-						$(_this).popover('hide');
-					});
-				}).on("mouseleave", function () {
-					var _this = this;
-					setTimeout(function () {
-						if (!$(".popover:hover").length) {
-							$(_this).popover("hide");
-						}
-					}, 100);
-			});
-
-			$('#dischargeDate').datetimepicker({
-				date: new Date(),
-				debug: true,
-				icons: {
-					time: 'far fa-clock',
-					date: 'far fa-calendar-alt',
-					up: 'fas fa-arrow-up',
-					down: 'fas fa-arrow-down',
-					previous: 'fas fa-chevron-left',
-					next: 'fas fa-chevron-right',
-					today: 'far fa-calendar-check',
-					clear: 'far fa-trash-alt',
-					close: 'fas fa-times'
-				},
-				buttons: {
-					showToday: true,
-					showClose: true,
-					showClear: true
-				}
-			});
-
-		});
-	</script>
+@section('active_visit_scripts')
+	<script src="{{ asset('AdminLTE-3.2.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 @endsection

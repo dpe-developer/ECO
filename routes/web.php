@@ -32,6 +32,7 @@ Route::get('our-story', 'WebsiteController@ourStory');
 Route::get('our-organization', 'WebsiteController@ourOrganization');
 Route::get('track-appointment', 'WebsiteController@trackAppointment');
 Route::get('contact-us', 'WebsiteController@contactUs');
+Route::post('submit-inquiry', 'WebsiteController@submitInquiry')->name('submit_inquiry');
 Route::post('patient-registration', 'WebsiteController@patientRegistration');
 Route::get('registration-complete/{username}', 'WebsiteController@patientRegistrationComplete')->name('registration_complete');
 
@@ -122,6 +123,11 @@ Route::group(array('middleware'=>['auth', 'role:System Administrator|Administrat
 	 */
 	Route::resource('patients', 'PatientController')->parameters([
 		'patients' => 'user'
+	]);
+	// restore
+	Route::post('patients-restore/{user}', [
+		'as' => 'patients.restore',
+		'uses' => 'PatientController@restore'
 	]);
 
 	/**

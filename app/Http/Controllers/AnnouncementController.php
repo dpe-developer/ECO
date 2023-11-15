@@ -139,14 +139,14 @@ class AnnouncementController extends Controller
 		}else{
 			$announcement->delete();
 		}
-		return redirect()->route('announcements.index')->with('alert-danger','Deleted');
+		return redirect()->route('announcements.index')->with('alert-danger','Announcement DELETED');
 	}
 
 	public function restore($announcement)
 	{
 		$announcement = Announcement::withTrashed()->find($announcement);
 		$announcement->restore();
-		return redirect()->route('announcements.index')->with('alert-success','Restored');
+		return redirect()->route('announcements.index')->with('alert-success','Announcement RESTORED');
     }
     
     public function notification()

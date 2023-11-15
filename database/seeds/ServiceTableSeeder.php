@@ -37,11 +37,6 @@ class ServiceTableSeeder extends Seeder
                 'name' => 'Color Vision Phototherapy',
                 'amount' => '0.00',
                 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            ],
-            [
-                'name' => 'Visual Therapy Flip Per Second',
-                'amount' => '0.00',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
             ]
         ]);
     }   

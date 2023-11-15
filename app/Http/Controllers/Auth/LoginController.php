@@ -68,9 +68,9 @@ class LoginController extends Controller
 				'browser' => $client->browser(),
 			]);
             if(Auth::user()->role->role_id == 4){
-                return redirect()->route('home');
+                return redirect()->route('home')->with('alert-success', 'You are now logged in');
             }else{
-                return redirect()->route('dashboard');
+                return redirect()->route('dashboard')->with('alert-success', 'You are now logged in');
             }
         }else{
             LoginInfo::create([

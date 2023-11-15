@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'version' => "3.6.18",
+    'version' => "3.8.1",
     'client_name' => env('APP_CLIENT_NAME', 'Laravel'),
 
     // Twilio
@@ -201,6 +201,7 @@ return [
          */
         Spatie\Permission\PermissionServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
+        ConsoleTVs\Charts\ChartsServiceProvider::class,
 
     ],
 

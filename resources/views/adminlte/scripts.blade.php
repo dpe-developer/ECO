@@ -74,7 +74,24 @@
         });
         $(document).on('click', 'tr[data-toggle="tr-link"]', function(){
             window.location = $(this).data("href");
-        })
+        });
+
+        /* $(document).on('click', 'td.td-action > a', function(e){
+            // e.preventDefault();
+            e.stopPropagation();
+            if($(this).data('toggle') == 'modal-ajax'){
+                modalAjax($(this))
+            }
+        });
+
+        $(document).on('click', 'tr[data-toggle="tr-link"]', function(event){
+            var href = $(this).data("href");
+            if (event.ctrlKey){
+                window.open(href);
+            }else{
+                window.location = href;
+            }
+        }); */
     });
 
     /*$(document).ready(function() {

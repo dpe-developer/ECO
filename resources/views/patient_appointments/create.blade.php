@@ -15,7 +15,7 @@
                             {{-- <strong class="text-danger">Business hours is from 8:00AM to 5:00PM</strong> --}}
                             <div class="form-group">
                                 <label for="appointmentDate">Appointment Date <strong class="text-danger">*</strong></label>
-                                <input type="date" class="form-control" name="appointment_date" id="appointmentDate" value="{{ $appointmentDate }}" required>
+                                <input type="date" class="form-control" name="appointment_date" id="appointmentDate" value="{{ $appointmentDate }}" required readonly>
                             </div>
                             <div class="form-group">
                                 <label for="appointmentTime">Appointment Time <strong class="text-danger">*</strong></label>

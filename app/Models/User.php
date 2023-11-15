@@ -236,6 +236,11 @@ class User extends Authenticatable
         return false;
     }
 
+    public function findings()
+    {
+        return $this->hasMany('App\Models\PatientFindings', 'patient_id');
+    }
+
     public function medicalHistories()
     {
         return $this->hasMany('App\Models\PatientProfile\MedicalHistory\MedicalHistory', 'patient_id');

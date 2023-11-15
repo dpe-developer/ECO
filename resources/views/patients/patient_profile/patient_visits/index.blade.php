@@ -41,7 +41,13 @@
 					@endif
 				</th> --}}
 				<td>{{ $visit->complaints }}</td>
-				<td>{{ $visit->findings }}</td>
+				<td>
+					@if($visit->findings != null)
+						@foreach(json_decode($visit->findings) as $finding)
+							{{ $finding }}@if(!$loop->last), @endif
+						@endforeach
+					@endif
+				</td>
 				<td>
 					@if($visit->status == 'done')
 					{{ Carbon::parse($visit->session_end)->format('M d,Y h:ia') }}

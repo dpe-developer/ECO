@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Inquiry;
 use App\Models\Appointment;
 use App\Models\Announcement;
 use App\Models\Service;
@@ -78,6 +79,27 @@ class WebsiteController extends Controller
     public function contactUs()
     {
         return view('contact_us');
+    }
+
+    public function submitInquiry(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'subject' => 'required',
+            'email' => ['required', 'email'],
+            'message' => 'required',
+        ]);
+        $userID = null;
+        if(isset(Auth::user()->id)){
+            $userID = Auth::user()->id;
+        }
+        Inquiry::create([
+            'user_id' => $userID,
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'subject' => $request->get('subject'),
+            'message' => $request->get('message'),
+        ]);
+        return back()->with('alert-success', 'Inquiry Sent');
     }
 
     public function patientRegistration(Request $request)
