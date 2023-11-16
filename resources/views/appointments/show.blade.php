@@ -74,7 +74,7 @@
 						@case('confirmed')
 							@can('appointments.accept_patient')
 								{{-- @if(Auth::user()->isDoctor() && !$appointment->hasVisit()) --}}
-								@if(!$appointment->hasVisit())
+								@if(!$appointment->hasVisit() && !$appointment->patient->trashed())
 									{{-- @if(Auth::user()->id == $appointment->doctor_id) --}}
 										<a class="btn btn-success" href="{{ route('appointments.accept_patient', $appointment->id) }}"><i class="fa fa-check"></i> Accept Patient</a>
 									{{-- @endif --}}

@@ -11,12 +11,9 @@
                     <h1 class="m-0">Dashboard</h1>
                 </div>
                 <!-- /.col -->
-                {{-- <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard v2</li>
-                    </ol>
-                </div> --}}
+                <div class="col-sm-6">
+                    
+                </div>
                 <!-- /.col -->
             </div>
             <!-- /.row -->
@@ -80,6 +77,36 @@
             </div>
             <!-- /.row -->
             <div class="row">
+                <div class="col-md-8">
+                    <div class="card card-info card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">Appointments This Week</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="position-relative mb-4">
+                                {!! $appointmentsThisWeekChart->container() !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-info card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">Findings This Month</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="position-relative mb-4">
+                                {!! $findingsThisMonthChart->container() !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12">
                     <div class="jumbotron text-center">
                         <h1>{{ config('app.client_name') }}</h1>
@@ -92,4 +119,24 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+@endsection
+@section('script')
+{!! $appointmentsThisWeekChart->script() !!}
+{!! $findingsThisMonthChart->script() !!}
+{{-- <script type="text/javascript">
+    // Custom JavaScript to display labels inside the pie chart
+    $(document).ready(function() {
+        var chart = {{ $findingsThisMonthChart->id }};
+        chart.update({
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    }
+                }
+            }
+        });
+    });
+</script> --}}
 @endsection
