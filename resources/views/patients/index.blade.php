@@ -102,72 +102,8 @@
 									{{ $finding->name }}
 								</option>
 								@endforeach
-						</select>
-						{{-- <div class="form-group">
-							<label>Doctor:</label>
-							<select name="filter_doctor[]" class="form-control select2" multiple>
-								@foreach ($doctors as $doctor)
-								<option @if(request()->get('filter_doctor')) {{ in_array($doctor->id, request()->get('filter_doctor')) ? 'selected' : '' }} @endif value="{{ $doctor->id }}">
-									{{ $doctor->doctorName() }}
-								</option>
-								@endforeach
 							</select>
-						</div> --}}
-						{{-- <div class="form-group">
-							<label>Appointment Date:</label>
-							<select class="form-control select2" name="filter_date_option" id="dateOption">
-								<option></option>
-								<option {{ request()->get('filter_date_option') ==  'today' ? 'selected' : '' }} value="today">Today</option>
-								<option {{ request()->get('filter_date_option') ==  'yesterday' ? 'selected' : '' }} value="yesterday">Yesterday</option>
-								<option {{ request()->get('filter_date_option') ==  'this week' ? 'selected' : '' }} value="this week">This Week</option>
-								<option {{ request()->get('filter_date_option') ==  'last week' ? 'selected' : '' }} value="last week">Last Week</option>
-								<option {{ request()->get('filter_date_option') ==  'this month' ? 'selected' : '' }} value="this month">This Month</option>
-								<option {{ request()->get('filter_date_option') ==  'last month' ? 'selected' : '' }} value="last month">Last Month</option>
-								<option {{ request()->get('filter_date_option') ==  'range' ? 'selected' : '' }} value="range">Range</option>
-							</select>
-							<div class="row date-range d-none">
-								<div class="col-sm-6">
-									<div class="input-group input-group-compact datetimepicker" id="dateFrom" data-target-input="nearest">
-										<div class="input-group-prepend" data-target="#dateFrom" data-toggle="datetimepicker">
-											<span class="input-group-text">
-												From
-											</span>
-										</div>
-										<input type="text" class="form-control datetimepicker-input" data-target="#dateFrom" data-toggle="datetimepicker" name="filter_appointment_date_from" value="{{ request()->get('filter_appointment_date_from') }}">
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="input-group input-group-compact datetimepicker" id="dateTo" data-target-input="nearest">
-										<div class="input-group-prepend" data-target="#dateTo" data-toggle="datetimepicker">
-											<span class="input-group-text">
-												To
-											</span>
-										</div>
-										<input type="text" class="form-control datetimepicker-input" data-target="#dateTo" data-toggle="datetimepicker" name="filter_appointment_date_to" value="{{ request()->get('filter_appointment_date_to') }}">
-									</div>
-								</div>
-							</div>
-						</div> --}}
-						{{-- <div class="form-group">
-							<div class="checkbox">
-								<div class="custom-control custom-checkbox">
-									<input @if(request()->get('filter_active')) {{ request()->get('filter_active') ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_active" value="1" id="filterActive">
-									<label class="custom-control-label" for="filterActive">Active</label>
-								</div>
-							</div>
-							<div class="checkbox">
-								<div class="custom-control custom-checkbox">
-									<input @if(request()->get('filter_inpatient')) {{ request()->get('filter_inpatient') ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_inpatient" value="1" id="filterInpatient">
-									<label class="custom-control-label" for="filterInpatient">Inpatient</label>
-								</div>
-							</div>
-							<div class="checkbox">
-								<div class="custom-control custom-checkbox">
-									<input @if(request()->get('filter_outpatient')) {{ request()->get('filter_outpatient') ? 'checked' : '' }} @endif type="checkbox" class="custom-control-input" name="filter_outpatient" value="1" id="filterOutpatient">
-									<label class="custom-control-label" for="filterOutpatient">Outpatient</label>
-								</div>
-							</div>
-						</div> --}}
+						</div>
 					</div>
 					<div class="modal-footer">
 						@if (request()->get('filter'))

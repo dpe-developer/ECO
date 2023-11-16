@@ -7,9 +7,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Patient</h5>
-                    <a href="javascript:void(0)" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                    </a>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -81,7 +78,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="textareaAddress">Address</label>
+                        <label class="form-label" for="textareaAddress">Address <strong class="text-danger">*</strong></label>
                         <textarea class="form-control @error('address') is-invalid @enderror" name="address" id="textareaAddress" rows="4">{{ old('address') }}</textarea>
                         @error('address')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -103,6 +100,3 @@
         </div>
     </div>
 </form>
-<script type="text/javascript">
-
-</script>

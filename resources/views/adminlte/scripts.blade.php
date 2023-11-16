@@ -252,7 +252,7 @@
                     allowClear: true
                 }); */
                 $('.datetimepicker').datetimepicker();
-                $(target).modal('show')
+                $(target).modal('show');
                 $('#loader').hide();
             },
             error: function(xhr, ajaxOptions, thrownError){
