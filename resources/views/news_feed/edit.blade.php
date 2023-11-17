@@ -269,7 +269,7 @@
                 this.on('addedfile', function (file) {
                     console.log('File added:', file.name);
                     // Display a thumbnail for video files
-                    if (file.type.includes('video')) {
+                    /* if (file.type.includes('video')) {
                         var reader = new FileReader();
                         reader.onload = function (e) {
                             var thumbnail = document.createElement('img');
@@ -278,7 +278,7 @@
                             file.previewElement.appendChild(thumbnail);
                         };
                         reader.readAsDataURL(file);
-                    }
+                    } */
                 });
 
                 this.on('sending', function (file, xhr, formData) {

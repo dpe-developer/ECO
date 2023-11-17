@@ -69,7 +69,9 @@
                                 <div class="table table-striped files" id="previews">
                                     <div id="template" class="row mt-2">
                                         <div class="col-auto">
-                                            <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+                                            <span class="preview">
+                                                <img src="data:," alt="" data-dz-thumbnail style="min-width: 100px;min-height: 100px;"/>
+                                            </span>
                                             <input type="hidden" name="file_attachment_id[]" data-file-attachment-id>
                                         </div>
                                         <div class="col-4 d-flex align-items-center">
