@@ -66,3 +66,22 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.post-card-body {
+    max-height: 30vh;
+    min-height: 30vh;
+}
+
+.post-container {
+    max-height: 18vh;
+    min-height: 18vh;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-files-container > .row {
+    max-height: 30vh;
+    min-height: 30vh;
+    overflow-y: scroll;
+    text-overflow: ellipsis;
+}

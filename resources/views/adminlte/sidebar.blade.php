@@ -82,6 +82,16 @@
                     </a>
                 </li>
                 @endcan
+                @can('news_feeds.index')
+                <li class="nav-item">
+                    <a href="{{ route('news_feeds.index') }}" class="nav-link">
+                        <i class="nav-icon fa fa-newspaper"></i>
+                        <p>
+                            News Feed
+                        </p>
+                    </a>
+                </li>
+                @endcan
                 @canany([
                     'roles.index',
                     'users.index',

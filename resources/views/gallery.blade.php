@@ -4,6 +4,7 @@
 <style>
     .row.grid > .grid-item{
         padding: 3px !important;
+        margin: 0px !important;
     }
 </style>
 @endsection
@@ -155,9 +156,12 @@
 @section('scripts')
 <script type="application/javascript" src="{{ asset('plugins/masonry.pkgd.min.js') }}"></script>
 <script type="application/javascript">
-    $('.grid').masonry({
-        itemSelector: '.grid-item'
-      // columnWidth: 400
-    });
+    $(window).on('load', function(){
+        $('.grid').masonry({
+            itemSelector: '.grid-item',
+            // columnWidth: 400,
+            // gutter: 20,
+        });
+    })
 </script>
 @endsection

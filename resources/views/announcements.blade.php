@@ -35,7 +35,7 @@
                             <div class="announcement-container">
                                 {!! $announcement->content !!}
                             </div>
-                            <a class="show-more d-none" href="clinic-announcements/view/{{ $announcement->id }}">
+                            <a class="show-more d-none" href="{{ url('clinic-announcements/view', $announcement->id) }}">
                                 ... show more
                             </a>
                         </div>
@@ -45,12 +45,11 @@
                                     {{ $announcement->getAnnouncementDuration() }}
                                 </div>
                                 <div class="col">
-                                    <a class="btn btn-primary float-end" class="show-more d-none" href="clinic-announcements/view/{{ $announcement->id }}">
+                                    <a class="btn btn-primary float-end" class="show-more d-none" href="{{ url('clinic-announcements/view', $announcement->id) }}">
                                         View
                                     </a>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>

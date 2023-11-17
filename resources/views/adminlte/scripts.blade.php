@@ -23,7 +23,10 @@
 <script type="application/javascript" src="{{ asset('AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 <script type="application/javascript" src="{{ asset('AdminLTE-3.2.0/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
-<script type="text/javascript">
+<script type="text/javascript">3
+
+    var getUrl = window.location;
+    var baseUrl = getUrl .protocol + "//" + getUrl.host;
 
     /*const app = new Vue({
         el: '#app',
@@ -655,8 +658,6 @@
 @if (old('from_modal_ajax_href'))
 <script>
     $(function(){
-        var getUrl = window.location;
-        var baseUrl = getUrl .protocol + "//" + getUrl.host;
         var route = "{{ old('from_modal_ajax_href') }}"
         var target = "{{ old('modal_ajax_target') }}"
         var data = {};

@@ -26,6 +26,8 @@ Auth::routes();
 Route::get('home', 'WebsiteController@home')->name('home');
 Route::get('services', 'WebsiteController@services');
 Route::get('clinic-announcements', 'WebsiteController@announcements');
+Route::get('news-feed', 'WebsiteController@newsFeed');
+Route::get('news-feed/view/{newsFeed}', 'WebsiteController@viewNewsFeed');
 Route::get('clinic-announcements/view/{announcement}', 'WebsiteController@viewAnnouncement');
 Route::get('gallery', 'WebsiteController@gallery');
 Route::get('our-story', 'WebsiteController@ourStory');
@@ -69,9 +71,25 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::group(array('middleware'=>['auth', 'role:System Administrator|Administrator|Doctor']), function() {
 
 	/**
+	 * File Attachments
+	 */
+	Route::resource('file_attachments', 'FileAttachmentController');
+	Route::post('file_attachment/upload-files', [
+		'as' => 'file_attachments.upload_files',
+		'uses' => 'FileAttachmentController@uploadFiles'
+	]);
+
+	/**
 	 * Announcements
 	 */
 	Route::resource('announcements', 'AnnouncementController');
+
+	/**
+	 * Announcements
+	 */
+	Route::resource('news_feeds', 'NewsFeedController')->parameters([
+		'news_feeds' => 'newsFeed'
+	]);
 
 	/**
 	 * Appointments

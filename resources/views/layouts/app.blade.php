@@ -44,25 +44,31 @@
                 <ul class="navbar-nav mb-2 mb-lg-0 main-navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ url('/') }}">
-                            <i class="fa fa-house "></i>
+                            <i class="fa-solid fa-house "></i>
                             Home
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ url('services') }}">
-                            <i class="fa fa-stethoscope "></i>
+                            <i class="fa-solid fa-stethoscope "></i>
                             Services
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ url('clinic-announcements') }}">
-                            <i class="fa fa-megaphone "></i>
+                            <i class="fa-solid fa-megaphone "></i>
                             Announcements
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ url('news-feed') }}">
+                            <i class="fa-solid fa-newspaper "></i>
+                            Newsfeed
                         </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_About" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-square-info "></i>
+                            <i class="fa-solid fa-square-info "></i>
                             About
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown_About">
@@ -79,13 +85,13 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ url('track-appointment') }}">
-                            <i class="fa fa-calendar-check "></i>
+                            <i class="fa-solid fa-calendar-check "></i>
                             Track Appointment
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ url('contact-us') }}">
-                            <i class="fa fa-comments "></i>
+                            <i class="fa-solid fa-comments "></i>
                             Contact Us
                         </a>
                     </li>
@@ -124,7 +130,7 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" style="color: #0098da" aria-current="page" href="#" data-mdb-toggle="modal" data-mdb-target="#modalLogin">
-                        <i class="fa fa-right-to-bracket "></i>
+                        <i class="fa-solid fa-right-to-bracket "></i>
                         Login
                     </a>
                 </li>

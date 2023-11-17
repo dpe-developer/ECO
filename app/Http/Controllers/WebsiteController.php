@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Inquiry;
 use App\Models\Appointment;
 use App\Models\Announcement;
+use App\Models\NewsFeed;
 use App\Models\Service;
 use App\Models\FileAttachment;
 use App\Models\Setting;
@@ -47,6 +48,22 @@ class WebsiteController extends Controller
             'announcement' => $announcement
         ]; 
         return view('view_announcement', $data);
+    }
+
+    public function newsFeed()
+    {
+        $data = [
+            'newsFeeds' => NewsFeed::orderBy('created_at', 'DESC')->get()
+        ]; 
+        return view('news_feed', $data);
+    }
+
+    public function viewNewsFeed(NewsFeed $newsFeed)
+    {
+        $data = [
+            'newsFeed' => $newsFeed
+        ]; 
+        return view('view_post', $data);
     }
 
     public function gallery()
