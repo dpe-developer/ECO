@@ -23,7 +23,7 @@
     <div class="row mb-3">
         <div class="col-md-12">
             <h1 class="heading mb-5">&nbsp;&nbsp;Announcements</h1>
-            <div class="row">
+            <div class="row justify-content-center">
                 @forelse ($announcements as $announcement)
                 <div class="col-md-4 mb-3">
                     <div class="card">
@@ -54,8 +54,10 @@
                     </div>
                 </div>
                 @empty
-                <div class="col-md-12 text-center">
-                    <h3 class="text-warning"> No Announcement yet </h3>
+                <div class="col-md-10">
+                    <div class="alert alert-warning text-center m-5 p-5">
+                        <h1>No Announcement yet</h1>
+                    </div>
                 </div>
                 @endforelse
             </div>

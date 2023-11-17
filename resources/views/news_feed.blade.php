@@ -54,8 +54,13 @@
     </div>
 </div> --}}
 <div class="container mt-5 mb-5">
-    <div class="row">
-        @foreach ($newsFeeds as $newsFeed)
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <h1 class="heading mb-5">&nbsp;&nbsp;Newsfeed</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        @forelse ($newsFeeds as $newsFeed)
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header">
@@ -107,7 +112,13 @@
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+        <div class="col-md-10">
+            <div class="alert alert-warning text-center m-5 p-5">
+                <h1>No post yet</h1>
+            </div>
+        </div>
+        @endforelse
     </div>
 </div>
 @endsection
