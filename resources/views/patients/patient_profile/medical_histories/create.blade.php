@@ -9,7 +9,7 @@
 		    	</div>
 				<div class="modal-body text-left scrollbar-primary">
 					<input type="test" hidden name="patient" value="{{ $patient->id }}">
-					<input type="test" hidden name="visit" value="@isset($patient->activeVisit()->id){{ $patient->activeVisit()->id }}@endisset">
+					<input type="test" hidden name="visit" value="@isset($patientVisitID){{ $patientVisitID }}@endisset">
 					{{-- <div class="row patient-profile-form grid"> --}}
 						@foreach ($medical_history_references as $reference)
 							@if ($reference->type == 'parent')

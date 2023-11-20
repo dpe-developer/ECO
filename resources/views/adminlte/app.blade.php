@@ -12,6 +12,12 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @php
+        $url = explode('/', url()->current());
+        $parentURL = $url[0].'//'.$url[2].'/'.$url[3];
+    @endphp
+    <meta name="parent-url" content="{{ $parentURL }}">
     
     {{-- <link rel="icon" type="image/x-icon" href="{{ asset(config('hospital.logo')) }}"> --}}
     <title>{{ config('app.name') }} | {{ config('app.client_name') }}</title>

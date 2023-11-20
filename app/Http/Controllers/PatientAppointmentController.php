@@ -34,7 +34,7 @@ class PatientAppointmentController extends Controller
     {
         $appointmentDate = Carbon::parse($request->get('appointment_date'))->format('Y-m-d');
         $timeTaken = [];
-        foreach(Appointment::whereDate('appointment_date', $appointmentDate)->whereIn('status', ['pending', 'confirmed'])->get() as $appointment){
+        foreach(Appointment::whereDate('appointment_date', $appointmentDate)->whereIn('status', ['confirmed'])->get() as $appointment){
             $timeTaken[] = Carbon::parse($appointment->appointment_date)->format('H:i');
         }
         $data = [

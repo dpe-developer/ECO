@@ -3,7 +3,7 @@
 	<input type="hidden" name ="from_modal_ajax_href" value="{{ route('users.create') }}">
 	<input type="hidden" name ="modal_ajax_target" value="#addUser">
 	<div class="modal fade" id="addUser" data-backdrop="static" data-keyboard="false" {{-- tabindex="-1" --}} role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-md" role="document">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Add User</h5>
@@ -80,7 +80,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-default text-success"><i class="fad fa-save"></i> Save</button>
+					<button type="submit" class="btn bg-gradient-success"><i class="fa fa-save"></i> Save</button>
 				</div>
 			</div>
 		</div>

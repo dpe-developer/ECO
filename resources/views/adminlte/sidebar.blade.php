@@ -56,7 +56,7 @@
                         <p>
                             Appointments
                             @if(Auth::user()->newAppointments()->count() > 0)
-                            <span class="right badge badge-danger">{{ Auth::user()->newAppointments()->count() }}</span>
+                                <span class="right badge badge-danger new-badge-count" badge-count="{{ Auth::user()->newAppointments()->count() }}">{{ Auth::user()->newAppointments()->count() }}</span>
                             @endif
                         </p>
                     </a>

@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     @can('news_feeds.create')
-                        <a class="btn bg-gradient-primary" href="{{ route('news_feeds.create') }}"><i class="fa fa-plus"></i> Add</a>
+                        <a class="btn bg-gradient-primary" href="{{ route('news_feeds.create') }}"><i class="fa fa-plus"></i> Create Post</a>
                     @endcan
                 </div>
             </div>
@@ -76,9 +76,9 @@
                                 @can('news_feeds.edit')
                                     <a class="btn btn-tool bg-gradient-info" href="{{ route('news_feeds.edit', $newsFeed->id) }}"><i class="fad fa-edit"></i></a>
                                 @endcan
-                                @can('news_feeds.show')
+                                {{-- @can('news_feeds.show')
                                     <a class="btn btn-tool bg-gradient-primary" href="{{ route('news_feeds.show', $newsFeed->id) }}"><i class="fad fa-eye"></i></a>
-                                @endcan
+                                @endcan --}}
                             </div>
                         </div>
                         <div class="card-body post-container">

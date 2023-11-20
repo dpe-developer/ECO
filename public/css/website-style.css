@@ -82,6 +82,6 @@
 .post-files-container > .row {
     max-height: 30vh;
     min-height: 30vh;
-    overflow-y: scroll;
-    text-overflow: ellipsis;
+    overflow-y: hidden;
+    /* overflow-y: scroll; */
 }

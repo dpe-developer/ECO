@@ -298,7 +298,7 @@ class AppointmentController extends Controller
         $appointmentTime = $request->get('appointment_time');
         $appointmentDateTime = Carbon::parse($appointmentDate.' '.$appointmentTime);
         $timeTaken = [];
-        $appointments = Appointment::whereDate('appointment_date', $appointmentDate)->whereIn('status', ['pending', 'confirmed']);
+        $appointments = Appointment::whereDate('appointment_date', $appointmentDate)->whereIn('status', ['confirmed']);
         if($request->get('request_for') == 'edit'){
             $appointments->where('appointment_date', '!=', $appointmentDateTime);
         }

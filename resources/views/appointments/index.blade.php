@@ -49,15 +49,7 @@
                     <h1 class="m-0 text-dark">Appointments</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#filterAppointments"><i class="fa fa-search"></i> Search</button>
-                    @if(request()->get('view') == 'calendar')
-                        <a class="btn btn-default text-primary" href="{{ route('appointments.index', ['view' => 'table']) }}">Table View</a>
-                    @else
-                        <a class="btn btn-default text-primary" href="{{ route('appointments.index', ['view' => 'calendar']) }}">Calendar View</a>
-                    @endif
-                    @can('appointments.create')
-                        <button class="btn btn-default text-primary" data-toggle="modal-ajax" data-href="{{ route('appointments.create') }}" data-target="#createAppointmentModal"><i class="fa fa-plus"></i> {{ trans('crud.create') }} Appointment</button>
-                    @endcan
+                    
                 </div>
             </div>
             {{-- /.row --}}
@@ -137,63 +129,83 @@
             @endif
             <div class="row">
                 <div class="col">
-                    @if(request()->get('view') == 'calendar')
-                    <div id="appointmentCalendar"></div>
-                    @else
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-sm" id="appointmentsDatatable">
-                            <thead>
-                                <tr>
-                                    <th>Date of Appointment</th>
-                                    <th>Time</th>
-                                    <th>Status</th>
-                                    <th>Patient ID</th>
-                                    <th>Patient Name</th>
-                                    <th>Doctor</th>
-									<th>Description</th>
-									<th>Date Added</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-								@foreach ($appointments as $appointment)
-                                <tr 
-                                    @can('appointments.show') 
-                                        data-toggle="modal-ajax" 
-                                        data-href="{{ route('appointments.show', $appointment->id) }}" 
-                                        data-target="#showAppointmentModal" 
-                                    @endcan
-                                >
-									<td data-order="{{ Carbon::parse($appointment->appointment_date) }}">
-                                        {{ Carbon::parse($appointment->appointment_date)->format('M d, Y') }}
-                                        @if(UserNotification::isNotSeen('appointment', $appointment->id))
-                                        <span class="right badge badge-danger">new</span>
-                                        @endif
-                                    </td>
-									<td>{{ date('h:ia', strtotime($appointment->appointment_date)) }}</td>
-									<td>
-                                        @if ($appointment->status != 3 && $appointment->appointment_date < today())
-                                            <span class="badge badge-danger">Due</span>
-                                        @endif
-                                        {!! $appointment->statusBadge() !!}
-									</td>
-									<td>{{ $appointment->patient->username }}</td>
-									<td>
-										{!! $appointment->patient->fullname() !!}
-									</td>
-									<td>
-										{!! $appointment->doctor->fullname() !!}
-									</td>
-									<td>{{ $appointment->description }}</td>
-                                    <td data-order="{{ Carbon::parse($appointment->created_at) }}">
-                                        {{ Carbon::parse($appointment->created_at)->format('M d, Y h:ia') }}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fa fa-list"></i>
+                                List
+                            </h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#filterAppointments"><i class="fa fa-search"></i> Filter</button>
+                                @if(request()->get('view') == 'calendar')
+                                    <a class="btn btn-tool bg-gradient-info" href="{{ route('appointments.index', ['view' => 'table']) }}">Table View</a>
+                                @else
+                                    <a class="btn btn-tool bg-gradient-info" href="{{ route('appointments.index', ['view' => 'calendar']) }}">Calendar View</a>
+                                @endif
+                                @can('appointments.create')
+                                    <button class="btn btn-tool bg-gradient-primary" data-toggle="modal-ajax" data-href="{{ route('appointments.create') }}" data-target="#createAppointmentModal"><i class="fa fa-plus"></i> {{ trans('crud.create') }} Appointment</button>
+                                @endcan
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @if(request()->get('view') == 'calendar')
+                            <div id="appointmentCalendar"></div>
+                            @else
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-sm" id="appointmentsDatatable">
+                                    <thead>
+                                        <tr>
+                                            <th>Date of Appointment</th>
+                                            <th>Time</th>
+                                            <th>Status</th>
+                                            <th>Patient ID</th>
+                                            <th>Patient Name</th>
+                                            <th>Doctor</th>
+                                            <th>Description</th>
+                                            <th>Date Added</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($appointments as $appointment)
+                                        <tr class="tr-with-badge"
+                                            @can('appointments.show') 
+                                                data-toggle="modal-ajax" 
+                                                data-href="{{ route('appointments.show', $appointment->id) }}" 
+                                                data-target="#showAppointmentModal" 
+                                            @endcan
+                                        >
+                                            <td data-order="{{ Carbon::parse($appointment->appointment_date) }}">
+                                                {{ Carbon::parse($appointment->appointment_date)->format('M d, Y') }}
+                                                @if(UserNotification::isNotSeen('appointment', $appointment->id))
+                                                <span class="right badge badge-danger new-badge">new</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ date('h:ia', strtotime($appointment->appointment_date)) }}</td>
+                                            <td>
+                                                @if ($appointment->status != 3 && $appointment->appointment_date < today())
+                                                    <span class="badge badge-danger">Due</span>
+                                                @endif
+                                                {!! $appointment->statusBadge() !!}
+                                            </td>
+                                            <td>{{ $appointment->patient->username }}</td>
+                                            <td>
+                                                {!! $appointment->patient->fullname() !!}
+                                            </td>
+                                            <td>
+                                                {!! $appointment->doctor->fullname() !!}
+                                            </td>
+                                            <td>{{ $appointment->description }}</td>
+                                            <td data-order="{{ Carbon::parse($appointment->created_at) }}">
+                                                {{ Carbon::parse($appointment->created_at)->format('M d, Y h:ia') }}
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+                        </div>
                     </div>
-                    {{-- <span class="justify-content-center row">{!! $appointments->links() !!}</span> --}}
-                    @endif
                 </div>
             </div>
             {{-- /.row --}}

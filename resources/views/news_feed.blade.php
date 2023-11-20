@@ -88,7 +88,7 @@
                     <div class="card-footer post-files-container">
                         <div class="row grid">
                             @foreach ($newsFeed->newsFeedFiles as $newsFeedFile)
-                            <div class="col-md-3 grid-item">
+                            <div class="{{ $newsFeed->newsFeedFiles->count() < 5 ? 'col' : 'col-md-3' }} grid-item">
                                 @if(in_array($newsFeedFile->fileAttachment->file_type, ['jpg', 'png', 'jpeg']))
                                     <a href="{{ asset('storage/'.$newsFeedFile->fileAttachment->getFile()) }}" data-fancybox="gallery" data-caption="">
                                         <img class="img-fluid" data-toggle="view-file-attachment" data-href="{{ route('file_attachments.show', $newsFeedFile->fileAttachment->id) }}" src="{{ asset('storage/'.$newsFeedFile->fileAttachment->getFile()) }}" alt="">

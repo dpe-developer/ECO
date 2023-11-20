@@ -10,19 +10,18 @@
                     <h1>Profile</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('users.index') }}" class="btn btn-default"><i class="fad fa-arrow-left"></i> Back</a>
 					@can('users.edit')
-						<a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editUser" data-href="{{ route('users.edit', $user->id) }}"><i class="fad fa-edit"></i> Edit</a>
+						<a class="btn bg-gradient-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editUser" data-href="{{ route('users.edit', $user->id) }}"><i class="fad fa-edit"></i> Edit</a>
 					@endcan
 					@if ($user->trashed())
 						@can('users.restore')
-						<a class="btn btn-default text-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('users.restore', $user->id) }}"><i class="fad fa-download"></i> Restore</a>
-						@endcan
-					@else
-						@can('users.destroy')
-						<a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('users.destroy', $user->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+						<a class="btn bg-gradient-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('users.restore', $user->id) }}"><i class="fad fa-download"></i> Restore</a>
 						@endcan
 					@endif
+                    @can('users.destroy')
+                    <a class="btn bg-gradient-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('users.destroy', $user->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+                    @endcan
+                    <a href="{{ route('users.index') }}" class="btn bg-gradient-secondary"><i class="fad fa-arrow-left"></i> Back</a>
                     {{-- <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item active">User Profile</li>

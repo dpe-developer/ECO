@@ -177,8 +177,13 @@ class PatientController extends Controller
         return back()->with('alert-success', 'Patient successfully UPDATED');
     }
     
-    public function destroy(User $user)
+    public function destroy($userID)
 	{
+        $user = User::find($userID);
+		if(Auth::user()->hasrole('System Administrator')){
+			$user = User::withTrashed()->find($userID);
+		}
+        
         if (request()->get('permanent')) {
             $user->forceDelete();
         }else{
@@ -194,4 +199,54 @@ class PatientController extends Controller
 		return back()->with('alert-success', $user->username.' Successfully Restored');
 		// return redirect()->route('users.index')->with('alert-success','User successfully restored');
 	}
+
+    public function exportData(Request $request)
+    {
+        $patientVisits = PatientVisit::select('*');
+        switch ($request->get('filter_date_option')) {
+            case 'today':
+                $date = Carbon::today();
+                $patientVisits->whereDate('session_end', $date);
+                break;
+            case 'yesterday':
+                $date = Carbon::yesterday();
+                $patientVisits->whereDate('session_end', $date);
+                break;
+            case 'this week':
+                $dayOfWeek = Carbon::today()->dayOfWeek;
+                $dateFrom = Carbon::parse(today()->subDays($dayOfWeek-1));
+                $dateTo = Carbon::parse(today()->addDays(7-$dayOfWeek));
+                $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                break;
+            case 'last week':
+                $dayOfWeek = Carbon::today()->dayOfWeek;
+                $dateFrom = Carbon::parse(today()->subDays($dayOfWeek+6));
+                $dateTo = Carbon::parse(today()->subDays($dayOfWeek));
+                $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                break;
+            case 'this month':
+                $daysInMonth = Carbon::today()->daysInMonth;
+                $dateFrom = date('Y-m-').'1';
+                $dateTo = date('Y-m-').$daysInMonth;
+                $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                break;
+            case 'last month':
+                $dayNow = date('d')+0;
+                $dateTo = Carbon::parse(today()->subDays($dayNow));
+                $dateFrom = Carbon::parse(today()->subDays($dayNow+(date('d', strtotime($dateTo)-1))));
+                $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                break;
+            case 'range':
+                if(Appointment::get()->count() > 0){
+                    $dateFrom = Carbon::parse(is_null($request->get('filter_date_from')) ? Appointment::orderBy('session_end', 'DESC')->first()->value('session_end') : $request->get('filter_date_from'));
+                    $dateTo = Carbon::parse(is_null($request->get('filter_date_to')) ? Appointment::orderBy('session_end', 'DESC')->latest()->value('session_end') : $request->get('filter_date_to'));
+                    $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                }
+                break;
+            default:
+                # code...
+                break;
+        }
+        return back()->with('alert-success', 'Patient Records successfully EXPORTED');
+    }
 }

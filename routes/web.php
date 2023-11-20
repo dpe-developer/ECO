@@ -143,6 +143,11 @@ Route::group(array('middleware'=>['auth', 'role:System Administrator|Administrat
 		'patients' => 'user'
 	]);
 	// restore
+	Route::get('patients-export-data', [
+		'as' => 'patients.export_data',
+		'uses' => 'PatientController@exportData'
+	]);
+	// restore
 	Route::post('patients-restore/{user}', [
 		'as' => 'patients.restore',
 		'uses' => 'PatientController@restore'

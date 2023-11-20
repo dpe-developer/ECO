@@ -38,12 +38,13 @@ class MedicalHistoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $data = [
 			'patient' => User::find(request()->get('patient_id')),
 			'doctors' => User::where('role_id', 3)->get(),
 			'medical_history_references' => MedicalHistoryReference::get(),
+			'patientVisitID' => $request->get('patient_visit_id'),
 		];
 		return response()->json([
 			'modal_content' => view('patients.patient_profile.medical_histories.create', $data)->render()

@@ -13,11 +13,10 @@
 						@can('patients.restore')
 						<a class="btn bg-gradient-success" href="javascript:void(0)" onclick="restoreFromTable(this)" data-href="{{ route('patients.restore', $patient->id) }}"><i class="fas fa-download"></i> Restore</a>
 						@endcan
-					@else
-						@can('patients.destroy')
-						<a class="btn bg-gradient-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('patients.destroy', $patient->id) }}" data-message="This will also delete all the records of the patient."><i class="fas fa-trash-alt"></i> Delete</a>
-						@endcan
-					@endif
+                    @endif
+                    @can('patients.destroy')
+                        <a class="btn bg-gradient-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('patients.destroy', $patient->id) }}" data-message="This will also delete all the records of the patient."><i class="fas fa-trash-alt"></i> Delete</a>
+                    @endcan
                     @can('patients.edit')
                         <a class="btn bg-gradient-info" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('patients.edit', $patient->id) }}" data-target="#editPatientModal"><i class="fa fa-edit"></i> Edit</a>
                     @endcan
@@ -30,7 +29,7 @@
         {{-- Patient Info --}}
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-outline card-primary collapsed-card">
+                <div class="card card-outline card-primary @if($patient->hasActiveVisit()) collapsed-card @endif">
                     <div class="card-header" data-card-widget="collapse" style="cursor: pointer">
                         <h2 class="card-title">
                             <strong>{{ $patient->username }}</strong> -

@@ -68,7 +68,7 @@ class LoginController extends Controller
 				'browser' => $client->browser(),
 			]);
             if(Auth::user()->role->role_id == 4){
-                return redirect()->route('home')->with('alert-success', 'You are now logged in');
+                return redirect()->route('patient_appointments.index')->with('alert-success', 'You are now logged in');
             }else{
                 return redirect()->route('dashboard')->with('alert-success', 'You are now logged in');
             }

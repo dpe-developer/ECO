@@ -14,12 +14,28 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="callout callout-info">
-                            <legend>VTFP Session</legend>
                             <div class="row">
                                 <div class="form-group col-md-3">
-                                    <label for="service">Service:</label>
+                                    <b>Service:</b><br>
                                     {{ $patientVisit->service->name ?? "" }}
                                 </div>
+								<div class="form-group col-md-9">
+									<div class="callout callout-warning">
+										<label for="findings">Findings:</label>
+										<div class="row">
+											@foreach ($findings as $finding)
+												<div class="col-md-3">
+													<div class="icheck-primary d-inline">
+														<input type="checkbox" name="findings[]" @if(!is_null($patientVisit->findings)) @if(in_array($finding->name, json_decode($patientVisit->findings))) checked @endif @endif value="{{ $finding->name }}" id="finding_{{ $finding->id }}">
+														<label for="finding_{{ $finding->id }}">
+														{{ $finding->name }}
+														</label>
+													</div>
+												</div>
+											@endforeach
+										</div>
+									</div>
+								</div>
                                 {{-- <div class="form-group col-md-3">
                                     <label for="admittingDiagnosis">Admiting Diagnosis:</label>
                                     <textarea name="admitting_diagnosis" id="admittingDiagnosis" rows="3" class="form-control"></textarea>
@@ -28,16 +44,16 @@
                                     <label for="finalDiagnosis">Final Diagnosis:</label>
                                     <textarea name="final_diagnosis" id="finalDiagnosis" rows="3" class="form-control"></textarea>
                                 </div> --}}
-                                <div class="form-group col-md-3">
-                                    <label for="complaints">Complaints:</label>
+								<div class="form-group col-md-4">
+                                    <b>Session End at:</b><br>
+                                    {{ Carbon::parse($patientVisit->session_end)->format('M d,Y h:ia') }}
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <b>Complaints:</b><br>
                                     {{ $patientVisit->complaints }}
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label for="findings">Findings:</label>
-                                    {{ $patientVisit->findings }}
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="recommendation">Recommendation:</label>
+                                <div class="form-group col-md-4">
+                                    <b>Recommendation:</b><br>
                                     {{ $patientVisit->recommendation }}
                                 </div>
                             </div>
@@ -127,7 +143,7 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<a class="btn btn-default" href="{{ route('patients.show', $patient->id) }}">Close</a>
+				<a class="btn bg-gradient-secondary float-right" href="{{ route('patients.show', $patient->id) }}">Close</a>
 			</div>
 		</div>
 	</div>
@@ -160,27 +176,6 @@
 							$(_this).popover("hide");
 						}
 					}, 100);
-			});
-
-			$('#dischargeDate').datetimepicker({
-				date: new Date(),
-				debug: true,
-				icons: {
-					time: 'far fa-clock',
-					date: 'far fa-calendar-alt',
-					up: 'fas fa-arrow-up',
-					down: 'fas fa-arrow-down',
-					previous: 'fas fa-chevron-left',
-					next: 'fas fa-chevron-right',
-					today: 'far fa-calendar-check',
-					clear: 'far fa-trash-alt',
-					close: 'fas fa-times'
-				},
-				buttons: {
-					showToday: true,
-					showClose: true,
-					showClear: true
-				}
 			});
 
 		});

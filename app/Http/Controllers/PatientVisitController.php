@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PatientVisit;
 use App\Models\Service;
 use App\Models\User;
+use App\Models\Finding;
 use Illuminate\Http\Request;
 use Carbon;
 
@@ -81,7 +82,8 @@ class PatientVisitController extends Controller
     {
         $data = [
             'patientVisit' => $patientVisit,
-            'patient' => $patientVisit->patient
+            'patient' => $patientVisit->patient,
+            'findings' => Finding::get(),
         ];
         return view('patients.patient_profile.patient_visits.show', $data);
     }

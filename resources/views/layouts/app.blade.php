@@ -42,18 +42,18 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 main-navbar-nav">
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ url('/') }}">
                             <i class="fa-solid fa-house "></i>
                             Home
                         </a>
-                    </li>
-                    <li class="nav-item">
+                    </li> --}}
+                    {{-- <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ url('services') }}">
                             <i class="fa-solid fa-stethoscope "></i>
                             Services
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{{ url('clinic-announcements') }}">
                             <i class="fa-solid fa-megaphone "></i>
@@ -66,12 +66,42 @@
                             Newsfeed
                         </a>
                     </li>
+                    {{-- <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ url('track-appointment') }}">
+                            <i class="fa-solid fa-calendar-check "></i>
+                            Track Appointment
+                        </a>
+                    </li> --}}
+                    @auth
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ url('patient_appointments') }}">
+                            <i class="fa-solid fa-calendar-check "></i>
+                            Appointments
+                        </a>
+                    </li>
+                    @else
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ url('track-appointment') }}">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            Track Appointment
+                        </a>
+                    </li>
+                    @endauth
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ url('contact-us') }}">
+                            <i class="fa-solid fa-comments "></i>
+                            Contact Us
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_About" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-square-info "></i>
                             About
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown_About">
+                            <li>
+                                <a class="dropdown-item" href="{{ url('services') }}">Services Offered</a>
+                            </li>
                             <li>
                                 <a class="dropdown-item" href="{{ url('gallery') }}">Gallery</a>
                             </li>
@@ -82,18 +112,6 @@
                                 <a class="dropdown-item" href="{{ url('our-organization') }}">Our Organization</a>
                             </li> --}}
                         </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ url('track-appointment') }}">
-                            <i class="fa-solid fa-calendar-check "></i>
-                            Track Appointment
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ url('contact-us') }}">
-                            <i class="fa-solid fa-comments "></i>
-                            Contact Us
-                        </a>
                     </li>
                 </ul>
             </div>

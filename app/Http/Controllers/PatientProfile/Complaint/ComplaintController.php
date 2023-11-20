@@ -81,7 +81,6 @@ class ComplaintController extends Controller
 					'value' => $request->get($reference->id),
 					'sub_value' => $request->get('input_'.$reference->id),
 				]);
-				echo '<h3>'.$parent_reference->id.' - '.$reference->name.':</h3>';
 				foreach ($reference->children as $children) {
 					if($children->child->count()){
 						$children_reference = ComplaintData::create([

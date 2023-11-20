@@ -320,8 +320,12 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($userID)
 	{
+		$user = User::find($userID);
+		if(Auth::user()->hasrole('System Administrator')){
+			$user = User::withTrashed()->find($userID);
+		}
 		if($user->id != 1){
 			if (request()->get('permanent')) {
 				$user->forceDelete();

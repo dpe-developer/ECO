@@ -1,5 +1,8 @@
 @extends('adminlte.app')
 
+@section('style')
+<link rel="stylesheet" href="{{ asset('AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+@endsection
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">

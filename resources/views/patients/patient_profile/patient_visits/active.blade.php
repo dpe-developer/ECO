@@ -6,7 +6,7 @@
 		<div class="card card-outline card-primary active-patient-profile">
 			<div class="card-header">
 				<h3 class="card-title">
-					<span class="badge badge-success">ACTIVE SESSION</span>
+					<span class="badge badge-success badge-lg">ACTIVE SESSION</span>
 				</h3>
 				<div class="card-tools">
 					<button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
@@ -25,7 +25,7 @@
 						</div>
 					</div>
 				</div> --}}
-				<form action="{{ route('patient_visits.update', $patient->activeVisit()->id) }}" method="POST">
+				<form action="{{ route('patient_visits.update', $patient->activeVisit()->id) }}" method="POST" id="patientVisitForm">
 					@csrf
 					@method('PUT')
 					<div class="row">
@@ -34,7 +34,7 @@
 								<div class="row">
 									<div class="form-group col-md-3">
 										<label for="service">Service:</label>
-										<select name="" id="" class="form-control select2">
+										<select name="service" id="" class="form-control select2">
 											<option></option>
 											@foreach ($services as $service)
 												<option @if($patient->activeVisit()->service_id == $service->id) selected @endif value="{{ $service->id }}">{{ $service->name }}</option>
@@ -69,7 +69,7 @@
 								</div>
 								<div class="row">
 									<div class="col">
-										<button class="btn btn-success float-right" type="submit"><i class="fa fa-save"></i> Save</button>
+										<button class="btn bg-gradient-success float-right" type="submit"><i class="fa fa-save"></i> Save</button>
 									</div>
 								</div>
 							</div>
@@ -83,7 +83,7 @@
 							<legend>
 								{{ trans('terminologies.medical_history') }}
 								@can('medical_histories.create')
-								<a class="btn btn-primary btn-sm text-light" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('medical_histories.create') }}" data-target="#addMedicalHistory" data-form="patient_id: {{ $patient->id }}">Add <i class="fa fa-plus"></i></a>
+								<a class="btn btn-primary btn-sm text-light" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('medical_histories.create') }}" data-target="#addMedicalHistory" data-form="patient_id: {{ $patient->id }}; patient_visit_id: {{ $patient->activeVisit()->id }}">Add <i class="fa fa-plus"></i></a>
 								@endcan
 							</legend>
 							<ul class="text-lg">
@@ -169,7 +169,7 @@
 			</div>
 			@can('patient_visits.end_visit')
 			<div class="card-footer">
-				<a class="btn btn-success float-right" href="{{ route('patient_visits.end_visit', $patient->activeVisit()->id) }}">End Session</a>
+				<a class="btn btn-success float-right" href="javascript:void(0)" data-toggle="confirm-link" data-href="{{ route('patient_visits.end_visit', $patient->activeVisit()->id) }}" data-message='Do you want to end this Visit?'>End Session</a>
 			</div>
 			@endcan
 		</div>
@@ -177,5 +177,5 @@
 </div>
 
 @section('active_visit_scripts')
-	<script src="{{ asset('AdminLTE-3.2.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
+	{{-- Scripts Here --}}
 @endsection

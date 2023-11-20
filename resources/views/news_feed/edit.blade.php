@@ -236,7 +236,8 @@
 				['color', ['color']],
 				['para', ['ul', 'ol', 'paragraph']],
 				['table', ['table']],
-				['insert', ['link', 'picture']],
+				['insert', ['link']],
+				// ['insert', ['link', 'picture']],
 				['view', ['fullscreen'/*, 'codeview', 'help'*/]],
 			]
         })
