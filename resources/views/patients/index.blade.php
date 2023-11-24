@@ -69,6 +69,7 @@
 										  <th>Patient ID</th>
 										  <th>Name</th>
 										  <th>Sex</th>
+										  <th>Age</th>
 										  <th>Occupation</th>
 									   </tr>
 									</thead>
@@ -87,6 +88,9 @@
 												</td>
 												<td>
 													{{ $patient->sex }}
+												</td>
+												<td>
+													{{ $patient->age() }}
 												</td>
 												<td>
 													{{ $patient->occupation }}
@@ -261,6 +265,7 @@
 							}
 						},
 						{data: 'sex', name: 'sex'},
+						{data: 'age'},
 						{data: 'occupation', name: 'occupation'},
 						{data: 'first_name', name: 'first_name', 'visible': false},
 					],

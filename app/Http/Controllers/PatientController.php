@@ -45,6 +45,9 @@ class PatientController extends Controller
 			->addColumn('patientID', function($row){
 				return $row->patient_id;
 			})
+			->addColumn('age', function($row){
+				return $row->age();
+			})
 			->rawColumns(['patientID'])
 			->addIndexColumn()
 			->make(true);

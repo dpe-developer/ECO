@@ -109,6 +109,22 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-12">
+                    <div class="card card-info card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">Findings by Patient Age</h5>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="position-relative mb-4">
+                                {!! $findingsByPatientAgeChart->container() !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12">
                     <div class="jumbotron text-center">
                         <h1>{{ config('app.client_name') }}</h1>
@@ -123,6 +139,7 @@
 <!-- /.content-wrapper -->
 @endsection
 @section('script')
+{!! $findingsByPatientAgeChart->script() !!}
 {!! $appointmentsThisWeekChart->script() !!}
 {!! $findingsThisMonthChart->script() !!}
 {{-- <script type="text/javascript">
