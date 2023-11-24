@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'version' => "3.10.18",
+    'version' => "3.12.1",
     'client_name' => env('APP_CLIENT_NAME', 'Laravel'),
 
     // Twilio
@@ -202,6 +202,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         ConsoleTVs\Charts\ChartsServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -268,6 +269,7 @@ return [
         'Appointment' => App\Models\Appointment::class,
         'User' => App\Models\User::class,
         'UserNotification' => App\Models\UserNotification::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

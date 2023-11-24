@@ -77,7 +77,7 @@
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-12">
                     <div class="card card-info card-outline">
                         <div class="card-header">
                             <div class="d-flex justify-content-between">
@@ -91,7 +91,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+            </div>
+            <div class="row">
+                <div class="col-12">
                     <div class="card card-info card-outline">
                         <div class="card-header">
                             <div class="d-flex justify-content-between">

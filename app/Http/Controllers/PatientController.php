@@ -6,9 +6,15 @@ use App\Models\User;
 use App\Models\PatientVisit;
 use App\Models\Service;
 use App\Models\Finding;
+use App\Models\PatientProfile\EyePrescription\EyePrescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Carbon;
 use Auth;
+// Excel
+use Excel;
+use App\Exports\PatientRecordsExport;
+use App\Imports\PatientRecordsImport;
 
 class PatientController extends Controller
 {
@@ -203,50 +209,85 @@ class PatientController extends Controller
     public function exportData(Request $request)
     {
         $patientVisits = PatientVisit::select('*');
+        $filterFromDate = 'visit_date';
         switch ($request->get('filter_date_option')) {
             case 'today':
                 $date = Carbon::today();
-                $patientVisits->whereDate('session_end', $date);
+                $patientVisits->whereDate($filterFromDate, $date);
                 break;
             case 'yesterday':
                 $date = Carbon::yesterday();
-                $patientVisits->whereDate('session_end', $date);
+                $patientVisits->whereDate($filterFromDate, $date);
                 break;
             case 'this week':
                 $dayOfWeek = Carbon::today()->dayOfWeek;
                 $dateFrom = Carbon::parse(today()->subDays($dayOfWeek-1));
                 $dateTo = Carbon::parse(today()->addDays(7-$dayOfWeek));
-                $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                $patientVisits->whereBetween($filterFromDate, [$dateFrom, $dateTo]);
                 break;
             case 'last week':
                 $dayOfWeek = Carbon::today()->dayOfWeek;
                 $dateFrom = Carbon::parse(today()->subDays($dayOfWeek+6));
                 $dateTo = Carbon::parse(today()->subDays($dayOfWeek));
-                $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                $patientVisits->whereBetween($filterFromDate, [$dateFrom, $dateTo]);
                 break;
             case 'this month':
                 $daysInMonth = Carbon::today()->daysInMonth;
                 $dateFrom = date('Y-m-').'1';
                 $dateTo = date('Y-m-').$daysInMonth;
-                $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                $patientVisits->whereBetween($filterFromDate, [$dateFrom, $dateTo]);
                 break;
             case 'last month':
                 $dayNow = date('d')+0;
                 $dateTo = Carbon::parse(today()->subDays($dayNow));
                 $dateFrom = Carbon::parse(today()->subDays($dayNow+(date('d', strtotime($dateTo)-1))));
-                $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                $patientVisits->whereBetween($filterFromDate, [$dateFrom, $dateTo]);
+                break;
+            case 'this year':
+                $date = Carbon::now();
+                $startOfYear = $date->copy()->startOfYear();
+                $endOfYear   = $date->copy()->endOfYear();
+                $patientVisits->whereBetween($filterFromDate, [$startOfYear, $endOfYear]);
                 break;
             case 'range':
-                if(Appointment::get()->count() > 0){
-                    $dateFrom = Carbon::parse(is_null($request->get('filter_date_from')) ? Appointment::orderBy('session_end', 'DESC')->first()->value('session_end') : $request->get('filter_date_from'));
-                    $dateTo = Carbon::parse(is_null($request->get('filter_date_to')) ? Appointment::orderBy('session_end', 'DESC')->latest()->value('session_end') : $request->get('filter_date_to'));
-                    $patientVisits->whereBetween('session_end', [$dateFrom, $dateTo]);
+                if(PatientVisit::get()->count() > 0){
+                    $dateFrom = Carbon::parse(is_null($request->get('filter_date_from')) ? PatientVisit::orderBy($filterFromDate, 'DESC')->first()->value($filterFromDate) : $request->get('filter_date_from'));
+                    $dateTo = Carbon::parse(is_null($request->get('filter_date_to')) ? PatientVisit::orderBy($filterFromDate, 'DESC')->latest()->value($filterFromDate) : $request->get('filter_date_to'));
+                    $patientVisits->whereBetween($filterFromDate, [$dateFrom, $dateTo]);
                 }
                 break;
             default:
                 # code...
                 break;
         }
-        return back()->with('alert-success', 'Patient Records successfully EXPORTED');
+        $patientVisits->has('eyePrescriptions');
+        $eyePrescriptions = EyePrescription::whereIn('visit_id', $patientVisits->pluck('id'));
+        $data = [
+            'patientVisits' => $patientVisits->get(),
+            'eyePrescriptions' => $eyePrescriptions->get()
+        ];
+        if($patientVisits->count() > 0){
+            return Excel::download(new PatientRecordsExport($data), 'patient-records-'. Carbon::now()->format('y-m-d h-ia') .'.xlsx', \Maatwebsite\Excel\Excel::XLSX, [
+                'Content-Type' => 'text/csv',
+            ]);
+        }else{
+            return back();
+        }
+        /* if(request()->ajax()){
+			return response()->json([
+                'alert' => ['success', 'Item successfully added']
+            ]);
+		} */
+        // return view('patients.excel', $data);
+        // return back()->with('alert-success', 'Patient Records EXPORT successfully');
+    }
+
+    public function importData(Request $request)
+    {
+        if($request->file('patient_records_csv_file') != null){
+			Excel::import(new PatientRecordsImport, $request->file('patient_records_csv_file'), \Maatwebsite\Excel\Excel::CSV);
+			return back()->with('alert-success', 'Patient Records imported successfully');
+		}
+		return back()->with('alert-warning', 'Import failed. Invalid File');
     }
 }

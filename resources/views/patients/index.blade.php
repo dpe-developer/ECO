@@ -50,6 +50,9 @@
 								<div class="card-tools">
 									<button class="btn btn-tool bg-gradient-{{ request()->get('filter')==1 ? 'success' : 'info' }}" data-toggle="modal" data-target="#filterPatients"><i class="fa fa-search"></i> Filter Findings</button>
 									<button class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#exportPatientDataModal"><i class="fa fa-download"></i> Export Data</button>
+									@hasrole('System Administrator')
+									<button class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#modalImportRecords"><i class="fa fa-upload"></i> Import</button>
+									@endhasrole
 									{{-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#filterPatients"><i class="fa fa-search"></i> Search</button> --}}
 									@can('patients.create')
 									<a class="btn btn-tool bg-gradient-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('patients.create') }}" data-target="#createPatientModal">
@@ -107,16 +110,16 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="exportPatientDataModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Export Data</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<form action="{{ route('patients.export_data') }}" action="GET" autocomplete="off">
+	<form action="{{ route('patients.export_data') }}" method="GET" autocomplete="off" target="_blank" id="exportPatientRecordsForm">
+		<div class="modal fade" id="exportPatientDataModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Export Data</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
 					<div class="modal-body">
 						<div class="form-group">
 							<label>Date:</label>
@@ -128,6 +131,7 @@
 								<option value="last week">Last Week</option>
 								<option value="this month">This Month</option>
 								<option value="last month">Last Month</option>
+								<option value="this year">This Year</option>
 								<option value="range">Range</option>
 							</select>
 							<div class="row date-range d-none">
@@ -155,12 +159,12 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn bg-gradient-success">Submit</button>
+						<button type="button" id="submitExportPatientRecordsForm" class="btn bg-gradient-success">Submit</button>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 	<div class="modal fade" id="filterPatients" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -194,9 +198,44 @@
 			</div>
 		</div>
 	</div>
+	@hasrole('System Administrator')
+	<form action="{{ route('patients.import_data') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+		@csrf
+		<div class="modal fade" id="modalImportRecords" tabindex="-1" role="dialog" aria-labelledby="modalImportRecords" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content text-left">
+					<div class="modal-header">
+						<h5 class="modal-title">Import Records</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="RecordsCsvFile">Records CSV File <strong class="text-danger">*</strong></label>
+							<div class="input-group">
+								<div class="custom-file">
+									<input type="file" class="custom-file-input" id="RecordsCsvFile" name="patient_records_csv_file" accept=".csv" required>
+									<label class="custom-file-label" for="RecordsCsvFile">Choose File</label>
+								</div>
+								<div class="input-group-append">
+									<span class="input-group-text">Upload</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn bg-gradient-success">Submit</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	@endhasrole
     {{-- @include('patients.create') --}}
 @endsection
 @section('script')
+<script src="{{ asset('AdminLTE-3.2.0/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 	<script type="application/javascript">
         $(document).ready(function() {
             $.ajaxSetup({
@@ -252,5 +291,11 @@
                 $('.date-range').addClass('d-none');
             }
         }
+		$(function(){
+			$('#submitExportPatientRecordsForm').on('click', function(){
+				$('#exportPatientRecordsForm').trigger('submit');
+			});
+		});
+
     </script>
 @endsection

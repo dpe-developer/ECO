@@ -142,7 +142,10 @@ Route::group(array('middleware'=>['auth', 'role:System Administrator|Administrat
 	Route::resource('patients', 'PatientController')->parameters([
 		'patients' => 'user'
 	]);
-	// restore
+	Route::post('patients-import-data', [
+		'as' => 'patients.import_data',
+		'uses' => 'PatientController@importData'
+	]);
 	Route::get('patients-export-data', [
 		'as' => 'patients.export_data',
 		'uses' => 'PatientController@exportData'

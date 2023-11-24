@@ -187,29 +187,26 @@ class User extends Authenticatable
 		return $name.$trashedBadge;
     }
 
-    public function age()
+    public function age($ageWhen = null)
     {
         $bdate = $this->birthdate;
 		if($bdate != null){
 			$bdate = Carbon::parse($bdate);
-			$now = Carbon::now();
-			$age = $bdate->diffInYears($now);
-			/*// date now
-			$d_now = date("d");
-			$m_now = date("m");
-			$y_now = date("Y");
-			// birth date
-			$d_bd = date("d", strtotime($bdate));
-			$m_bd = date("m", strtotime($bdate));
-			$y_bd = date("Y", strtotime($bdate));
+			$ageWhenDate = is_null($ageWhen) ? Carbon::now() : Carbon::parse($ageWhen);
+			$age = $bdate->diffInYears($ageWhenDate);
+			return $age;
+		}else{
+			return '';
+		}
+	}
 
-			if ($m_bd > $m_now || $d_bd > $d_now & $m_bd >= $m_now){
-				$compute = $y_now - $y_bd;
-				$age = $compute - 1;
-			}
-			else {
-				$age = $y_now - $y_bd;
-			}*/
+    public function ageWhenDateIs($ageWhen = null)
+    {
+        $bdate = $this->birthdate;
+		if($bdate != null){
+			$bdate = Carbon::parse($bdate);
+			$ageWhenDate = is_null($ageWhen) ? Carbon::now() : Carbon::parse($ageWhen);
+			$age = $bdate->diffInYears($ageWhenDate);
 			return $age;
 		}else{
 			return '';

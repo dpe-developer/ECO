@@ -18,9 +18,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			@forelse ($patient->visits()->orderBy('created_at', 'DESC')->get() as $visit)
+			@forelse ($patient->visits()->orderBy('visit_date', 'DESC')->get() as $visit)
 			<tr @can('patient_visits.show') @if($visit->status == 'done') data-toggle="tr-link" data-href="{{ route('patient_visits.show', $visit->id) }}" @endif @endcan>
-				<td>{{ Carbon::parse($visit->session_date)->format('M d,Y h:ia') }} </td>
+				<td>{{ Carbon::parse($visit->visit_date)->format('M d,Y h:ia') }} </td>
 				<td>
 					@if($visit->appointment_id == null)
 					Walk-in
