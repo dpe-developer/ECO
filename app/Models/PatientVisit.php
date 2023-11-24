@@ -30,12 +30,12 @@ class PatientVisit extends Model
      */
     public function patient()
     {
-        return $this->belongsTo('App\Models\User', 'patient_id');
+        return $this->belongsTo('App\Models\User', 'patient_id')->withTrashed();
     }
 
     public function doctor()
     {
-        return $this->belongsTo('App\Models\User', 'doctor_id');
+        return $this->belongsTo('App\Models\User', 'doctor_id')->withTrashed();
     }
 
     public function service()
