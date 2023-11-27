@@ -19,7 +19,7 @@
   ```
 - Execute this on shell/terminal: 
   ```
-  git clone https://github.com/dpe-developer/ECO.git
+  git clone https://github.com/dpe-developer/ECO.git eco
   ```
 - Execute this on shell/terminal: 
   ```
