@@ -20,7 +20,7 @@
 					</div>
 					<div class="form-group">
 						<label>Doctor:</label><strong class="text-danger text-lg"> *</strong>
-						<select class="form-control select2" name="doctor" style="width: 100%">
+						<select class="form-control select2" name="doctor" style="width: 100%" required>
 							<option></option>
 							@foreach ($doctors as $doctor)
 								<option value="{{ $doctor->id }}">

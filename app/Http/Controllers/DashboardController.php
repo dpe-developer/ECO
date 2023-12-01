@@ -114,7 +114,7 @@ class DashboardController extends Controller
 
         foreach(Finding::get() as $index => $finding){
             $patientVisitsByFindings = PatientVisit::where('patient_visits.findings', '!=', null)
-            ->where('patient_visits.findings', 'LIKE', '%'.$finding->name.'%')->get();
+            ->where('patient_visits.findings', 'LIKE', '%'.explode('/', $finding->name)[0].'%')->get();
             foreach($patientVisitsByFindings as $patientVisitByFinding){
                 $patientAge = $patientVisitByFinding->patient->age($patientVisitByFinding->visit_date);
                 if($patientAge < 11){
@@ -176,13 +176,23 @@ class DashboardController extends Controller
         $findingsThisMonthChartData = [];
         $totalFindingsThisMonth = 0;
         $dateToFilter = 'visit_date';
+        $colors =  [
+            '#009900',
+            'pink',
+            'purple',
+            'yellow',
+            '#FF6600',
+            '#FF0000',
+            'silver',
+            'blue',
+        ];
 
         foreach(Finding::get() as $finding){
             $patientVisitsThisMonthFromFindings = PatientVisit::whereMonth($dateToFilter, Carbon::now()->month)->whereYear($dateToFilter, Carbon::now()->year)
             ->where('findings', 'LIKE', '%'.explode('/', $finding->name)[0].'%')->where('findings', '!=', null)->count();
             $totalFindingsThisMonth = $totalFindingsThisMonth + $patientVisitsThisMonthFromFindings;
         }
-        foreach(Finding::get() as $finding){
+        foreach(Finding::get() as $i => $finding){
             $percentage = 0;
             $patientVisitsThisMonthFromFindings = PatientVisit::whereMonth($dateToFilter, Carbon::now()->month)->whereYear($dateToFilter, Carbon::now()->year)
             ->where('findings', 'LIKE', '%'.explode('/', $finding->name)[0].'%')->where('findings', '!=', null)->count();
@@ -197,7 +207,7 @@ class DashboardController extends Controller
                     $greenColor = 255-($percentage*5);
                     $blueColor = 0;
                     $hexColor = sprintf("#%02x%02x%02x", ($redColor >= 255 ? 255 : $redColor), ($greenColor <= 0 ? 0 : $greenColor), ($blueColor >= 255 ? 0 : $blueColor));
-                    $labelColors[] = $hexColor;
+                    $labelColors[] = $colors[$i];
                     $findingsThisMonthChartData[] = $patientVisitsThisMonthFromFindings;
                 // }
             }
