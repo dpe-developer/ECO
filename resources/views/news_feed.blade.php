@@ -142,7 +142,7 @@
             if(this.offsetHeight < this.scrollHeight){
                 $(this).parent().find('.show-more').removeClass('d-none')
             }
-        })
+        });
     })
 </script>
 @endsection

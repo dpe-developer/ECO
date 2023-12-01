@@ -161,12 +161,19 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
-        UserNotification::create([
-            'user_id' => Auth::user()->id,
-            'entity_id' => $appointment->id,
-            'notification_type' => 'appointment',
-            'is_seen' => true,
-        ]);
+        if(UserNotification::where([
+            ['user_id', Auth::user()->id],
+            ['entity_id', $appointment->id],
+            ['notification_type', 'appointment'],
+            ['is_seen', true],
+        ])->doesntExist()){
+            UserNotification::create([
+                'user_id' => Auth::user()->id,
+                'entity_id' => $appointment->id,
+                'notification_type' => 'appointment',
+                'is_seen' => true,
+            ]);
+        }
         $data = ([
 			'appointment' => $appointment,
 		]);

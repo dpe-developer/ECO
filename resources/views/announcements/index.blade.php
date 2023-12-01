@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     @can('announcements.create')
-                        <a class="btn btn-default" href="{{ route('announcements.create') }}"><i class="fa fa-plus"></i> Add</a>
+                        <a class="btn bg-gradient-primary" href="{{ route('announcements.create') }}"><i class="fa fa-plus"></i> Add Announcement</a>
                     @endcan
                 </div>
             </div>
@@ -22,38 +22,52 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col" id="accordion">
+                <div class="col" id="accordion" data-toggle="card-accordion-ajax">
                     @forelse ($announcements as $announcement)
-                        <div class="card card-primayr card-outline">
-                            <a class="d-block" data-toggle="collapse" href="#announcement-{{ $announcement->id }}">
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <h4 class="card-title w-100">
+                                    <a class="d-block w-100 collapsed text-dark accordion-with-badge" data-toggle="collapse" data-href="{{ route('announcements.show',  $announcement->id) }}" data-target="#announcement-{{ $announcement->id }}" href="#announcement-{{ $announcement->id }}" aria-expanded="false">
+                                        <b>{{ $announcement->title }}</b>
+                                        @if(UserNotification::isNotSeen('announcement', $announcement->id))
+                                            <span class="right badge badge-danger new-badge">new</span>
+                                        @endif
+                                        <span class="float-right">
+                                            {{ Carbon::parse($announcement->created_at)->format('M-d-Y') }}
+                                        </span>
+                                    </a>
+                                </h4>
+                            </div>
+                            {{-- <a class="d-block accordion-with-badge" data-toggle="collapse" data-href="{{ route('announcements.show',  $announcement->id) }}" data-target="#announcement-{{ $announcement->id }}" href="#announcement-{{ $announcement->id }}">
                                 <div class="card-header d-flex p-0">
-                                    {{-- <div class="row"> --}}
-                                        {{-- <div class="col-md-6"> --}}
-                                        <h4 class="card-title p-3 text-dark">
-                                            {{ $announcement->title }}
-                                        </h4>
-                                        {{-- </div> --}}
-                                        <ul class="nav nav-pills ml-auto p-2">
-                                            @can('announcements.destroy')
-                                            <li class="nav-item">
-                                                <a class="nav-link text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('announcements.destroy', $announcement->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
-                                            </li>
-                                            @endcan
-                                            @can('announcements.edit')
-                                            <li class="nav-item">
-                                                <a class="nav-link text-primary" href="{{ route('announcements.edit', $announcement->id) }}"><i class="fad fa-edit"></i> Edit</a>
-                                            </li>
-                                            @endcan
-                                        </ul>
-                                    {{-- </div> --}}
+                                    <h4 class="card-title p-3 text-dark">
+                                        
+                                    </h4>
+                                    <ul class="nav nav-pills ml-auto p-2">
+                                        @can('announcements.destroy')
+                                        <li class="nav-item">
+                                            <a class="nav-link text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('announcements.destroy', $announcement->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+                                        </li>
+                                        @endcan
+                                        @can('announcements.edit')
+                                        <li class="nav-item">
+                                            <a class="nav-link text-primary" href="{{ route('announcements.edit', $announcement->id) }}"><i class="fad fa-edit"></i> Edit</a>
+                                        </li>
+                                        @endcan
+                                    </ul>
                                 </div>
-                            </a>
-                            <div id="announcement-{{ $announcement->id }}" class="collapse @if($loop->first) show @endif" data-parent="#accordion">
+                            </a> --}}
+                            <div id="announcement-{{ $announcement->id }}" class="collapse" data-parent="#accordion">
                                 <div class="card-body">
-                                    {!! $announcement->content !!}
-                                    <br>
-                                    <label>Date Published:</label>
-                                    {{ date('F d, Y h:i A', strtotime($announcement->created_at)) }}
+                                    
+                                </div>
+                                <div class="card-footer text-right">
+                                    @can('announcements.destroy')
+                                        <a class="btn bg-gradient-danger btn-sm" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('announcements.destroy', $announcement->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+                                    @endcan
+                                    @can('announcements.edit')
+                                        <a class="btn bg-gradient-info btn-sm" href="{{ route('announcements.edit', $announcement->id) }}"><i class="fad fa-edit"></i> Edit</a>
+                                    @endcan
                                 </div>
                             </div>
                         </div>

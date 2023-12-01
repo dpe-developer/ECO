@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
-use App\Models\UserAnnouncement;
+use App\Models\UserNotification;
 use App\Models\Users;
 use App\Models\Configuration\RolePermission\Role;
 use Illuminate\Http\Request;
@@ -81,15 +81,24 @@ class AnnouncementController extends Controller
     public function show(Announcement $announcement)
     {
         if(request()->ajax()){
-            UserAnnouncement::create([
-                'user_id' => Auth::user()->id,
-                'announcement_id' => $announcement->id,
-            ]);
+            if(UserNotification::where([
+                ['user_id', Auth::user()->id],
+                ['entity_id', $announcement->id],
+                ['notification_type', 'announcement'],
+                ['is_seen', true],
+            ])->doesntExist()){
+                UserNotification::create([
+                    'user_id' => Auth::user()->id,
+                    'entity_id' => $announcement->id,
+                    'notification_type' => 'announcement',
+                    'is_seen' => true,
+                ]);
+            }
             $data = [
                 'announcement' => $announcement
             ];
             return response()->json([
-                'modal_content' => view('announcements.show', $data)->render()
+                'accordion_content' => view('announcements.card_accordion_ajax', $data)->render()
             ]);
         }
     }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\NewsFeed;
 use App\Models\NewsFeedFile;
 use App\Models\FileAttachment;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
+use Auth;
 
 class NewsFeedController extends Controller
 {
@@ -67,7 +69,25 @@ class NewsFeedController extends Controller
      */
     public function show(NewsFeed $newsFeed)
     {
-        //
+        if(UserNotification::where([
+            ['user_id', Auth::user()->id],
+            ['entity_id', $newsFeed->id],
+            ['notification_type', 'news_feed'],
+            ['is_seen', true],
+        ])->doesntExist()){
+            UserNotification::create([
+                'user_id' => Auth::user()->id,
+                'entity_id' => $newsFeed->id,
+                'notification_type' => 'news_feed',
+                'is_seen' => true,
+            ]);
+        }
+        $data = [
+            'newsFeed' => $newsFeed
+        ];
+        return response()->json([
+            'modal_content' => view('news_feed.show', $data)->render()
+        ]);
     }
 
     /**

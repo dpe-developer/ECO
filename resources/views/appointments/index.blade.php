@@ -177,7 +177,7 @@
                                             <td data-order="{{ Carbon::parse($appointment->appointment_date) }}">
                                                 {{ Carbon::parse($appointment->appointment_date)->format('M d, Y') }}
                                                 @if(UserNotification::isNotSeen('appointment', $appointment->id))
-                                                <span class="right badge badge-danger new-badge">new</span>
+                                                    <span class="right badge badge-danger new-badge">new</span>
                                                 @endif
                                             </td>
                                             <td>{{ date('h:ia', strtotime($appointment->appointment_date)) }}</td>
@@ -235,9 +235,9 @@
                         <select name="filter_patient[]" class="form-control select2" multiple>
                             {{-- <option></option> --}}
                             @foreach ($patients as $patient)
-                            <option @if(request()->get('filter_patient')) {{ in_array($patient->id, request()->get('filter_patient')) ? 'selected' : '' }} @endif value="{{ $patient->id }}">
-                                {{ $patient->fullname('f-m-l') }}
-                            </option>
+                                <option @if(request()->get('filter_patient')) {{ in_array($patient->id, request()->get('filter_patient')) ? 'selected' : '' }} @endif value="{{ $patient->id }}">
+                                    {{ $patient->fullname('f-m-l') }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -362,7 +362,7 @@
     <script src="{{ asset('plugins/fullcalendar-timegrid/main.min.js') }}"></script>
     <script src="{{ asset('plugins/fullcalendar-interaction/main.min.js') }}"></script>
     <script src="{{ asset('plugins/fullcalendar-bootstrap/main.min.js') }}"></script>
-    {{-- Initialize Calendat --}}
+    {{-- Initialize Calendar --}}
     <script>
         var Calendar = FullCalendar.Calendar;
         var calendarEl = document.getElementById('appointmentCalendar');

@@ -157,6 +157,19 @@ $(document).on('click', '[data-toggle="modal-ajax"]', function(){
                     countBadge.text(newCount);
                 }
             }
+            if(modalAjaxBtn.hasClass('card-with-badge')){
+                modalAjaxBtn.parents('.card').find('.new-badge').remove();
+                var countBadge = $('ul.nav-sidebar').find('a.active .new-badge-count');
+                var totalCount = countBadge.attr('badge-count');
+                console.log(totalCount);
+                var newCount = totalCount-1;
+                countBadge.attr('badge-count', newCount);
+                if(newCount == 0){
+                    countBadge.remove();
+                }else{
+                    countBadge.text(newCount);
+                }
+            }
             $('.modal-backdrop').remove()
             $('#modalAjax').html(data.modal_content)
             $('.select2').select2({
@@ -185,6 +198,46 @@ $(document).on('click', '[data-toggle="modal-ajax"]', function(){
             $('#loader').hide();
         }
     })
+});
+
+// Card Accordion AJAX
+$(document).on('click', '#accordion[data-toggle="card-accordion-ajax"] [data-toggle="collapse"]', function(){
+    const button = $(this);
+    let href = button.data('href');
+    let target = button.data('target');
+    if(button.attr('aria-expanded') == 'true'){
+        console.log("AJAX CALL");
+        $.ajax({
+            type: 'GET',
+            url: href,
+            data: {},
+            beforeSend: function(){
+                $('#loader').fadeIn();
+            },
+            success: function(response){
+                if(button.hasClass('accordion-with-badge')){
+                    button.find('.new-badge').remove();
+                    let countBadge = $('ul.nav-sidebar').find('a.active .new-badge-count');
+                    let totalCount = countBadge.attr('badge-count');
+                    let newCount = totalCount-1;
+                    countBadge.attr('badge-count', newCount);
+                    if(newCount == 0){
+                        countBadge.remove();
+                    }else{
+                        countBadge.text(newCount);
+                    }
+                }
+                $(target).find('.card-body').html(response.accordion_content);
+                $('#loader').hide();
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                ajax_error(xhr, ajaxOptions, thrownError)
+                // removeLocationHash()
+                $('#loader').hide();
+            }
+        })
+    }
+
 });
 
 $(document).on('click', '[data-dismiss="modal-ajax"]', function() {

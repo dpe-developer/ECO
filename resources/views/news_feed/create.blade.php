@@ -197,21 +197,21 @@
                     }
                 });
             }
-        })
+        });
 
 
 
         myDropzone.on("addedfile", function(file) {
             // Hookup the start button
             file.previewElement.querySelector(".start").onclick = function() {
-                myDropzone.enqueueFile(file)
+                myDropzone.enqueueFile(file);
             }
-        })
+        });
 
         // Update the total progress bar
         myDropzone.on("totaluploadprogress", function(progress) {
             document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
-        })
+        });
 
         myDropzone.on("sending", function(file) {
             // Show the total progress bar when upload starts

@@ -35,10 +35,23 @@
             font-size: 24px;
         }
 
+        .post-card-body {
+            max-height: 30vh;
+            min-height: 30vh;
+        }
+
         .post-container {
-            max-height: 50vh;
-            min-height: 50vh;
-            overflow-y: scroll;
+            max-height: 18vh;
+            min-height: 18vh;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .post-files-container > .row {
+            max-height: 20vh;
+            min-height: 20vh;
+            overflow-y: hidden;
+            /* overflow-y: scroll; */
         }
     </style>
 @endsection
@@ -68,21 +81,32 @@
                         <div class="card-header">
                             <h4 class="card-title">
                                 {{ Carbon::parse($newsFeed->created_at)->format('M-d-Y h:ia') }}
+                                @if(UserNotification::isNotSeen('news_feed', $newsFeed->id))
+                                    <span class="right badge badge-danger new-badge">new</span>
+                                @endif
                             </h4>
                             <div class="card-tools">
                                 @can('news_feeds.destroy')
-                                    <a class="btn btn-tool bg-gradient-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('news_feeds.destroy', $newsFeed->id) }}"><i class="fad fa-trash-alt"></i></a>
+                                    <a class="btn btn-tool bg-gradient-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('news_feeds.destroy', $newsFeed->id) }}"><i class="fa fa-trash-alt"></i></a>
                                 @endcan
                                 @can('news_feeds.edit')
-                                    <a class="btn btn-tool bg-gradient-info" href="{{ route('news_feeds.edit', $newsFeed->id) }}"><i class="fad fa-edit"></i></a>
+                                    <a class="btn btn-tool bg-gradient-info" href="{{ route('news_feeds.edit', $newsFeed->id) }}"><i class="fa fa-edit"></i></a>
                                 @endcan
+                                <a class="btn btn-tool bg-gradient-primary card-with-badge" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('news_feeds.show', $newsFeed->id) }}" data-target="#showNewsFeedModal"><i class="fa fa-eye"></i></a>
                                 {{-- @can('news_feeds.show')
                                     <a class="btn btn-tool bg-gradient-primary" href="{{ route('news_feeds.show', $newsFeed->id) }}"><i class="fad fa-eye"></i></a>
                                 @endcan --}}
                             </div>
                         </div>
-                        <div class="card-body post-container">
-                            {!! $newsFeed->content !!}
+                        <div class="card-body post-card-body">
+                            <div class="post-container mb-3">
+                                {!! $newsFeed->content !!}
+                            </div>
+                            <a class="show-more d-none" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('news_feeds.show', $newsFeed->id) }}" data-target="#showNewsFeedModal">
+                                ... show more
+                            </a>
+                        </div>
+                        <div class="card-footer post-files-container">
                             <div class="row grid">
                                 @foreach ($newsFeed->newsFeedFiles as $newsFeedFile)
                                 <div class="col-sm-4 grid-item">
@@ -130,9 +154,16 @@
                 // columnWidth: 400,
                 // gutter: 20,
             });
-        })
+        });
+
         $('[data-fancybox="gallery"]').fancybox({
             // Fancybox options go here
+        });
+
+        $('.post-container').each(function(){
+            if(this.offsetHeight < this.scrollHeight){
+                $(this).parent().find('.show-more').removeClass('d-none')
+            }
         });
     })
     </script>

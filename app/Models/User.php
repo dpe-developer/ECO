@@ -10,6 +10,8 @@ use Wildside\Userstamps\Userstamps;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\LoginInfos;
 use App\Models\Appointments;
+use App\Models\Announcement;
+use App\Models\NewsFeed;
 use DB;
 use Carbon\Carbon;
 
@@ -268,6 +270,28 @@ class User extends Authenticatable
     {
         $seenAppointments = $this->seenAppointments()->get('entity_id');
         return Appointment::whereNotIn('id', $seenAppointments);
+    }
+
+    public function seenAnnouncements()
+    {
+        return $this->hasMany('App\Models\UserNotification', 'user_id')->where('notification_type', 'announcement');
+    }
+
+    public function newAnnouncements()
+    {
+        $seenAnnouncements = $this->seenAnnouncements()->get('entity_id');
+        return Announcement::whereNotIn('id', $seenAnnouncements);
+    }
+
+    public function seenNewsFeeds()
+    {
+        return $this->hasMany('App\Models\UserNotification', 'user_id')->where('notification_type', 'news_feed');
+    }
+
+    public function newNewsFeeds()
+    {
+        $seenNewsFeeds = $this->seenNewsFeeds()->get('entity_id');
+        return NewsFeed::whereNotIn('id', $seenNewsFeeds);
     }
 
     /**

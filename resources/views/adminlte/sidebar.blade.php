@@ -78,6 +78,9 @@
                         <i class="nav-icon fa fa-bullhorn"></i>
                         <p>
                             Announcements
+                            @if(Auth::user()->newAnnouncements()->count() > 0)
+                                <span class="right badge badge-danger new-badge-count" badge-count="{{ Auth::user()->newAnnouncements()->count() }}">{{ Auth::user()->newAnnouncements()->count() }}</span>
+                            @endif
                         </p>
                     </a>
                 </li>
@@ -88,6 +91,9 @@
                         <i class="nav-icon fa fa-newspaper"></i>
                         <p>
                             News Feed
+                            @if(Auth::user()->newNewsFeeds()->count() > 0)
+                                <span class="right badge badge-danger new-badge-count" badge-count="{{ Auth::user()->newNewsFeeds()->count() }}">{{ Auth::user()->newNewsFeeds()->count() }}</span>
+                            @endif
                         </p>
                     </a>
                 </li>

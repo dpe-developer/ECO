@@ -53,43 +53,48 @@
 					<label>Description:</label>
 					{{ $appointment->description }}
 				</div>
+				<hr>
+				<div class="form-group text-center">
+					{{-- <div class="btn-group"> --}}
+						@if($appointment->status != 'declined')
+							@switch($appointment->status)
+								@case('pending')
+									@can('appointments.confirm')
+										<a class="btn bg-gradient-success" href="{{ route('appointments.confirm', $appointment->id) }}"><i class="fa fa-check"></i> Confirm</a>
+									@endcan
+									@can('appointments.decline')
+										<a class="btn bg-gradient-danger" href="javascript:void(0)" data-toggle="modal" data-target="#declineAppointmentModal"><i class="fa fa-times"></i> Decline</a>
+									@endcan
+									@break
+								@case('confirmed')
+									@can('appointments.accept_patient')
+										{{-- @if(Auth::user()->isDoctor() && !$appointment->hasVisit()) --}}
+										@if(!$appointment->hasVisit() && !$appointment->patient->trashed())
+											{{-- @if(Auth::user()->id == $appointment->doctor_id) --}}
+												<a class="btn bg-gradient-success" href="{{ route('appointments.accept_patient', $appointment->id) }}"><i class="fa fa-check"></i> Accept Patient</a>
+											{{-- @endif --}}
+										@endif
+									@endcan
+									@break
+								@default
+							@endswitch
+							@can('appointments.cancel')
+								@if(!in_array($appointment->status, ['done', 'canceled', 'declined']) && !$appointment->hasVisit())
+									<a class="btn bg-gradient-danger" href="javascript:void(0)" id="cancelAppointment" data-toggle="modal" data-target="#cancelAppointmentModal"><i class="fa fa-times"></i> Cancel</a>
+								@endif
+							@endcan
+						@endif
+					{{-- </div> --}}
+				</div>
 			</div>
 			<div class="modal-footer">
 				@can('appointments.destroy')
-				<a class="btn btn-default text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('appointments.destroy', $appointment->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
+				<a class="btn bg-gradient-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('appointments.destroy', $appointment->id) }}"><i class="fad fa-trash-alt"></i> Delete</a>
 				@endcan
 				@can('appointments.edit')
-					<a class="btn btn-default text-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editAppointmentModal" data-href="{{ route('appointments.edit', $appointment->id) }}"><i class="fad fa-edit"></i> Edit</a>
+					<a class="btn bg-gradient-info" href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editAppointmentModal" data-href="{{ route('appointments.edit', $appointment->id) }}"><i class="fad fa-edit"></i> Edit</a>
 				@endcan
-				@if($appointment->status != 'declined')
-					@switch($appointment->status)
-						@case('pending')
-							@can('appointments.confirm')
-								<a class="btn btn-success" href="{{ route('appointments.confirm', $appointment->id) }}"><i class="fa fa-check"></i> Confirm</a>
-							@endcan
-							@can('appointments.decline')
-								<a class="btn btn-danger" href="javascript:void(0)" data-toggle="modal" data-target="#declineAppointmentModal"><i class="fa fa-times"></i> Decline</a>
-							@endcan
-							@break
-						@case('confirmed')
-							@can('appointments.accept_patient')
-								{{-- @if(Auth::user()->isDoctor() && !$appointment->hasVisit()) --}}
-								@if(!$appointment->hasVisit() && !$appointment->patient->trashed())
-									{{-- @if(Auth::user()->id == $appointment->doctor_id) --}}
-										<a class="btn btn-success" href="{{ route('appointments.accept_patient', $appointment->id) }}"><i class="fa fa-check"></i> Accept Patient</a>
-									{{-- @endif --}}
-								@endif
-							@endcan
-							@break
-						@default
-					@endswitch
-					@can('appointments.cancel')
-						@if(!in_array($appointment->status, ['done', 'canceled', 'declined']) && !$appointment->hasVisit())
-							<a class="btn btn-danger" href="javascript:void(0)" id="cancelAppointment" data-toggle="modal" data-target="#cancelAppointmentModal"><i class="fa fa-times"></i> Cancel Appointment</a>
-						@endif
-					@endcan
-				@endif
-				<button class="btn btn-default" type="button" data-dismiss="modal-ajax">Close</button>
+				<button class="btn bg-gradient-secondary" type="button" data-dismiss="modal-ajax"><i class="fa fa-times"></i>Close</button>
 			</div>
 		</div>
 	</div>

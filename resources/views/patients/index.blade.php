@@ -51,7 +51,7 @@
 									<button class="btn btn-tool bg-gradient-{{ request()->get('filter')==1 ? 'success' : 'info' }}" data-toggle="modal" data-target="#filterPatients"><i class="fa fa-search"></i> Filter Findings</button>
 									<button class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#exportPatientDataModal"><i class="fa fa-download"></i> Export Data</button>
 									@hasrole('System Administrator')
-									<button class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#modalImportRecords"><i class="fa fa-upload"></i> Import</button>
+									{{-- <button class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#modalImportRecords"><i class="fa fa-upload"></i> Import</button> --}}
 									@endhasrole
 									{{-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#filterPatients"><i class="fa fa-search"></i> Search</button> --}}
 									@can('patients.create')

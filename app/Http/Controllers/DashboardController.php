@@ -175,36 +175,37 @@ class DashboardController extends Controller
         $labelColors = [];
         $findingsThisMonthChartData = [];
         $totalFindingsThisMonth = 0;
+        $dateToFilter = 'visit_date';
 
         foreach(Finding::get() as $finding){
-            $patientVisitsThisMonthFromFindings = PatientVisit::whereMonth('visit_date', Carbon::now()->month)->whereYear('visit_date', Carbon::now()->year)
-            ->where('findings', 'LIKE', '%'.$finding->name.'%')->where('findings', '!=', null)->count();
+            $patientVisitsThisMonthFromFindings = PatientVisit::whereMonth($dateToFilter, Carbon::now()->month)->whereYear($dateToFilter, Carbon::now()->year)
+            ->where('findings', 'LIKE', '%'.explode('/', $finding->name)[0].'%')->where('findings', '!=', null)->count();
             $totalFindingsThisMonth = $totalFindingsThisMonth + $patientVisitsThisMonthFromFindings;
         }
         foreach(Finding::get() as $finding){
             $percentage = 0;
-            $patientVisitsThisMonthFromFindings = PatientVisit::whereMonth('visit_date', Carbon::now()->month)->whereYear('visit_date', Carbon::now()->year)
-            ->where('findings', 'LIKE', '%'.$finding->name.'%')->where('findings', '!=', null)->count();
+            $patientVisitsThisMonthFromFindings = PatientVisit::whereMonth($dateToFilter, Carbon::now()->month)->whereYear($dateToFilter, Carbon::now()->year)
+            ->where('findings', 'LIKE', '%'.explode('/', $finding->name)[0].'%')->where('findings', '!=', null)->count();
             if($patientVisitsThisMonthFromFindings){
                 $percentage = number_format(($patientVisitsThisMonthFromFindings / $totalFindingsThisMonth) * 100, 0);
-                if($percentage > 2){
+                // if($percentage > 2){
                     $labels[] = $finding->name . " " . $percentage . "%";
                     $red = mt_rand(0, 255);
                     $green = mt_rand(0, 255);
                     $blue = mt_rand(0, 255);
-                    $redColor = $percentage*10;
-                    $greenColor = 255-($percentage*6);
+                    $redColor = 200;
+                    $greenColor = 255-($percentage*5);
                     $blueColor = 0;
                     $hexColor = sprintf("#%02x%02x%02x", ($redColor >= 255 ? 255 : $redColor), ($greenColor <= 0 ? 0 : $greenColor), ($blueColor >= 255 ? 0 : $blueColor));
                     $labelColors[] = $hexColor;
                     $findingsThisMonthChartData[] = $patientVisitsThisMonthFromFindings;
-                }
+                // }
             }
         }
 
 
         $findingsThisMonthChart->labels($labels);
-        $findingsThisMonthChart->dataset('Findings this Month', 'pie', $findingsThisMonthChartData)->backgroundColor($labelColors)->color('#FFF');
+        $findingsThisMonthChart->dataset('Findings this Month', 'pie', $findingsThisMonthChartData)->backgroundColor($labelColors)->color('black');
 
         $findingsThisMonthChart->options([
             'scales' => [
