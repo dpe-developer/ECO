@@ -122,9 +122,10 @@ class AppointmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $data = [
+            'patientID' => $request->get('patient_id'),
             'patients' => User::where('role_id', 4)->get(),
             'doctors' => User::where('role_id', 3)->get(),
             'services' => Service::get(),
@@ -253,6 +254,9 @@ class AppointmentController extends Controller
 
     public function acceptPatient(Request $request, Appointment $appointment)
     {
+        $appointment->update([
+            'status' => 'done'
+        ]);
         if(PatientVisit::where('appointment_id', $appointment->id)->doesntExist()){
             PatientVisit::create([
                 'appointment_id' => $appointment->id,

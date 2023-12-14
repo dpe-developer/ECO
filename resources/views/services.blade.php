@@ -1,5 +1,18 @@
 @extends('layouts.app')
+@section('style')
+<style>
+    .service-container {
+        max-height: 25vh;
+        min-height: 25vh;
+    }
 
+    .service-description-container {
+        max-height: 10vh;
+        min-height: 10vh;
+        overflow: hidden;
+    }
+</style>
+@endsection
 @section('content')
 <div
     class="p-5 text-center bg-image"
@@ -28,13 +41,44 @@
                     {{-- <div class="card-header">
                         <h5 class="card-title">{{ $announcement->title }}</h5>
                     </div> --}}
-                    <div class="card-body">
+                    <div class="card-body service-container">
                         <h5 class="card-title">{{ $service->name }}</h5>
-                        <p class="card-text">{{ $service->description }}</p>
+                        <p class="card-text service-description-container mb-2">
+                            {{ $service->description }}
+                        </p>
+                        <a class="show-more d-none mt-0" href="#" data-mdb-toggle="modal" data-mdb-target="#modalService-{{ $service->id }}">
+                            ... show more
+                        </a>
+                    </div>
+                </div>
+                <div class="modal fade" id="modalService-{{ $service->id }}" tabindex="-1" aria-labelledby="modalService-{{ $service->id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ $service->name }}</h5>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ $service->description }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         @endforeach
     </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+    $(function(){
+        $('.service-description-container').each(function(){
+            if(this.offsetHeight < this.scrollHeight){
+                $(this).parents('.card-body').find('.show-more').removeClass('d-none')
+            }else{
+                $(this).parents('.card-body').find('.show-more').addClass('d-none')
+            }
+        });
+    })
+</script>
 @endsection

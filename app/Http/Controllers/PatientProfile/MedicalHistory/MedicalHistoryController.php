@@ -7,6 +7,7 @@ use App\Models\PatientProfile\MedicalHistory\MedicalHistory;
 use App\Models\PatientProfile\MedicalHistory\MedicalHistoryReference;
 use App\Models\PatientProfile\MedicalHistory\MedicalHistoryData;
 use App\Models\User;
+use App\Models\PatientVisit;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
@@ -41,6 +42,7 @@ class MedicalHistoryController extends Controller
     public function create(Request $request)
     {
         $data = [
+			'patientVisit' => PatientVisit::find($request->get('visit_id')),
 			'patient' => User::find(request()->get('patient_id')),
 			'doctors' => User::where('role_id', 3)->get(),
 			'medical_history_references' => MedicalHistoryReference::get(),
@@ -133,8 +135,7 @@ class MedicalHistoryController extends Controller
 			}
 		}
 
-		return redirect()->route('patients.show', $request->patient)
-					->with('alert-success', 'Vital Information successfully added');
+		return back()->with('alert-success', 'Vital Information successfully added');
     }
 
     /**
@@ -212,7 +213,7 @@ class MedicalHistoryController extends Controller
 			]);
 		}
 
-		return redirect()->route('patients.show', $medicalHistory->patient_id)->with('alert-sucess', 'Medical History UPDATED');
+		return back()->with('alert-sucess', 'Medical History UPDATED');
     }
 
     /**

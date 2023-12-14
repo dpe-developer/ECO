@@ -7,6 +7,7 @@ use App\Models\PatientProfile\Complaint\Complaint;
 use App\Models\PatientProfile\Complaint\ComplaintReference;
 use App\Models\PatientProfile\Complaint\ComplaintData;
 use App\Models\User;
+use App\Models\PatientVisit;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
@@ -38,9 +39,10 @@ class ComplaintController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $data = [
+			'patientVisit' => PatientVisit::find($request->get('visit_id')),
 			'patient' => User::find(request()->get('patient_id')),
 			'doctors' => User::where('role_id', 3)->get(),
 			'complaint_references' => ComplaintReference::get(),
@@ -132,8 +134,7 @@ class ComplaintController extends Controller
 			}
 		}
 
-		return redirect()->route('patients.show', $request->patient)
-					->with('alert-success', 'Eye Prescription successfully added');
+		return back()->with('alert-success', 'Eye Prescription successfully added');
     }
 
     /**
@@ -211,7 +212,7 @@ class ComplaintController extends Controller
 			]);
 		}
 
-		return redirect()->route('patients.show', $complaint->patient_id)->with('alert-success', trans('terminologies.complaint').' UPDATED');
+		return back()->with('alert-success', trans('terminologies.complaint').' UPDATED');
     }
 
     /**

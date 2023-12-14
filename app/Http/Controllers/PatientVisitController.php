@@ -57,6 +57,12 @@ class PatientVisitController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'patient' => 'required',
+            'doctor' => 'required',
+            'visit_date' => 'required',
+        ]);
+
         PatientVisit::create([
             'appointment_id' => $request->get('appointment_id'),
             'patient_id' => $request->get('patient'),
@@ -66,9 +72,10 @@ class PatientVisitController extends Controller
             'findings' => $request->get('findings'),
             'recommendation' => $request->get('recommendation'),
             'status' => 'active',
-            'visit_date' => Carbon::now(),
-            'session_start' => Carbon::now(),
+            'visit_date' => Carbon::parse($request->get('visit_date')),
+            'session_start' => Carbon::parse($request->get('visit_date')),
         ]);
+
         return redirect()->route('patients.show', $request->get('patient'))->with('alert-success', 'Patient Visit added successfully');
     }
 
@@ -96,7 +103,13 @@ class PatientVisitController extends Controller
      */
     public function edit(PatientVisit $patientVisit)
     {
-        //
+        $data = [
+            'patientVisit' => $patientVisit,
+            'patient' => $patientVisit->patient,
+            'findings' => Finding::get(),
+            'services' => Service::get(),
+        ];
+        return view('patients.patient_profile.patient_visits.edit', $data);
     }
 
     /**
@@ -113,9 +126,8 @@ class PatientVisitController extends Controller
             'complaints' => $request->get('complaints'),
             'findings' => $request->get('findings'),
             'recommendations' => $request->get('recommendations'),
-            'session_start' => Carbon::now(),
         ]);
-        return redirect()->route('patients.show', $patientVisit->patient_id)->with('alert-success', 'Saved');
+        return back()->with('alert-success', 'Saved');
     }
 
     /**
@@ -127,7 +139,7 @@ class PatientVisitController extends Controller
     public function destroy(PatientVisit $patientVisit)
     {
         $patientVisit->delete();
-        return back()->with('alert-warning', 'Patient Visit Successfully DELETED');
+        return redirect()->route('patients.show', $patientVisit->patient_id)->with('alert-warning', 'Patient Visit Successfully DELETED');
     }
 
     public function endVisit(Request $request, PatientVisit $patientVisit)

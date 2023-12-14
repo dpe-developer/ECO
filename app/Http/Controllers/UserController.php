@@ -140,7 +140,7 @@ class UserController extends Controller
 				'file_name' => $file_name,
 				'data' => $base64,
 			]);
-			Storage::disk('upload')->putFileAs($path, $file, $file_name);
+			Storage::disk('public')->putFileAs($path, $file, $file_name);
 			$user->update([
 				'avatar_file_attachment_id' => $attachment->id
 			]);
@@ -301,7 +301,7 @@ class UserController extends Controller
 					'file_name' => $file_name,
 					'data' => $base64,
 				]);
-				Storage::disk('upload')->putFileAs($path, $file, $file_name);
+				Storage::disk('public')->putFileAs($path, $file, $file_name);
 				$user->update([
 					'avatar_file_attachment_id' => $attachment->id
 				]);
@@ -438,7 +438,7 @@ class UserController extends Controller
 							'file_name' => $file_name,
 							'data' => $base64,
 						]);
-						Storage::disk('upload')->putFileAs($path, $file, $file_name);
+						Storage::disk('public')->putFileAs($path, $file, $file_name);
 						$user->update([
 							'avatar_file_attachment_id' => $attachment->id
 						]);

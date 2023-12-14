@@ -44,7 +44,7 @@
                             <div class="form-group">
                                 <label for="doctor">Doctor <strong class="text-danger">*</strong></label>
                                 <select name="doctor" id="doctor" class="form-control" required style="width: 100%">
-                                    <option></option>
+                                    {{-- <option></option> --}}
                                     @foreach ($doctors as $doctor)
                                         <option value="{{ $doctor->id }}">{{ $doctor->fullname('f-m-l') }}</option>
                                     @endforeach

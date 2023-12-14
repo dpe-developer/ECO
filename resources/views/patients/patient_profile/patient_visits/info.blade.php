@@ -45,7 +45,7 @@
                                     <textarea name="final_diagnosis" id="finalDiagnosis" rows="3" class="form-control"></textarea>
                                 </div> --}}
 								<div class="form-group col-md-4">
-                                    <b>Session End at:</b><br>
+                                    <b>Session End:</b><br>
                                     {{ Carbon::parse($patientVisit->session_end)->format('M d,Y h:ia') }}
                                 </div>
                                 <div class="form-group col-md-4">
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <b>Recommendation:</b><br>
-                                    {{ $patientVisit->recommendation }}
+                                    {{ $patientVisit->recommendations }}
                                 </div>
                             </div>
                         </div>
@@ -142,8 +142,14 @@
 					</div>
 				</div>
 			</div>
-			<div class="card-footer">
-				<a class="btn bg-gradient-secondary float-right" href="{{ route('patients.show', $patient->id) }}">Close</a>
+			<div class="card-footer text-right">
+				@can('medical_histories.destroy')
+				<a class="btn bg-gradient-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('patient_visits.destroy', $patientVisit->id) }}"><i class="fa fa-trash"></i> Delete</a>
+				@endcan
+				@can('medical_histories.edit')
+				<a class="btn bg-gradient-info" href="{{ route('patient_visits.edit', $patientVisit->id) }}"><i class="fa fa-edit"></i> Edit</a>
+				@endcan
+				<a class="btn bg-gradient-secondary" href="{{ route('patients.show', $patient->id) }}"><i class="fa fa-times"></i> Close</a>
 			</div>
 		</div>
 	</div>

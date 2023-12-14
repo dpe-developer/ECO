@@ -19,7 +19,7 @@ class NewsFeedController extends Controller
     public function index()
     {
         $data = [
-            'newsFeeds' => NewsFeed::get(),
+            'newsFeeds' => NewsFeed::orderBy('created_at', 'DESC')->get(),
         ];
         return view('news_feed.index', $data);
     }
@@ -142,7 +142,7 @@ class NewsFeedController extends Controller
                 }
             }
         }
-        NewsFeedFile::whereNotIn('id', $finalFiles)->delete();
+        NewsFeedFile::where('news_feed_id', $newsFeed->id)->whereNotIn('id', $finalFiles)->delete();
 
         return redirect()->route('news_feeds.index')->with('alert-success', 'Post UPDATED');
     }

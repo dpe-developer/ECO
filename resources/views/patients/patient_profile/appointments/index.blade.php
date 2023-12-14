@@ -4,7 +4,7 @@
     </div>
     <div class="col text-right">
         @can('appointments.create')
-			<button class="btn btn-default text-primary btn-sm" type="button" data-toggle="modal-ajax" data-href="{{ route('appointments.create') }}" data-target="#addAppointment" data-form="patient_id: {{ $patient->id }}">@fa('fa fa-plus fa-lg') Add</button>
+			<button class="btn bg-gradient-primary" type="button" data-toggle="modal-ajax" data-href="{{ route('appointments.create') }}" data-target="#createAppointmentModal" data-form="patient_id: {{ $patient->id }}">@fa('fa fa-plus fa-lg') Add Appointment</button>
 	    @endcan
     </div>
 </div>

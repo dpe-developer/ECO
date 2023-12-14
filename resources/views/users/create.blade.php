@@ -18,7 +18,7 @@
 								<label>Avatar:</label>
 								<div class="row justify-content-center">
 									<div class="col-md-6">
-										<img id="img" width="100%" class="img-thumbnail" src="{{ asset('images/avatar.png') }}" />
+										<img id="img" width="100%" class="img-thumbnail" src="{{ asset('storage/images/avatar.png') }}" />
 										<label class="btn btn-primary btn-block">
 											Browse&hellip;<input value="" type="file" name="avatar" style="display: none;" id="upload" accept="image/*" />
 										</label>

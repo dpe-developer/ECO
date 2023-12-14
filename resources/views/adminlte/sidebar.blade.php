@@ -5,7 +5,7 @@
     ">
     <!-- Brand Logo -->
     <a href="/" class="brand-link {{ Setting::ui('adminlte_brand_logo_variant') }}">
-        <img src="{{ asset(Setting::company('company_logo')) }}" alt="AdminLTE Logo" class="brand-image {{-- img-circle elevation-3 --}}" style="opacity: .8">
+        <img src="{{ asset('storage/'.Setting::company('company_logo')) }}" alt="AdminLTE Logo" class="brand-image {{-- img-circle elevation-3 --}}" style="opacity: .8">
         <span class="brand-text font-weight-light">{{ config('app.client_name', "Laravel AdminLTE") }}</span>
     </a>
     <!-- Sidebar -->
@@ -13,7 +13,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset(Auth::user()->getAvatar()) }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ asset('storage/'.Auth::user()->getAvatar()) }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a href="{{ route('users.profile', Auth::user()->username) }}" class="d-block">{{ Auth::user()->first_name }}</a>

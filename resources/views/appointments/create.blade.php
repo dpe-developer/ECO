@@ -18,7 +18,7 @@
                                 <select class="form-control select2" name="patient" id="patiient" required>
                                     <option></option>
                                     @foreach ($patients as $patient)
-                                        <option value="{{ $patient->id }}">{{ $patient->fullname() }}</option>
+                                        <option @if($patientID == $patient->id) selected @endif value="{{ $patient->id }}">{{ $patient->fullname() }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -53,7 +53,6 @@
                             <div class="form-group">
                                 <label for="doctor">Doctor <strong class="text-danger">*</strong></label>
                                 <select name="doctor" id="doctor" class="form-control select2" required style="width: 100%">
-                                    <option></option>
                                     @foreach ($doctors as $doctor)
                                         <option value="{{ $doctor->id }}">{{ $doctor->fullname('f-m-l') }}</option>
                                     @endforeach

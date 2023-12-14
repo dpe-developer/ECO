@@ -9,7 +9,7 @@
 	<div class="col text-right">
 		@if(isset($patient->activeVisit()->id))
 			@can('medical_histories.create')
-			<button class="btn btn-default text-primary btn-sm" type="button" data-toggle="modal-ajax" data-href="{{ route('medical_histories.create') }}" data-target="#addMedicalHistory" data-form="patient_id: {{ $patient->id }}"><i class="fa fa-plus"></i> Add</button>
+			<button class="btn bg-gradient-primary" type="button" data-toggle="modal-ajax" data-href="{{ route('medical_histories.create') }}" data-target="#addMedicalHistory" data-form="patient_id: {{ $patient->id }}"><i class="fa fa-plus"></i> Add</button>
 			@endcan
     	@endif
 	</div>

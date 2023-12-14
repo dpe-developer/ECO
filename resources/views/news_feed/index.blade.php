@@ -41,15 +41,15 @@
         }
 
         .post-container {
-            max-height: 18vh;
-            min-height: 18vh;
+            max-height: 16vh;
+            min-height: 16vh;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .post-files-container > .row {
-            max-height: 20vh;
-            min-height: 20vh;
+            max-height: 18vh;
+            min-height: 18vh;
             overflow-y: hidden;
             /* overflow-y: scroll; */
         }
@@ -163,6 +163,8 @@
         $('.post-container').each(function(){
             if(this.offsetHeight < this.scrollHeight){
                 $(this).parent().find('.show-more').removeClass('d-none')
+            }else{
+                $(this).parent().find('.show-more').addClass('d-none')
             }
         });
     })

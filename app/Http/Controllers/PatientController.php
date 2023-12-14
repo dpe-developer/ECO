@@ -45,10 +45,16 @@ class PatientController extends Controller
 			->addColumn('patientID', function($row){
 				return $row->patient_id;
 			})
+			->addColumn('fullName', function($row){
+				return $row->fullname();
+			})
 			->addColumn('age', function($row){
 				return $row->age();
 			})
-			->rawColumns(['patientID'])
+            ->addColumn('patientSex', function($row){
+				return ucfirst($row->sex[0]);
+			})
+			->rawColumns(['patientID', 'fullName', 'patientSex'])
 			->addIndexColumn()
 			->make(true);
 		}else{
@@ -130,7 +136,7 @@ class PatientController extends Controller
         ]);
         $patient->assignRole(4);
 
-        return back()->with('alert-success', 'Patient successfully registered');
+        return redirect()->route('patients.show', $patient->id)->with('alert-success', 'Patient successfully registered');
     }
 
     public function show($userID)
@@ -142,7 +148,7 @@ class PatientController extends Controller
         $data = [
             'patient' => $user->where('id', $userID)->first(),
             'services' => Service::get(),
-            'findings' => Finding::get(),
+            'findings' => Finding::orderBy('name', 'ASC')->get(),
         ];
         return view('patients.show', $data);
     }
@@ -254,8 +260,8 @@ class PatientController extends Controller
                 break;
             case 'range':
                 if(PatientVisit::get()->count() > 0){
-                    $dateFrom = Carbon::parse(is_null($request->get('filter_date_from')) ? PatientVisit::orderBy($filterFromDate, 'DESC')->first()->value($filterFromDate) : $request->get('filter_date_from'));
-                    $dateTo = Carbon::parse(is_null($request->get('filter_date_to')) ? PatientVisit::orderBy($filterFromDate, 'DESC')->latest()->value($filterFromDate) : $request->get('filter_date_to'));
+                    $dateFrom = Carbon::parse($request->get('filter_date_from')) ? PatientVisit::orderBy($filterFromDate, 'DESC')->first()->value($filterFromDate) : $request->get('filter_date_from');
+                    $dateTo = Carbon::parse($request->get('filter_date_to')) ? PatientVisit::orderBy($filterFromDate, 'DESC')->latest()->value($filterFromDate) : $request->get('filter_date_to');
                     $patientVisits->whereBetween($filterFromDate, [$dateFrom, $dateTo]);
                 }
                 break;

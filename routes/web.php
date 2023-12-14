@@ -68,7 +68,15 @@ Route::group(['middleware' => ['role:Patient']], function () {
 });
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+/**
+ * Filter Dashboard Chart
+ */
+Route::get('/dashboard/filter-findings-chart', 'DashboardController@filterFindingsChartAjax')->name('dashboard.filter_findings_chart');
+Route::get('/dashboard/filter-findings-by-patient-age-chart', 'DashboardController@filterFindingsByPatientAgeAjax')->name('dashboard.filter_findings_by_patient_age_chart');
+Route::get('/dashboard/filter-appointments-chart', 'DashboardController@filterAppointmentsAjax')->name('dashboard.filter_appointments_chart');
+
 Route::group(array('middleware'=>['auth', 'role:System Administrator|Administrator|Doctor']), function() {
+
 
 	/**
 	 * File Attachments
@@ -80,12 +88,17 @@ Route::group(array('middleware'=>['auth', 'role:System Administrator|Administrat
 	]);
 
 	/**
+	 * Findings
+	 */
+	Route::resource('findings', 'FindingController');
+
+	/**
 	 * Announcements
 	 */
 	Route::resource('announcements', 'AnnouncementController');
 
 	/**
-	 * Announcements
+	 * Newsfeed
 	 */
 	Route::resource('news_feeds', 'NewsFeedController')->parameters([
 		'news_feeds' => 'newsFeed'

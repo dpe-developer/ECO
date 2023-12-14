@@ -160,7 +160,7 @@
                                             <th>Status</th>
                                             <th>Patient ID</th>
                                             <th>Patient Name</th>
-                                            <th>Doctor</th>
+                                            {{-- <th>Doctor</th> --}}
                                             <th>Description</th>
                                             <th>Date Added</th>
                                         </tr>
@@ -191,9 +191,9 @@
                                             <td>
                                                 {!! $appointment->patient->fullname() !!}
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 {!! $appointment->doctor->fullname() !!}
-                                            </td>
+                                            </td> --}}
                                             <td>{{ $appointment->description }}</td>
                                             <td data-order="{{ Carbon::parse($appointment->created_at) }}">
                                                 {{ Carbon::parse($appointment->created_at)->format('M d, Y h:ia') }}

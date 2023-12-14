@@ -21,7 +21,7 @@
 									<i>File must be <b>jpeg, png, or jpg</b>. Required image dimention is <b>square.</b></i>
 									<div class="row justify-content-center">
 										<div class="col-md-8">
-											<img id="img" width="100%" class="img-thumbnail" src="@isset($user->avatar->id) {{ asset($user->avatar->file_path.'/'.$user->avatar->file_name) }} @else {{ asset('images/avatar.png') }} @endisset" />
+											<img id="img" width="100%" class="img-thumbnail" src="@isset($user->avatar->id) {{ asset('storage/'.$user->getAvatar()) }} @else {{ asset('images/avatar.png') }} @endisset" />
 											<label class="btn btn-primary btn-block">
 												Browse&hellip;<input value="" type="file" name="avatar" style="display: none;" id="upload" accept="image/*" />
 											</label>

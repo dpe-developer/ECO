@@ -1,252 +1,181 @@
-<form action="{{ route('patient_visits.update', $patientVisit_edit->id) }}" method="POST" autocomplete="off">
-@csrf
-@method('PUT')
-	<div class="modal fade" id="editPatientVisit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg{{-- modal-dialog-scrollable --}}">
-			<div class="modal-content">
-				<div class="modal-header">
-		          <h4 class="modal-title">Edit Visit</h4>
-		          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		    	</div>
-				<div class="modal-body text-left">
-					<input type="text" name="patient" hidden value="{{ $patient->id }}">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Visit Type:</label>
-								<select class="form-control select2" name="visit_type" id="visitType" style="width: 100%">
-									<option></option>
-									<option @if($patientVisit_edit->visit_type == 'admission'){{'selected'}}@endif value="admission">Admission</option>
-									<option @if($patientVisit_edit->visit_type == 'clinic'){{'selected'}}@endif value="clinic">Clinic</option>
-									<option @if($patientVisit_edit->visit_type == 'follow-up'){{'selected'}}@endif value="follow-up">Follow-up</option>
-									<option @if($patientVisit_edit->visit_type == 'pathology'){{'selected'}}@endif value="pathology">Pathology</option>
-									<option @if($patientVisit_edit->visit_type == 'radiology'){{'selected'}}@endif value="radiology">Radiology</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label>Admitting Doctor:</label>
-								<select class="form-control select2" name="admitting_doctor" style="width: 100%">
-									<option></option>
-									@foreach ($doctors as $doctor)
-										<option @if($patientVisit_edit->doctor_id == $doctor->id){{'selected'}}@endif value="{{ $doctor->id }}">
-											{{ $doctor->employeeName() }}
-										</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="form-group">
-								<label>Reason for Visit:</label>
-								<textarea class="form-control" name="reason_for_visit">{{ $patientVisit_edit->reason_for_visit }}</textarea>
-							</div>
-						</div>
-						<div class="col-sm-6">
-				            <div class="form-group">
-				            	<label>Admission/Visit Date:</label>
-				                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-				                    <input type="text" name="admission_date" data-target="#datetimepicker1" data-toggle="datetimepicker" value="{{ date('m/d/Y h:i A', strtotime($patientVisit_edit->admission_date)) }}" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-				                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-				                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-				                    </div>
-				                </div>
-				            </div>
-				            <div id="bedOptions" style="display: none">
-					            <div class="form-group">
-					            	<label>Bed Group:</label><strong class="text-danger text-lg"> *</strong>
-					            	<select class="form-control bed-group-select2" name="bed_group" id="bedGroup" style="width: 100%">
-					            		<option></option>
-					            	</select>
-					            </div>
-					            <div class="form-group">
-					            	<label>Bed:</label><strong class="text-danger text-lg"> *</strong>
-					            	<select class="form-control bed-select2" name="bed" id="bed" style="width: 100%">
-					            		<option></option>
-					            	</select>
-					            </div>
-					            <div class="form-group">
-					            	<label>Bed Charge:</label>
-					            	<input class="form-control" type="text" id="bedCharge" readonly="">
-					            </div>
-					        </div>
-				        </div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-toggle="modal" data-target="#closeEditPatientVisit"><i class="fa fa-times"></i> Cancel</button>
-					<button class="btn btn-default text-success" type="submit"><i class="fad fa-save"></i> Save</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="modal fade" id="closeEditPatientVisit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-md modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header text-center">
-		          <h3 class="modal-title">You have unsaved changes.</h3>
-		    	</div>
-				<div class="modal-body">
-					<p>Are you sure you want to leave this screen and discard your changes?</p>
-				</div>
-				<div class="modal-footer">
-					<div class="col text-left">
-						<button class="btn btn-default" type="button" data-dismiss="modal" aria-label="Close">Cancel</button>
-					</div>
-					<div class="col text-right">
-						<button type="button" class="btn btn-default" data-dismiss="modal-ajax"><i class="fa fa-times"></i> Cancel</button>
-						<button class="btn btn-default text-success" type="submit"><i class="fad fa-save"></i> Save</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</form>
-<script type="application/javascript">
-	$(function () {
+@extends('adminlte.app')
 
-	    $('.bed-group-select2').select2({
-            placeholder: 'Select',
-            ajax: {
-                url: '{{ url('bed_group_select2') }}',
-                dataType: 'json',
-                // delay: 250,
-                data: function(params) {
-                    var query = {
-                        search: params.term,
-                        floor_id: $('#bedFloorSelect').val()
-                    }
-                    return query;
-                },
-                processResults: function (data) {
-                    return {
-                        // results: data.name
-                        results:  $.map(data, function (item) {
-                            return {
-                                text: item.name,
-                                id: item.id
-                            }
-                        })
-                    };
-                },
-            }
-        });
+@section('style')
+<link rel="stylesheet" href="{{ asset('AdminLTE-3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+@endsection
+@section('content')
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <h1 class="m-0 text-dark">Patient Profile</h1>
+                </div>
+                <div class="col-md-6 text-right">
 
-        $('.bed-select2').select2({
-            placeholder: 'Select',
-            ajax: {
-                url: '{{ url('bed_select2') }}',
-                dataType: 'json',
-                // delay: 250,
-                data: function(params) {
-                    var query = {
-                        search: params.term,
-                        bed_group_id: $('.bed-group-select2').val()
-                    }
-                    return query;
-                },
-                processResults: function (data) {
-                    return {
-                        // results: data.name
-                        results:  $.map(data, function (item) {
-                            return {
-                                text: item.name,
-                                id: item.id
-                            }
-                        })
-                    };
-                },
-            }
-        });
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        {{-- Patient Info --}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-outline card-primary collapsed-card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <strong>{{ $patientVisit->patient->username }}</strong> -
+                            {{ $patientVisit->patient->fullname('f-m-l') }}
+                        </h2>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body" id="profile">
+                        <div class="row patient-info">
+                            <div class="col-md-2">
+                                <div class="form-group mb-0">
+                                    <img class="img-thumbnail patient-avatar" src="{{ isset($patientVisit->patient->profile_image->data) ? $patientVisit->patient->profile_image->data : asset('images/avatar.png') }}" width="100%" />
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group mb-0">
+                                    <label>Patient ID:</label>
+                                    {{ $patientVisit->patient->username }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>First Name:</label>
+                                    {{ $patientVisit->patient->first_name }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Last Name:</label>
+                                    {{ $patientVisit->patient->last_name }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Sex:</label>
+                                    {{ $patientVisit->patient->sex }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Age:</label>
+                                    {{ $patientVisit->patient->age() }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Date of Birth:</label> 
+                                    {{ Carbon::parse($patientVisit->patient->birthdate)->format('M d,Y') }}
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group mb-0 form-group mb-0-clean">
+                                    <label>Address:</label>
+                                    {{ $patientVisit->patient->address }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Contact #:</label>
+                                    {{ $patientVisit->patient->contact_number }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Email:</label>
+                                    {{ $patientVisit->patient->email }}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label>Occupation:</label>
+                                    {{ $patientVisit->patient->occupation }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        $('.bed-select2').on('change', function(){
-        	$.ajax({
-	            type: 'GET',
-	            url: '{{ url('bed_get_charge_amount') }}',
-	            data: {
-	            	bed_id : $(this).val()
-	            },
-	            success: function(data){
-	                $('#bedCharge').val(data.bed_charge);
-	            },
-	            error: function(xhr, ajaxOptions, thrownError){
-	                ajax_error(xhr, ajaxOptions, thrownError)
-	            }
-	        })
-        })
+		{{-- Visit Informations --}}
+        @include('patients.patient_profile.patient_visits.edit_info')
 
-	  	$('#datetimepicker1').datetimepicker({
-    		// date: new Date(),
-	  		debug: true,
-			icons: {
-				time: 'far fa-clock',
-				date: 'far fa-calendar-alt',
-				up: 'fas fa-arrow-up',
-				down: 'fas fa-arrow-down',
-				previous: 'fas fa-chevron-left',
-				next: 'fas fa-chevron-right',
-				today: 'far fa-calendar-check',
-				clear: 'far fa-trash-alt',
-				close: 'fas fa-times'
-			},
-			buttons: {
-				showToday: true,
-				showClose: true,
-				showClear: true
-			}
-	  	});
-
-	  	$('#visitType').on('change', function(){
-	  		var visitType = $(this).val();
-	  		if(visitType == 'admission'){
-	  			$('#bedOptions').show();
-	  			// get_bed();
-	  		}else{
-           	    $('#bedOptions').hide();
-           	    // $('#bedGroup').val('').trigger('change');
-           	    // $('#bed').val('').trigger('change');
-	  		}
-	  	});
-
-	  	/*$('#bedGroup').on('change', function(){
-	  		$.ajax({
-           	    type:'POST',
-           	    url:'{{ route('beds.filter_beds') }}',
-           	    data: {
-           	    	bed_group_id: $(this).val(),
-           	    },
-           	    success:function(data){
-           	        $('#bed').html(data.html);
-           	    },
-           	    error:function (data){
-           	        Swal.fire({
-           	            // position: 'top-end',
-           	            type: 'error',
-           	            title: 'error',
-           	            showConfirmButton: false,
-           	            timer: 2000,
-           	            toast: true
-           	        });
-           	    }
-           	});
-	  	});
-
-	  	function get_bed(){
-	  		$.ajax({
-           	    type:'GET',
-           	    url:'{{ route('beds.get_options') }}',
-           	    success:function(data){
-           	    	$('#bedOptions').show();
-           	        $('#bedGroup').html(data.html);
-           	    },
-           	    error:function (data){
-           	        Swal.fire({
-           	            // position: 'top-end',
-           	            type: 'error',
-           	            title: 'error',
-           	            showConfirmButton: false,
-           	            timer: 2000,
-           	            toast: true
-           	        });
-           	    }
-           	});
-	  	}*/
-	});
-</script>
+        {{-- Medical Records --}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary card-outline card-outline-tabs">
+                    <div class="card-header p-0 border-bottom-0">
+                        <ul class="nav nav-tabs {{-- patient-profile-tab --}}" id="patient-profile-tab" role="tablist">
+                            @can('patient_visits.index')
+                            <li class="nav-item">
+                                <a class="nav-link active" id="visits-tab" data-toggle="tab" href="#nav-visits" role="tab" aria-controls="nav-visits" aria-selected="true">Visits</a>
+                            </li>
+                            @endcan
+                            @can('appointments.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="appointments-tab" data-toggle="tab" href="#nav-appointments" role="tab" aria-controls="nav-appointments" aria-selected="false">Appointments</a>
+                            </li>
+                            @endcan
+                            @can('medical_histories.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="medical-histories-tab" data-toggle="tab" href="#nav-medical-histories" role="tab" aria-controls="nav-medical-histories" aria-selected="false">Medical Histories</a>
+                            </li>
+                            @endcan
+                            @can('complaints.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="complaints-tab" data-toggle="tab" href="#nav-complaints" role="tab" aria-controls="nav-complaints" aria-selected="false">{{ trans('terminologies.complaints') }}</a>
+                            </li>
+                            @endcan
+                            @can('eye_prescriptions.index')
+                            <li class="nav-item">
+                                <a class="nav-link" id="eye-prescriptions-tab" data-toggle="tab" href="#nav-eye-prescriptions" role="tab" aria-controls="nav-eye-prescriptions" aria-selected="false">{{ trans('terminologies.eye_prescriptions') }}</a>
+                            </li>
+                            @endcan
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="nav-tabContent">
+                            @can('patient_visits.index')
+                            <div class="tab-pane fade show active" id="nav-visits" role="tabpanel" aria-labelledby="visits-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.patient_visits.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('appointments.index')
+                            <div class="tab-pane fade" id="nav-appointments" role="tabpanel" aria-labelledby="appointments-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.appointments.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('medical_histories.index')
+                            <div class="tab-pane fade" id="nav-medical-histories" role="tabpanel" aria-labelledby="medical-histories-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.medical_histories.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('complaints.index')
+                            <div class="tab-pane fade" id="nav-complaints" role="tabpanel" aria-labelledby="complaints-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.complaints.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                            @can('eye_prescriptions.index')
+                            <div class="tab-pane fade" id="nav-eye-prescriptions" role="tabpanel" aria-labelledby="eye-prescriptions-tab">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @include('patients.patient_profile.eye_prescriptions.index')
+                                    </div>
+                                </div>
+                            </div>
+                            @endcan
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

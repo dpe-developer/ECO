@@ -1,6 +1,6 @@
 @if(!$patient->hasActiveVisit())
 @can('patient_visits.create')
-<button class="btn btn-default btn-sm text-primary float-right" type="button" data-toggle="modal-ajax" data-target="#addVisit" data-href="{{ route('patient_visits.create') }}" data-form="patient_id:{{ $patient->id }}"><i class="fa fa-plus"></i> Add</button>
+<button class="btn btn-default bg-gradient-primary float-right" type="button" data-toggle="modal-ajax" data-target="#addVisit" data-href="{{ route('patient_visits.create') }}" data-form="patient_id:{{ $patient->id }}"><i class="fa fa-plus"></i> Add</button>
 @endcan
 @endif
 <div class="table-responsive scrollbar-primary" style="height: 250px">
@@ -8,6 +8,7 @@
 		<thead>
 			<tr>
 				<th>Session Date</th>
+				<th>Age</th>
 				<th>Type</th>
 				<th>Status</th>
 				<th>Doctor</th>
@@ -21,6 +22,9 @@
 			@forelse ($patient->visits()->orderBy('visit_date', 'DESC')->get() as $visit)
 			<tr @can('patient_visits.show') @if($visit->status == 'done') data-toggle="tr-link" data-href="{{ route('patient_visits.show', $visit->id) }}" @endif @endcan>
 				<td>{{ Carbon::parse($visit->visit_date)->format('M d,Y h:ia') }} </td>
+				<td>
+					{{ $visit->patient->age($visit->visit_date) }}
+				</td>
 				<td>
 					@if($visit->appointment_id == null)
 					Walk-in

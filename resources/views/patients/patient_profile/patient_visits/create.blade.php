@@ -10,18 +10,28 @@
 				<div class="modal-body text-left">
 					<input type="text" name="patient" hidden value="{{ $patient->id }}">
 					<div class="form-group">
+						<label>Visit Date:</label>
+						<div class="input-group input-group-compact datetimepicker" id="visitDate" data-target-input="nearest">
+							<div class="input-group-prepend" data-target="#visitDate" data-toggle="datetimepicker">
+								<span class="input-group-text">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+							<input type="text" class="form-control datetimepicker-input" data-target="#visitDate" data-toggle="datetimepicker" name="visit_date" value="{{ Carbon::now()->format('m/d/Y h:i A') }}" required>
+						</div>
+					</div>
+					<div class="form-group">
 						<label>Service:</label>
 						<select class="form-control select2" name="service" style="width: 100%">
 							<option></option>
 							@foreach($services as $service)
-							<option value="{{ $service->id }}">{{ $service->name }}</option>
+								<option value="{{ $service->id }}">{{ $service->name }}</option>
 							@endforeach
 						</select>
 					</div>
 					<div class="form-group">
 						<label>Doctor:</label><strong class="text-danger text-lg"> *</strong>
 						<select class="form-control select2" name="doctor" style="width: 100%" required>
-							<option></option>
 							@foreach ($doctors as $doctor)
 								<option value="{{ $doctor->id }}">
 									{{ $doctor->fullname('f-m-l') }}

@@ -7,6 +7,7 @@ use App\Models\PatientProfile\EyePrescription\EyePrescription;
 use App\Models\PatientProfile\EyePrescription\EyePrescriptionReference;
 use App\Models\PatientProfile\EyePrescription\EyePrescriptionData;
 use App\Models\User;
+use App\Models\PatientVisit;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
@@ -38,9 +39,10 @@ class EyePrescriptionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $data = [
+			'patientVisit' => PatientVisit::find($request->get('visit_id')),
 			'patient' => User::find(request()->get('patient_id')),
 			'doctors' => User::where('role_id', 3)->get(),
 			'eye_prescription_references' => EyePrescriptionReference::get(),
@@ -132,8 +134,7 @@ class EyePrescriptionController extends Controller
 			}
 		}
 
-		return redirect()->route('patients.show', $request->patient)
-					->with('alert-success', trans('terminologies.eye_prescription').' successfully ADDED');
+		return back()->with('alert-success', trans('terminologies.eye_prescription').' successfully ADDED');
     }
 
     /**
@@ -211,7 +212,7 @@ class EyePrescriptionController extends Controller
 			]);
 		}
 
-		return redirect()->route('patients.show', $eyePrescription->patient_id)->with('alert-success', trans('terminologies.eye_prescription').' UPDATED');
+		return back()->with('alert-success', trans('terminologies.eye_prescription').' UPDATED');
     }
 
     /**

@@ -93,8 +93,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" type="button" data-dismiss="modal">Cancel</button>
-					<button type="submit" class="btn btn-default text-success btn-submit"><i class="fad fa-save"></i> Save</button>
+                    <button class="btn bg-gradient-secondary" type="button" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+					<button type="submit" class="btn bg-gradient-success btn-submit"><i class="fa fa-save"></i> Save</button>
                 </div>
             </div>
         </div>

@@ -24,7 +24,9 @@ class FindingController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'modal_content' => view('findings.create')->render()
+        ]);
     }
 
     /**
@@ -35,7 +37,14 @@ class FindingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'finding_name' => 'required'
+        ]);
+        Finding::create([
+            'name' => $request->get('finding_name'),
+            'description' => $request->get('finding_description'),
+        ]);
+        return back()->with('alert-success', 'Finding successfully ADDED');
     }
 
     /**

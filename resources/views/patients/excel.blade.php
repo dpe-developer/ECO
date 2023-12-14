@@ -12,21 +12,25 @@
     <div class="container-fluid">
         <table class="table table-bordered table-sm">
             <tr>
-                <th rowspan="2">Date</th>
-                <th rowspan="2">Age</th>
-                <th rowspan="2">Sex</th>
+                <th>Date</th>
+                <th>Age</th>
+                <th>Sex</th>
                 @if($patientVisits->first()->eyePrescriptions->count() > 0)
                     @foreach ($patientVisits->first()->eyePrescriptions->first()->result as $result)
                         @if($result->parent_id == null)
-                        <th class="text-center" colspan="{{ $result->children->count() }}">
-                            {{ $result->name }}
-                        </th>
+                            @foreach ($result->children as $children)
+                            <th {{-- class="text-center" colspan="{{ $result->children->count() }}" --}}>
+                                {{ $result->name }}
+                                -
+                                {{ $children->name }}
+                            </th>
+                            @endforeach
                         @endif
                     @endforeach
                 @endif
-                <th rowspan="2">Findings</th>
+                <th>Findings</th>
             </tr>
-            <tr>
+            {{-- <tr>
                 @if($patientVisits->first()->eyePrescriptions->count() > 0)
                     @foreach ($eyePrescriptions->first()->result as $result)
                         @if($result->parent_id != null)
@@ -36,7 +40,7 @@
                         @endif
                     @endforeach
                 @endif
-            </tr>
+            </tr> --}}
             @foreach ($patientVisits as $patientVisit)
                 @foreach ($patientVisit->eyePrescriptions as $eyePrescription)
                     <tr>

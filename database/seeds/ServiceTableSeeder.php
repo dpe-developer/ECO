@@ -16,27 +16,27 @@ class ServiceTableSeeder extends Seeder
             [
                 'name' => 'Preventive and Rehabilitative Optometry',
                 'amount' => '0.00',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                'description' => 'two aspects of eye care that focus on maintaining and improving the visual health of individuals. These areas of optometry involve different approaches and techniques to address various eye conditions.'
             ],
             [
                 'name' => 'Sports Vision Optometry',
                 'amount' => '0.00',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                'description' => 'also known as sports vision training or sports vision therapy, is a specialized field within optometry that focuses on enhancing the visual abilities and performance of athletes. The goal is to optimize visual skills that are crucial for success in various sports.'
             ],
             [
                 'name' => 'Low Vision Optometry',
                 'amount' => '0.00',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                'description' => ' specialized field within optometry that focuses on the assessment, management, and rehabilitation of individuals with low vision. Low vision refers to a significant visual impairment that cannot be fully corrected by conventional eyeglasses, contact lenses, medication, or surgery. People with low vision often experience difficulties with daily activities, such as reading, writing, driving, and recognizing faces.'
             ],
             [
                 'name' => 'Vision Therapy',
                 'amount' => '0.00',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                'description' => "also known as visual therapy or vision training, is a specialized program of eye exercises and activities designed to improve and enhance a person's visual skills and abilities. It is often prescribed by optometrists to address various vision problems that cannot be corrected with glasses, contact lenses, or surgery alone. Vision therapy is particularly beneficial for conditions related to eye coordination, binocular vision, and certain visual perceptual skills."
             ],
             [
                 'name' => 'Color Vision Phototherapy',
                 'amount' => '0.00',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                'description' => "also known as visual therapy or vision training, is a specialized program of eye exercises and activities designed to improve and enhance a person's visual skills and abilities. It is often prescribed by optometrists to address various vision problems that cannot be corrected with glasses, contact lenses, or surgery alone. Vision therapy is particularly beneficial for conditions related to eye coordination, binocular vision, and certain visual perceptual skills."
             ]
         ]);
     }   

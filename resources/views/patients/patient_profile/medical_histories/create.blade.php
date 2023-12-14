@@ -8,8 +8,8 @@
 		        	<button type="button" class="close" data-dismiss="modal-ajax" aria-hidden="true">&times;</button>
 		    	</div>
 				<div class="modal-body text-left scrollbar-primary">
-					<input type="test" hidden name="patient" value="{{ $patient->id }}">
-					<input type="test" hidden name="visit" value="@isset($patientVisitID){{ $patientVisitID }}@endisset">
+					<input type="hidden" name="patient" value="{{ $patient->id }}">
+					<input type="hidden" name="visit" value="{{ $patientVisit->id }}">
 					{{-- <div class="row patient-profile-form grid"> --}}
 						@foreach ($medical_history_references as $reference)
 							@if ($reference->type == 'parent')
@@ -161,7 +161,7 @@
 									<select class="form-control select2{{ $errors->has('doctor') ? ' is-invalid' : '' }}" name="doctor" style="width: 100%">
 										<option></option>
 										@foreach ($doctors as $doctor)
-											<option @isset($patient->activeVisit()->doctor_id) @if($patient->activeVisit()->doctor_id == $doctor->id){{'selected'}}@endif @endisset value="{{ $doctor->id }}">
+											<option @if($patientVisit->doctor_id == $doctor->id){{'selected'}}@endif value="{{ $doctor->id }}">
 												{{ $doctor->fullname() }}
 											</option>
 										@endforeach

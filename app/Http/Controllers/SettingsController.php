@@ -133,7 +133,7 @@ class SettingsController extends Controller
 				'file_name' => $file_name,
 				// 'data' => $base64,
 			]);
-			Storage::disk('upload')->putFileAs('File Attachments/Company/Image', $file, $file_name);
+			Storage::disk('public')->putFileAs('File Attachments/Company/Image', $file, $file_name);
 			Setting::where('name', 'company_logo')->update([
                 'value' => 'File Attachments/Company/Image/'.$file_name
             ]);

@@ -48,11 +48,11 @@
 									List
 								</h3>
 								<div class="card-tools">
-									<button class="btn btn-tool bg-gradient-{{ request()->get('filter')==1 ? 'success' : 'info' }}" data-toggle="modal" data-target="#filterPatients"><i class="fa fa-search"></i> Filter Findings</button>
+									<button class="btn btn-tool bg-gradient-{{ request()->get('filter')==1 ? 'success' : 'info' }}" data-toggle="modal" data-target="#filterPatients"><i class="fa fa-search"></i> Filter by Findings</button>
 									<button class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#exportPatientDataModal"><i class="fa fa-download"></i> Export Data</button>
-									@hasrole('System Administrator')
-									{{-- <button class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#modalImportRecords"><i class="fa fa-upload"></i> Import</button> --}}
-									@endhasrole
+									{{-- @hasrole('System Administrator')
+									<button class="btn btn-tool bg-gradient-info" data-toggle="modal" data-target="#modalImportRecords"><i class="fa fa-upload"></i> Import</button>
+									@endhasrole --}}
 									{{-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#filterPatients"><i class="fa fa-search"></i> Search</button> --}}
 									@can('patients.create')
 									<a class="btn btn-tool bg-gradient-primary" href="javascript:void(0)" data-toggle="modal-ajax" data-href="{{ route('patients.create') }}" data-target="#createPatientModal">
@@ -259,13 +259,14 @@
 						{data: 'username', name: 'username'},
 						// {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false,searchable: false},
 						{
-							data: 'last_name',
+							data: 'fullName',
+							name: 'last_name',/* 
 							render: function(data, type, row){
-								return row.first_name+' '+row.last_name
-							}
+								return row.last_name+', '+row.first_name
+							} */
 						},
-						{data: 'sex', name: 'sex'},
-						{data: 'age'},
+						{data: 'patientSex', orderable: false},
+						{data: 'age', orderable: false},
 						{data: 'occupation', name: 'occupation'},
 						{data: 'first_name', name: 'first_name', 'visible': false},
 					],
