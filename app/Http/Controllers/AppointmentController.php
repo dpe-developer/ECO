@@ -159,11 +159,11 @@ class AppointmentController extends Controller
         // Send Mail
         if(Setting::system('send_email_notification')){
             if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
-                try{
+                // try{
                     Mail::to($appointment->patient->email)->send(new AppointmentConfirmationMail($appointment));
-                }catch(\Exception $e){
-                    report($e);
-                }
+                // }catch(\Exception $e){
+                    // report($e);
+                // }
             }
         }
         return back()->with('alert-success', 'Appointment successfully CREATED');
@@ -272,11 +272,11 @@ class AppointmentController extends Controller
         // Send Mail
         if(Setting::system('send_email_notification')){
             if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
-                try{
+                // try{
                     Mail::to($appointment->patient->email)->send(new AppointmentConfirmedMail($appointment));
-                }catch(\Exception $e){
-                    report($e);
-                }
+                // }catch(\Exception $e){
+                    // report($e);
+                // }
             }
         }
         return back()->with('alert-success', 'Appointment Confirmed');
@@ -335,11 +335,12 @@ class AppointmentController extends Controller
         // Send Mail
         if(Setting::system('send_email_notification')){
             if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
-                try{
+                // try{
                     Mail::to($appointment->patient->email)->send(new AppointmentCancelledMail($appointment));
-                }catch(\Exception $e){
-                    report($e);
-                }
+                    // Mail::to("dpe.developer001gmail.com")->send(new AppointmentCancelledMail($appointment));
+                // }catch(\Exception $e){
+                    // report($e);
+                // }
             }
         }
         return back()->with('alert-warning', 'Appointment canceled');
