@@ -50,7 +50,7 @@ Route::group(['middleware' => ['role:System Administrator']], function () {
 
 });
 
-Route::group(['middleware' => ['role:Patient']], function () {
+Route::group(['middleware' => ['auth', 'role:Patient']], function () {
 	Route::get('my-profile/{username}', [
 		'as' => 'my-profile',
 		'uses' => 'WebsiteController@myProfile'
@@ -58,6 +58,10 @@ Route::group(['middleware' => ['role:Patient']], function () {
 	Route::put('update-my-profile/{username}', [
 		'as' => 'update-my-profile',
 		'uses' => 'WebsiteController@updateMyProfile'
+	]);
+	Route::post('patient-appointment-cancel/{appointment}', [
+		'as' => 'patient_appointments.cancel',
+		'uses' => 'PatientAppointmentController@cancelAppointment'
 	]);
 	/**
 	 * Patient Appointments

@@ -11,14 +11,16 @@ class AppointmentConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $appointment; 
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($appointment)
     {
-        //
+        $this->appointment = $appointment;
     }
 
     /**
@@ -28,6 +30,6 @@ class AppointmentConfirmationMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->subject('Appointment')->view('mail_template.appointment_confirmation');
     }
 }

@@ -130,8 +130,7 @@
     </div>
 </form>
 @endcan
-@can('appointments.cancel')
-<form action="{{ route('appointments.cancel', $appointment->id) }}" method="POST">
+<form action="{{ route('patient_appointments.cancel', $appointment->id) }}" method="POST">
     @csrf
     <div id="cancelAppointmentModal" class="modal fade" role="dialog" aria-labelledby="cancel-appointment-title" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
@@ -156,7 +155,6 @@
         </div>
     </div>
 </form>
-@endcan
 <script>
 	$(function(){
 		$('#cancelAppointment').on('click', function(){

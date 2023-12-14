@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Appointment; 
 use App\Models\User; 
 use App\Models\Service; 
+use App\Models\Setting; 
+use App\Mail\AppointmentConfirmationMail;
+use App\Mail\AppointmentConfirmedMail;
+use App\Mail\AppointmentDeclinedMail;
+use App\Mail\AppointmentCancelledMail;
+use App\Mail\AppointmentUpdateMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon;
@@ -57,13 +64,24 @@ class PatientAppointmentController extends Controller
     public function store(Request $request)
     {
         $appointmentDate = Carbon::parse($request->get('appointment_date').' '.$request->get('appointment_time'));
-        Appointment::create([
+        $appointment = Appointment::create([
             'patient_id' => Auth::user()->id,
             'doctor_id' => $request->get('doctor'),
             'service_id' => $request->get('service'),
             'appointment_date' => $appointmentDate,
             'description' => $request->get('description'),
         ]);
+        // Send Mail
+        if(Setting::system('send_email_notification')){
+            if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
+                try{
+                    Mail::to($appointment->patient->email)->send(new AppointmentConfirmationMail($appointment));
+                }catch(\Exception $e){
+                    report($e);
+                    return back()->with('alert-success', 'Appointment successfully created');
+                }
+            }
+        }
         return back()->with('alert-success', 'Appointment successfully created');
     }
 
@@ -119,5 +137,25 @@ class PatientAppointmentController extends Controller
     public function destroy(Appointment $appointment)
     {
         //
+    }
+
+    public function cancelAppointment(Request $request, Appointment $appointment)
+    {
+        $appointment->update([
+            'status' => 'canceled',
+            'reason_of_cancel' => $request->get('reason')
+        ]);
+        // Send Mail
+        if(Setting::system('send_email_notification')){
+            if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
+                try{
+                    Mail::to($appointment->patient->email)->send(new AppointmentCancelledMail($appointment));
+                }catch(\Exception $e){
+                    report($e);
+                    return back()->with('alert-warning', 'Appointment canceled');
+                }
+            }
+        }
+        return back()->with('alert-warning', 'Appointment canceled');
     }
 }

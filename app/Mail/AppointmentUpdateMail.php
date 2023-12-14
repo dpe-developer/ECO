@@ -7,20 +7,22 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class AppointmentCancelledMail extends Mailable
+class AppointmentUpdateMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $appointment; 
+    public $appointment;    
+    public $oldAppointmentDate;    
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($appointment)
+    public function __construct($appointment, $oldAppointmentDate)
     {
         $this->appointment = $appointment;
+        $this->oldAppointmentDate = $oldAppointmentDate;
     }
 
     /**
@@ -30,6 +32,6 @@ class AppointmentCancelledMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Appointment Canceled')->view('mail_template.appointment_canceled');
+        return $this->subject('Appointment Canceled')->view('mail_template.appointment_updated');
     }
 }

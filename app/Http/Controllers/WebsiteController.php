@@ -157,16 +157,21 @@ class WebsiteController extends Controller
             $this->sendPatientCredentialsSMS($patient);
         }
 
-        // Send Mail
-        if(Setting::system('send_email_notification')){
-            if($request->get('email')){
-                Mail::to($patient->email)->send(new RegistrationCompleteMail($patient));
-            }
-        }
-
         $data = [
             'patient' => $patient
         ];
+
+        // Send Mail
+        if(Setting::system('send_email_notification')){
+            if($request->get('email')){
+                try{
+                    Mail::to($patient->email)->send(new RegistrationCompleteMail($patient));
+                }catch(\Exception $e){
+                    report($e);
+                    return redirect()->route('registration_complete', $patient->username)->with('alert-warning', 'Confirmation Email not sent.');
+                }
+            }
+        }    
         
         return redirect()->route('registration_complete', $patient->username);
     }

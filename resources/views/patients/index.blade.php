@@ -260,7 +260,8 @@
 						// {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false,searchable: false},
 						{
 							data: 'fullName',
-							name: 'last_name',/* 
+							name: 'last_name', 
+							orderable: false,/* 
 							render: function(data, type, row){
 								return row.last_name+', '+row.first_name
 							} */

@@ -15,7 +15,7 @@
 		<div class="col-md-4">
 			<div class="form-group">
 				<label>Company Logo:</label>
-				<img id="img" width="100%" class="img-thumbnail" src="{{ isset($companySetting['company_logo']) ? asset($companySetting['company_logo']) : asset('images/laravel-3d-logo.png') }}" />
+				<img id="img" width="100%" class="img-thumbnail" src="{{ isset($companySetting['company_logo']) ? asset('storage/'.$companySetting['company_logo']) : asset('storage/images/laravel-3d-logo.png') }}" />
 				<label class="btn btn-primary btn-block">
 					Browse&hellip;<input type="file" name="company_logo" style="display: none;" id="upload" accept="image/*" />
 				</label>
