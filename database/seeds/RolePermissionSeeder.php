@@ -29,35 +29,37 @@ class RolePermissionSeeder extends Seeder
                 if(is_array($action_object['middleware'])){
                     if(in_array('auth',  $action_object['middleware'])) {
                         $array = explode('.', $action_object['as']);
-                        if(
-                            $array[1] == 'create' ||
-                            $array[1] == 'show' ||
-                            $array[1] == 'edit' ||
-                            $array[1] == 'destroy' ||
-                            $array[1] == 'export' ||
-                            $action_object['as'] == 'appointments.confirm' ||
-                            $action_object['as'] == 'appointments.decline' ||
-                            $action_object['as'] == 'appointments.cancel' ||
-                            $action_object['as'] == 'appointments.accept_patient' ||
-                            $action_object['as'] == 'patient_visits.end_visit' ||
-                            $array[1] == 'edit_company' ||
-                            $array[1] == 'reset_company' ||
-                            $array[1] == 'edit_user_interface' ||
-                            $array[1] == 'reset_user_interface' ||
-                            $array[1] == 'edit_system' ||
-                            $array[1] == 'reset_system' ||
-                            $array[1] == 'index'
-                        )
-                        /* if(
-                            $array[1] !== 'store' &&
-                            $array[1] !== 'update' &&
-                            $array[1] !== 'restore'
-                        ) */
-                        {
-                            Permission::create([
-                               'group' => str_replace("_", " ",$array[0]),
-                               'name' => $action_object['as'],
-                            ]);
+                        if(isset($array[1])){
+                            if(
+                                $array[1] == 'create' ||
+                                $array[1] == 'show' ||
+                                $array[1] == 'edit' ||
+                                $array[1] == 'destroy' ||
+                                $array[1] == 'export' ||
+                                $action_object['as'] == 'appointments.confirm' ||
+                                $action_object['as'] == 'appointments.decline' ||
+                                $action_object['as'] == 'appointments.cancel' ||
+                                $action_object['as'] == 'appointments.accept_patient' ||
+                                $action_object['as'] == 'patient_visits.end_visit' ||
+                                $array[1] == 'edit_company' ||
+                                $array[1] == 'reset_company' ||
+                                $array[1] == 'edit_user_interface' ||
+                                $array[1] == 'reset_user_interface' ||
+                                $array[1] == 'edit_system' ||
+                                $array[1] == 'reset_system' ||
+                                $array[1] == 'index'
+                            )
+                            /* if(
+                                $array[1] !== 'store' &&
+                                $array[1] !== 'update' &&
+                                $array[1] !== 'restore'
+                            ) */
+                            {
+                                Permission::create([
+                                   'group' => str_replace("_", " ",$array[0]),
+                                   'name' => $action_object['as'],
+                                ]);
+                            }
                         }
                     }
                 }
