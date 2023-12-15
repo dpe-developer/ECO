@@ -9,7 +9,7 @@
 <body>
     <h3>Registration Complete</h3>
     <p>
-        Hello {{ $patient->fullname() }}. You successfully registered on <a href="{{ config('app.url') }}" target="_blank">Dizon Vision Clinic</a>. Your can now use your Username or Email to login to our system.
+        Hello {{ $patient->fullname() }}. You successfully registered on <a href="{{ config('app.url') }}" target="_blank">Dizon Vision Clinic</a>. Your can now use your Username/Email to login in our website.
     </p>
     <p>
         <b>Username: </b> {{ $patient->username }}

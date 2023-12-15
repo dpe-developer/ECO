@@ -13,6 +13,7 @@ use App\Mail\AppointmentCancelledMail;
 use App\Mail\AppointmentUpdateMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use Twilio\Rest\Client;
 use Auth;
 use Carbon;
 
@@ -71,6 +72,26 @@ class PatientAppointmentController extends Controller
             'appointment_date' => $appointmentDate,
             'description' => $request->get('description'),
         ]);
+
+        // Send SMS
+        $patient = $appointment->patient;
+        if(Setting::system('send_sms_notification')){
+            try{
+                $account_sid = config("app.twilio_sid");
+                $auth_token = config("app.twilio_auth_token");
+                $twilio_number = config("app.twilio_number");
+                $client = new Client($account_sid, $auth_token);
+                $message = "Good day ". $patient->fullname().". You have a pending appointment in ".config('app.client_name')." scheduled on ".Carbon::parse($appointment->appointment_date)->format('M d, Y h:ia').". You can track your appointment status using this link 
+                ".route('track-appointment', ['reference_code' => Carbon::parse($appointment->created_at)->timestamp]).".";
+                $client->messages->create('+639673700022', [
+                    'from' => $twilio_number,
+                    'body' => $message
+                ]);
+            }catch(\Exception $e){
+                report($e);
+            }
+        }
+
         // Send Mail
         if(Setting::system('send_email_notification')){
             if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
@@ -145,6 +166,27 @@ class PatientAppointmentController extends Controller
             'status' => 'canceled',
             'reason_of_cancel' => $request->get('reason')
         ]);
+
+        // Send SMS
+        $patient = $appointment->patient;
+        if(Setting::system('send_sms_notification')){
+            try{
+                $account_sid = config("app.twilio_sid");
+                $auth_token = config("app.twilio_auth_token");
+                $twilio_number = config("app.twilio_number");
+                $client = new Client($account_sid, $auth_token);
+                $message = "Good day ". $patient->fullname().". Your appointment in ".config('app.client_name')." scheduled on ".Carbon::parse($appointment->appointment_date)->format('M d, Y h:ia')." has ben canceled.
+                
+                Reason: ".$appointment->reason_of_cancel;
+                $client->messages->create('+639673700022', [
+                    'from' => $twilio_number,
+                    'body' => $message
+                ]);
+            }catch(\Exception $e){
+                report($e);
+            }
+        }
+
         // Send Mail
         if(Setting::system('send_email_notification')){
             if($appointment->patient->email != ($appointment->patient->username.'@temp.com')){
@@ -152,7 +194,6 @@ class PatientAppointmentController extends Controller
                     Mail::to($appointment->patient->email)->send(new AppointmentCancelledMail($appointment));
                 }catch(\Exception $e){
                     report($e);
-                    return back()->with('alert-warning', 'Appointment canceled');
                 }
             }
         }

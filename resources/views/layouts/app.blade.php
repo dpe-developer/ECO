@@ -81,7 +81,7 @@
                     </li>
                     @else
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="{{ url('track-appointment') }}">
+                        <a class="nav-link" aria-current="page" href="{{ route('track-appointment') }}">
                             <i class="fa-solid fa-calendar-check"></i>
                             Track Appointment
                         </a>

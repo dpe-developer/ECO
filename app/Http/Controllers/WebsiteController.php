@@ -152,10 +152,9 @@ class WebsiteController extends Controller
         ]);
         $patient->assignRole(4);
         Auth::attempt(['username' => $patient->username, 'password' => $request->get('password')]);
+        
         // Send SMS
-        if(Setting::system('send_sms_notification')){
-            $this->sendPatientCredentialsSMS($patient);
-        }
+        $this->sendPatientCredentialsSMS($patient);
 
         $data = [
             'patient' => $patient
@@ -188,15 +187,26 @@ class WebsiteController extends Controller
 
     public function sendPatientCredentialsSMS($patient)
     {
-        $account_sid = config("app.twilio_sid");
-        $auth_token = config("app.twilio_auth_token");
-        $twilio_number = config("app.twilio_number");
-        $client = new Client($account_sid, $auth_token);
-        $message = "\n\nHi ". $patient->first_name ." ". $patient->last_name .". You successfully registered on ". config('app.url') .". Your can now use your Username or Email to login to our system. \n\nUsername: ". $patient->username ."\nTo protect you account, please do not share your login credentials.";
-        $client->messages->create('+639673700022', [
-            'from' => $twilio_number,
-            'body' => $message
-        ]);
+        if(Setting::system('send_sms_notification')){
+            try{
+                $account_sid = config("app.twilio_sid");
+                $auth_token = config("app.twilio_auth_token");
+                $twilio_number = config("app.twilio_number");
+                $client = new Client($account_sid, $auth_token);
+                $message = "Hi ". $patient->fullname() .".You successfully registered on ". config('app.url') .". Your can now use your Username or Email to login to our system.
+                    
+                    Your username is ". $patient->username ."
+                    
+                    To protect you account, please do not share your login credentials.
+                ";
+                $client->messages->create('+639673700022', [
+                    'from' => $twilio_number,
+                    'body' => $message
+                ]);
+            }catch(\Exception $e){
+                report($e);
+            }
+        }
     }
 
     public function myProfile($username)
@@ -207,6 +217,26 @@ class WebsiteController extends Controller
 				$data = [
 					'user' => $user,
 				];
+                $patient = $user;
+                /* try{
+                    $account_sid = config("app.twilio_sid");
+                    $auth_token = config("app.twilio_auth_token");
+                    $twilio_number = config("app.twilio_number");
+                    $client = new Client($account_sid, $auth_token);
+                    $message = "Hi ". $patient->fullname() .".You successfully registered on ". config('app.url') .". Your can now use your Username or Email to login to our system.
+                        
+                        Your username is ". $patient->username ."
+                        
+                        To protect you account, please do not share your login credentials.
+                    ";
+                    // $message = "Hi ". $patient->fullname() .". You successfully registered on ". config('app.url') .". Your can now use your Username or Email to login to our system. \n\n\nYour username is ". $patient->username .".\nTo protect you account, please do not share your login credentials.";
+                    $client->messages->create('+639673700022', [
+                        'from' => $twilio_number,
+                        'body' => $message
+                    ]);
+                }catch(\Exception $e){
+                    report($e);
+                } */
 				return view('my_profile', $data);
 			}else{
 				return abort(401);

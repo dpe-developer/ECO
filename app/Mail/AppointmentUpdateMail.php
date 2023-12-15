@@ -32,6 +32,6 @@ class AppointmentUpdateMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Appointment Canceled')->view('mail_template.appointment_updated');
+        return $this->subject('Appointment Updated')->view('mail_template.appointment_updated');
     }
 }

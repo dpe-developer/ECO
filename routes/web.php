@@ -32,7 +32,7 @@ Route::get('clinic-announcements/view/{announcement}', 'WebsiteController@viewAn
 Route::get('gallery', 'WebsiteController@gallery');
 Route::get('our-story', 'WebsiteController@ourStory');
 Route::get('our-organization', 'WebsiteController@ourOrganization');
-Route::get('track-appointment', 'WebsiteController@trackAppointment');
+Route::get('track-appointment', 'WebsiteController@trackAppointment')->name('track-appointment');
 Route::get('contact-us', 'WebsiteController@contactUs');
 Route::post('submit-inquiry', 'WebsiteController@submitInquiry')->name('submit_inquiry');
 Route::post('patient-registration', 'WebsiteController@patientRegistration');

@@ -30,6 +30,6 @@ class AppointmentConfirmationMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Appointment')->view('mail_template.appointment_confirmation');
+        return $this->subject('Pending Appointment')->view('mail_template.appointment_confirmation');
     }
 }
