@@ -81,8 +81,8 @@ class PatientAppointmentController extends Controller
                 $auth_token = config("app.twilio_auth_token");
                 $twilio_number = config("app.twilio_number");
                 $client = new Client($account_sid, $auth_token);
-                $message = "Good day ". $patient->fullname().". You have a pending appointment in ".config('app.client_name')." scheduled on ".Carbon::parse($appointment->appointment_date)->format('M d, Y h:ia').". You can track your appointment status using this link 
-                ".route('track-appointment', ['reference_code' => Carbon::parse($appointment->created_at)->timestamp]).".";
+                $message = "Good day ". $patient->fullname().". You have a pending appointment in ".config('app.client_name')." scheduled on ".Carbon::parse($appointment->appointment_date)->format('M d, Y h:ia').". You can track your appointment status using this link ".
+                route('track-appointment', ['reference_code' => Carbon::parse($appointment->created_at)->timestamp]).".";
                 $client->messages->create('+639673700022', [
                     'from' => $twilio_number,
                     'body' => $message
