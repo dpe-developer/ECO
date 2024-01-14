@@ -67,7 +67,7 @@
                                             @unlessrole('System Administrator')
                                                 @can('eye_prescription_references.edit')
                                                     data-toggle="modal-ajax"
-                                                    data-href="{{ route('eye_prescription_references.edit', $children->id) }}"
+                                                    data-href="{{ route('eye_prescription_references.edit', $reference->id) }}"
                                                     data-target="#editPatientProfileReference" 
                                                 @endcan
                                             @endunlessrole
@@ -109,8 +109,8 @@
 													<td>{{ $child->description}}</td>
 													@role('System Administrator')
                                                     <td class="text-center">
-                                                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('eye_prescription_references.edit',$reference->id) }}"><i class="fad fa-edit fa-lg"></i></a>
-														<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescription_references.destroy', $reference->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
+                                                        <a href="javascript:void(0)" data-toggle="modal-ajax" data-target="#editPatientProfileReference" data-href="{{ route('eye_prescription_references.edit',$child->id) }}"><i class="fad fa-edit fa-lg"></i></a>
+														<a class="text-danger" href="javascript:void(0)" onclick="deleteFromTable(this)" data-href="{{ route('eye_prescription_references.destroy', $child->id) }}"><i class="fad fa-trash-alt fa-lg"></i></a>
                                                     </td>
                                                     @endrole
 												</tr> {{-- end of child reference w/out children --}}

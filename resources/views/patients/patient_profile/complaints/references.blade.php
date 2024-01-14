@@ -67,7 +67,7 @@
                                             @unlessrole('System Administrator')
                                                 @can('complaint_references.edit')
                                                     data-toggle="modal-ajax"
-                                                    data-href="{{ route('complaint_references.edit', $children->id) }}"
+                                                    data-href="{{ route('complaint_references.edit', $reference->id) }}"
                                                     data-target="#editPatientProfileReference" 
                                                 @endcan
                                             @endunlessrole
