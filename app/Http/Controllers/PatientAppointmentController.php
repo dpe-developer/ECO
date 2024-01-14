@@ -99,10 +99,11 @@ class PatientAppointmentController extends Controller
                     Mail::to($appointment->patient->email)->send(new AppointmentConfirmationMail($appointment));
                 }catch(\Exception $e){
                     report($e);
-                    return back()->with('alert-success', 'Appointment successfully created');
+                    return back()->with('alert-success', 'Appointment successfully created. Notification email failed to send.');
                 }
             }
         }
+        
         return back()->with('alert-success', 'Appointment successfully created');
     }
 

@@ -9,7 +9,7 @@
 	<div class="col text-right">
 		@if(isset($patient->activeVisit()->id))
 			@can('complaints.create')
-			<button class="btn bg-gradient-primary" type="button" data-toggle="modal-ajax" data-href="{{ route('complaints.create') }}" data-target="#addEyePrescription" data-form="patient_id: {{ $patient->id }}"><i class="fa fa-plus"></i> Add</button>
+			<button class="btn bg-gradient-primary" type="button" data-toggle="modal-ajax" data-href="{{ route('complaints.create') }}" data-target="#addComplaint" data-form="patient_id: {{ $patient->id }}; visit_id: {{ $patient->activeVisit()->id }}""><i class="fa fa-plus"></i> Add</button>
 			@endcan
     	@endif
 	</div>

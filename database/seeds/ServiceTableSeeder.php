@@ -14,6 +14,11 @@ class ServiceTableSeeder extends Seeder
     {
         Service::insert([
             [
+                'name' => 'Comprehensive Eye Exam',
+                'amount' => '0.00',
+                'description' => 'Comprehensive eye exams by a doctor of optometry are an important part of caring for your eyes, vision, and overall all health.'
+            ],
+            [
                 'name' => 'Preventive and Rehabilitative Optometry',
                 'amount' => '0.00',
                 'description' => 'two aspects of eye care that focus on maintaining and improving the visual health of individuals. These areas of optometry involve different approaches and techniques to address various eye conditions.'
