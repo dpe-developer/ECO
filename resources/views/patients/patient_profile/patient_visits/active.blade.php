@@ -303,7 +303,8 @@
 				va_os = (va_os == Infinity ? new Decimal(0) : va_os);
 				let va_od = va_od_numerator.dividedBy(va_od_denominator);
 				va_od = (va_od == Infinity ? new Decimal(0) : va_od);
-				let vaDifference = va_os.minus(va_od).absoluteValue();
+				// let vaDifference = va_os.minus(va_od).absoluteValue();
+				let vaDifference = va_os_denominator.minus(va_od_denominator).absoluteValue();
 
 				let predictionPercentageDOM = $('#predictionPercentage')
 				let predictionPercentage = 0
@@ -328,7 +329,8 @@
 					console.log("Q5 TRUE");
 					predictionPercentage += 1
 				}
-				if(vaDifference.lessThanOrEqualTo(0.5) && vaDifference.greaterThanOrEqualTo(0.02)) {
+				// if(vaDifference.lessThanOrEqualTo(0.5) && vaDifference.greaterThanOrEqualTo(0.02)) {
+				if(vaDifference.greaterThanOrEqualTo(20)) {
 					console.log("Q6 TRUE");
 					predictionPercentage += 1
 				}
