@@ -299,12 +299,15 @@
 				let sphDifference = os_sph.minus(od_sph).absoluteValue();
 				let cylDifference = os_cyl.minus(od_cyl).absoluteValue();
 				let axisDifference = os_axis.minus(od_axis).absoluteValue();
-				let va_os = va_os_numerator.dividedBy(va_os_denominator);
+				/* let va_os = va_os_numerator.dividedBy(va_os_denominator);
 				va_os = (va_os == Infinity ? new Decimal(0) : va_os);
 				let va_od = va_od_numerator.dividedBy(va_od_denominator);
-				va_od = (va_od == Infinity ? new Decimal(0) : va_od);
+				va_od = (va_od == Infinity ? new Decimal(0) : va_od); */
 				// let vaDifference = va_os.minus(va_od).absoluteValue();
 				let vaDifference = va_os_denominator.minus(va_od_denominator).absoluteValue();
+				if(isNaN(parseFloat($('#va_os_denominator').val())) || isNaN(parseFloat($('#va_od_denominator').val()))) {
+					vaDifference = new Decimal(0);
+				}
 
 				let predictionPercentageDOM = $('#predictionPercentage')
 				let predictionPercentage = 0
@@ -334,7 +337,8 @@
 					console.log("Q6 TRUE");
 					predictionPercentage += 1
 				}
-				if(va_od.greaterThanOrEqualTo(0.4) || va_os.greaterThanOrEqualTo(0.4)) {
+				// if(va_od.greaterThanOrEqualTo(0.4) || va_os.greaterThanOrEqualTo(0.4)) {
+				if(va_os_denominator.greaterThanOrEqualTo(50) || va_od_denominator.greaterThanOrEqualTo(50)) {
 					console.log("Q7 TRUE");
 					predictionPercentage += 1
 				}
@@ -351,7 +355,7 @@
 					useGrouping: false
 				});
 				return formatter.format(num);
-}
+			}
 		});
 	</script>
 @endsection
