@@ -314,6 +314,13 @@
 				let predictionPercentageDOM = $('#predictionPercentage')
 				let predictionPercentage = 0
 
+				// DEV
+				console.log("========== CHANGES " + changesCount + "==========");
+				console.log("Q3 = " + sphDifference);
+				console.log("Q4 = " + cylDifference);
+				console.log("Q5 = " + axisDifference);
+				console.log("Q6 = " + vaDifference);
+
 				if(q1 == 1) {
 					console.log("Q1 TRUE");
 					predictionPercentage += 1
@@ -344,11 +351,6 @@
 					console.log("Q7 TRUE");
 					predictionPercentage += 1
 				}
-
-				// DEV
-				/* if(predictionPercentage > 0) {
-					console.log("========== CHANGES " + changesCount + "==========");
-				} */
 
 				predictionPercentage = (predictionPercentage / 7) * 100;
 				predictionPercentageDOM.text(roundNum(predictionPercentage, 0, 2) + '%');
