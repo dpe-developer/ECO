@@ -280,17 +280,19 @@
 	<script src="{{ asset('js/decimal.js') }}"></script>
 	<script>
 		$(function(){
+			let changesCount = 0;
 			Decimal.set({ precision: 9 });
 
 			$('#predictionForm').on('change', function(){
+				changesCount += 1;
 				let q1 = $(this).find("input[name='q1']:checked").val()
 				let q2 = $(this).find("input[name='q2']:checked").val()
-				let os_sph = new Decimal(isNaN(parseFloat($('#os_sph').val())) ? 0 : parseFloat($('#os_sph').val()));
+				let os_sph = new Decimal(isNaN(parseFloat($('#os_sph').val())) ? 0 : parseFloat($('#os_sph').val())).absoluteValue();
 				let os_cyl = new Decimal(isNaN(parseFloat($('#os_cyl').val())) ? 0 : parseFloat($('#os_cyl').val()));
 				let os_axis = new Decimal(isNaN(parseFloat($('#os_axis').val())) ? 0 : parseFloat($('#os_axis').val()))
 				let va_os_numerator = new Decimal(isNaN(parseFloat($('#va_os_numerator').val())) ? 0 : parseFloat($('#va_os_numerator').val()))
 				let va_os_denominator = new Decimal(isNaN(parseFloat($('#va_os_denominator').val())) ? 0 : parseFloat($('#va_os_denominator').val()))
-				let od_sph = new Decimal(isNaN(parseFloat($('#od_sph').val())) ? 0 : parseFloat($('#od_sph').val()));
+				let od_sph = new Decimal(isNaN(parseFloat($('#od_sph').val())) ? 0 : parseFloat($('#od_sph').val())).absoluteValue();
 				let od_cyl = new Decimal(isNaN(parseFloat($('#od_cyl').val())) ? 0 : parseFloat($('#od_cyl').val()));
 				let od_axis = new Decimal(isNaN(parseFloat($('#od_axis').val())) ? 0 : parseFloat($('#od_axis').val()))
 				let va_od_numerator = new Decimal(isNaN(parseFloat($('#va_od_numerator').val())) ? 0 : parseFloat($('#va_od_numerator').val()))
@@ -342,6 +344,11 @@
 					console.log("Q7 TRUE");
 					predictionPercentage += 1
 				}
+
+				// DEV
+				/* if(predictionPercentage > 0) {
+					console.log("========== CHANGES " + changesCount + "==========");
+				} */
 
 				predictionPercentage = (predictionPercentage / 7) * 100;
 				predictionPercentageDOM.text(roundNum(predictionPercentage, 0, 2) + '%');
