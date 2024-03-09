@@ -18,7 +18,7 @@ use Carbon;
 
 class DashboardController extends Controller
 {
-
+    protected $patients;
     public function __construct()
     {
         $this->middleware('auth');
@@ -246,8 +246,6 @@ class DashboardController extends Controller
             $appointmentsThisWeekChartData[$status] = [];
         }
 
-        
-
         foreach($datesOfWeek as $date){
             foreach($appointmentStatus as $status){
                 $appointmentsThisWeekChartData[$status][] = Appointment::whereDate('appointment_date', $date)->where('status', $status)->count();
@@ -284,9 +282,9 @@ class DashboardController extends Controller
         return response()->json([
             'chart' => $appointmentsThisWeekChart,
             'dateOption' => $request->get('filter_date_option'),
-            'dateFilter' => Carbon::parse($dateFilter)->format('F d,Y'),
-            'dateFrom' => Carbon::parse($dateFrom)->format('F d,Y'),
-            'dateTo' => Carbon::parse($dateTo)->format('F d,Y'),
+            // 'dateFilter' => Carbon::parse($dateFilter)->format('F d,Y'),
+            // 'dateFrom' => Carbon::parse($dateFrom)->format('F d,Y'),
+            // 'dateTo' => Carbon::parse($dateTo)->format('F d,Y'),
         ]);
     }
 
@@ -619,11 +617,6 @@ class DashboardController extends Controller
         $v = ($l <= 0.5) ? ($l * (1 + $s)) : ($l + $s - $l * $s);
         
         if ($v > 0) {
-            $m;
-            $sv;
-            $sextant;
-            $fract;
-            $vsf;
 
             $m = $l + $l - $v;
             $sv = ($v - $m) / $v;

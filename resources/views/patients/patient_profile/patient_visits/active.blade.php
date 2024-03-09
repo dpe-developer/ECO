@@ -333,7 +333,8 @@
 					console.log("Q3 TRUE");
 					predictionPercentage += 1
 				}
-				if(cylDifference.greaterThanOrEqualTo(0.75) && cylDifference.lessThanOrEqualTo(2)) {
+				// if(cylDifference.greaterThanOrEqualTo(0.75) && cylDifference.lessThanOrEqualTo(2)) {
+				if(cylDifference.greaterThanOrEqualTo(0.75)) {
 					console.log("Q4 TRUE");
 					predictionPercentage += 1
 				}
